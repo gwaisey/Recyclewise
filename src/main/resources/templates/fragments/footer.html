@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<footer th:fragment="footer" class="site-footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <span class="logo-leaf">♻</span>
+            <span class="logo-text">RecycleWise</span>
+            <p>Making responsible waste disposal simple for everyone.</p>
+        </div>
+        <div class="footer-links">
+            <h4>Navigate</h4>
+            <a href="/">Home</a>
+            <a href="/guide">Waste Guide</a>
+            <a href="/tips">Eco Tips</a>
+        </div>
+        <div class="footer-categories">
+            <h4>Categories</h4>
+            <a href="/guide?category=RECYCLABLE">♻ Recyclable</a>
+            <a href="/guide?category=ORGANIC">🌿 Organic</a>
+            <a href="/guide?category=HAZARDOUS">⚠️ Hazardous</a>
+            <a href="/guide?category=GENERAL">🗑 General</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>🌍 Every small action counts. Built with Spring Boot + Thymeleaf.</p>
+    </div>
+</footer>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

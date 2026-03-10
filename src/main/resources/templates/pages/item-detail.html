@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body>
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main>
+    <section class="page-hero">
+        <div class="container">
+            <a href="/guide" class="back-link">← Back to Guide</a>
+            <div class="page-hero-content">
+                <span class="detail-emoji" th:text="${item.icon}">🍶</span>
+                <h1 th:text="${item.name}">Item Name</h1>
+                <div class="item-meta">
+                    <span class="meta-badge" th:text="${item.category}">RECYCLABLE</span>
+                    <span class="meta-bin"
+                          th:style="'background: var(--bin-' + ${item.binColor} + ')'"
+                          th:text="${item.binColor} + ' bin'">blue bin</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="detail-section">
+        <div class="container">
+            <div class="detail-grid">
+                <div class="detail-card disposal-card">
+                    <div class="detail-card-header">
+                        <span>🗺</span>
+                        <h2>How to Dispose</h2>
+                    </div>
+                    <p th:text="${item.disposalInstructions}">Instructions here.</p>
+                </div>
+
+                <div class="detail-card tips-card">
+                    <div class="detail-card-header">
+                        <span>💡</span>
+                        <h2>Pro Tip</h2>
+                    </div>
+                    <p th:text="${item.tips}">Tips here.</p>
+                </div>
+
+                <div class="detail-card recycle-card">
+                    <div class="detail-card-header">
+                        <span th:text="${item.recyclable} ? '✅' : '❌'">✅</span>
+                        <h2 th:text="${item.recyclable} ? 'Recyclable' : 'Not Recyclable'">Recyclable</h2>
+                    </div>
+                    <p th:if="${item.recyclable}">This item can be recycled through standard recycling programs.</p>
+                    <p th:unless="${item.recyclable}">This item requires special disposal — do not place in regular recycling bins.</p>
+                </div>
+
+                <div class="detail-card bin-card">
+                    <div class="detail-card-header">
+                        <span>🗑</span>
+                        <h2>Correct Bin</h2>
+                    </div>
+                    <div class="bin-display"
+                         th:style="'background: var(--bin-' + ${item.binColor} + '20); border-color: var(--bin-' + ${item.binColor} + ')'">
+                        <div class="bin-color-dot" th:style="'background: var(--bin-' + ${item.binColor} + ')'"></div>
+                        <span class="bin-label" th:text="${#strings.capitalize(item.binColor)} + ' Bin'">Blue Bin</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-actions">
+                <a href="/guide" class="btn-outline">← Back to Guide</a>
+                <a th:href="@{/guide(category=${item.category})}" class="btn-primary">Browse More <span th:text="${item.category}">RECYCLABLE</span> Items</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

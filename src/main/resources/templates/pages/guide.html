@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body>
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main>
+    <section class="page-hero">
+        <div class="container">
+            <div class="page-hero-content">
+                <h1>♻ Waste Guide</h1>
+                <p>Search any item to find out how to dispose of it responsibly</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="guide-section">
+        <div class="container">
+
+            <div class="guide-search-bar">
+                <form action="/guide" method="get" class="guide-search-form">
+                    <input type="text" name="search"
+                           th:value="${searchQuery}"
+                           placeholder="e.g. plastic bottle, old battery, egg carton..."
+                           class="guide-search-input" />
+                    <button type="submit" class="search-btn">🔍 Search</button>
+                </form>
+            </div>
+
+            <div class="filter-tabs">
+                <a href="/guide" class="tab" th:classappend="${activeCategory == null and searchQuery == null} ? 'active'">All Items</a>
+                <a href="/guide?category=RECYCLABLE" class="tab tab-green" th:classappend="${activeCategory == 'RECYCLABLE'} ? 'active'">♻ Recyclable</a>
+                <a href="/guide?category=ORGANIC" class="tab tab-lime" th:classappend="${activeCategory == 'ORGANIC'} ? 'active'">🌿 Organic</a>
+                <a href="/guide?category=HAZARDOUS" class="tab tab-red" th:classappend="${activeCategory == 'HAZARDOUS'} ? 'active'">⚠️ Hazardous</a>
+                <a href="/guide?category=GENERAL" class="tab tab-gray" th:classappend="${activeCategory == 'GENERAL'} ? 'active'">🗑 General</a>
+            </div>
+
+            <div class="results-info" th:if="${searchQuery != null}">
+                <span>Showing results for: <strong th:text="${searchQuery}"></strong></span>
+                <a href="/guide">Clear ×</a>
+            </div>
+
+            <div class="items-grid" th:if="${not #lists.isEmpty(items)}">
+                <a th:href="@{/guide/{id}(id=${item.id})}" class="item-card" th:each="item : ${items}"
+                   th:classappend="'item-' + ${#strings.toLowerCase(item.category)}">
+                    <div class="item-header">
+                        <span class="item-emoji" th:text="${item.icon}">🍶</span>
+                        <div class="item-bin-badge"
+                             th:text="${item.binColor} + ' bin'"
+                             th:style="'background: var(--bin-' + ${item.binColor} + ')'">blue bin</div>
+                    </div>
+                    <h3 class="item-name" th:text="${item.name}">Item Name</h3>
+                    <div class="item-category-tag" th:text="${item.category}">RECYCLABLE</div>
+                    <p class="item-hint" th:text="${#strings.abbreviate(item.disposalInstructions, 80)}">Instructions...</p>
+                    <span class="item-read-more">View details →</span>
+                </a>
+            </div>
+
+            <div class="empty-state" th:if="${#lists.isEmpty(items)}">
+                <span class="empty-icon">🔍</span>
+                <h3>No items found</h3>
+                <p>Try a different search term or browse all categories</p>
+                <a href="/guide" class="btn-outline">Browse All Items</a>
+            </div>
+
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body>
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main>
+    <section class="page-hero">
+        <div class="container">
+            <div class="page-hero-content">
+                <h1>🌱 Eco Tips</h1>
+                <p>Practical actions to reduce your environmental impact every day</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="tips-section">
+        <div class="container">
+            <div class="filter-tabs">
+                <a href="/tips" class="tab" th:classappend="${activeCategory == null} ? 'active'">All Tips</a>
+                <a href="/tips?category=REDUCE" class="tab" th:classappend="${activeCategory == 'REDUCE'} ? 'active'">✂️ Reduce</a>
+                <a href="/tips?category=REUSE" class="tab" th:classappend="${activeCategory == 'REUSE'} ? 'active'">🔄 Reuse</a>
+                <a href="/tips?category=RECYCLE" class="tab tab-green" th:classappend="${activeCategory == 'RECYCLE'} ? 'active'">♻ Recycle</a>
+                <a href="/tips?category=COMPOST" class="tab tab-lime" th:classappend="${activeCategory == 'COMPOST'} ? 'active'">🌿 Compost</a>
+            </div>
+
+            <div class="full-tips-grid">
+                <div class="full-tip-card" th:each="tip : ${tips}">
+                    <div class="tip-top">
+                        <span class="tip-big-icon" th:text="${tip.icon}">💡</span>
+                        <div class="tip-cat-badge" th:text="${tip.category}">RECYCLE</div>
+                    </div>
+                    <h3 th:text="${tip.title}">Tip Title</h3>
+                    <p th:text="${tip.description}">Description goes here.</p>
+                    <div class="impact-bar">
+                        <span class="impact-label">Environmental Impact</span>
+                        <div class="impact-track">
+                            <div class="impact-fill" th:style="'width: ' + ${tip.impactScore * 10} + '%'"></div>
+                        </div>
+                        <span class="impact-score" th:text="${tip.impactScore} + '/10'">9/10</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-banner">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to sort your waste?</h2>
+                <p>Use our waste guide to find out how to dispose of any item correctly</p>
+                <a href="/guide" class="btn-primary">Open Waste Guide</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

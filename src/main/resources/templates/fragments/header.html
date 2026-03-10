@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RecycleWise — Waste &amp; Recycling Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+</head>
+<body>
+<nav th:fragment="navbar" class="navbar">
+    <div class="nav-inner">
+        <a href="/" class="nav-logo">
+            <span class="logo-leaf">♻</span>
+            <span class="logo-text">RecycleWise</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="/" th:classappend="${activePage == 'home'} ? 'active'">Home</a></li>
+            <li><a href="/guide" th:classappend="${activePage == 'guide'} ? 'active'">Waste Guide</a></li>
+            <li><a href="/tips" th:classappend="${activePage == 'tips'} ? 'active'">Eco Tips</a></li>
+        </ul>
+        <button class="nav-toggle" onclick="toggleNav()">☰</button>
+    </div>
+</nav>
+</body>
+</html>
