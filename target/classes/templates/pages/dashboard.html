@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body>
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+<main>
+  <section class="dashboard-hero">
+    <div class="container">
+      <div class="dashboard-welcome">
+        <div class="welcome-text">
+          <p class="welcome-label">Welcome back,</p>
+          <h1 th:text="${user.fullName}">User Name</h1>
+          <p class="welcome-sub">Keep recycling and earn more rewards!</p>
+        </div>
+        <div class="points-badge">
+          <div class="points-number" th:text="${user.totalPoints}">0</div>
+          <div class="points-label">♻ Total Points</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="dashboard-actions">
+    <div class="container">
+      <div class="action-cards">
+        <a href="/stations" class="action-card action-submit">
+          <span class="action-icon">🗑</span>
+          <h3>Submit Trash</h3>
+          <p>Drop off at a station near you and earn points</p>
+          <span class="action-arrow">→</span>
+        </a>
+        <a href="/rewards" class="action-card action-rewards">
+          <span class="action-icon">🎁</span>
+          <h3>Redeem Rewards</h3>
+          <p>Exchange your points for food, transport, and bill discounts</p>
+          <span class="action-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+  <section class="dashboard-content">
+    <div class="container">
+      <div class="dashboard-grid">
+        <div class="dash-panel">
+          <div class="panel-header">
+            <h2>♻ Submission History</h2>
+            <a href="/stations" class="panel-link">+ New Submission</a>
+          </div>
+          <div class="flash-success" th:if="${success}" th:text="${success}"></div>
+          <div class="empty-panel" th:if="${#lists.isEmpty(submissions)}">
+            <span>🗑</span>
+            <p>No submissions yet. Drop off trash at a station to get started!</p>
+          </div>
+          <div class="submission-list" th:unless="${#lists.isEmpty(submissions)}">
+            <div class="submission-item" th:each="sub : ${submissions}">
+              <div class="sub-top">
+                <div class="sub-station">
+                  <span class="sub-icon">📍</span>
+                  <span th:text="${sub.station.name}">Station Name</span>
+                </div>
+                <div class="sub-status"
+                     th:classappend="'status-' + ${#strings.toLowerCase(sub.status.name())}"
+                     th:text="${sub.status}">PENDING</div>
+              </div>
+              <div class="sub-footer">
+                <span th:text="${#temporals.format(sub.submittedAt, 'dd MMM yyyy, HH:mm')}">Date</span>
+                <strong th:text="'Total: +' + ${sub.pointsEarned} + ' pts'">+0 pts</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="dash-panel">
+          <div class="panel-header">
+            <h2>🎁 My Vouchers</h2>
+            <a href="/rewards" class="panel-link">Browse Rewards</a>
+          </div>
+          <div class="empty-panel" th:if="${#lists.isEmpty(redemptions)}">
+            <span>🎫</span>
+            <p>No vouchers yet. Redeem your points for great benefits!</p>
+          </div>
+          <div class="voucher-list" th:unless="${#lists.isEmpty(redemptions)}">
+            <div class="voucher-card" th:each="r : ${redemptions}">
+              <div class="voucher-icon" th:text="${r.reward.icon}">🎁</div>
+              <div class="voucher-info">
+                <h4 th:text="${r.reward.name}">Reward Name</h4>
+                <p class="voucher-code" th:text="${r.voucherCode}">RW-XXXXXXXX</p>
+                <p class="voucher-date" th:text="${#temporals.format(r.redeemedAt, 'dd MMM yyyy')}">Date</p>
+              </div>
+              <div class="voucher-status"
+                   th:classappend="'vstatus-' + ${#strings.toLowerCase(r.status.name())}"
+                   th:text="${r.status}">ACTIVE</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

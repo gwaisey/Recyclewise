@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body>
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+<main>
+  <section class="page-hero">
+    <div class="container">
+      <a href="/stations" class="back-link">← Back to Stations</a>
+      <div class="page-hero-content">
+        <span class="detail-emoji" th:text="${station.icon}">🏢</span>
+        <h1 th:text="${station.name}">Station Name</h1>
+        <p th:text="${station.address}">Station address</p>
+      </div>
+    </div>
+  </section>
+  <section class="submit-section">
+    <div class="container">
+      <div class="submit-wrapper">
+        <div class="submit-info">
+          <h2>How it works</h2>
+          <div class="step-list">
+            <div class="step"><span class="step-num">1</span><p>Enter the weight (kg) of each waste category</p></div>
+            <div class="step"><span class="step-num">2</span><p>Submit — points are calculated automatically</p></div>
+            <div class="step"><span class="step-num">3</span><p>Bring your trash to the station</p></div>
+            <div class="step"><span class="step-num">4</span><p>Points are added to your account instantly</p></div>
+          </div>
+          <div class="points-preview-box">
+            <h3>Points Rate</h3>
+            <div class="rate-row"><span>♻ Recyclable</span><strong th:text="${multipliers.get('RECYCLABLE')} + ' pts/kg'">15 pts/kg</strong></div>
+            <div class="rate-row"><span>🌿 Organic</span><strong th:text="${multipliers.get('ORGANIC')} + ' pts/kg'">10 pts/kg</strong></div>
+            <div class="rate-row"><span>⚠️ Hazardous</span><strong th:text="${multipliers.get('HAZARDOUS')} + ' pts/kg'">20 pts/kg</strong></div>
+            <div class="rate-row"><span>🗑 General</span><strong th:text="${multipliers.get('GENERAL')} + ' pts/kg'">5 pts/kg</strong></div>
+          </div>
+        </div>
+        <div class="submit-form-card">
+          <h2>Submit Your Trash</h2>
+          <p class="submit-station-label">📍 <span th:text="${station.name}">Station</span></p>
+          <form th:action="@{/stations/{id}/submit(id=${station.id})}" method="post" class="trash-form">
+            <div class="trash-input-group recyclable-group">
+              <div class="trash-label"><span class="trash-emoji">♻</span><div><strong>Recyclable</strong><small th:text="${multipliers.get('RECYCLABLE')} + ' pts per kg'">15 pts/kg</small></div></div>
+              <div class="trash-input-row"><input type="number" name="recyclableKg" id="recyclableKg" min="0" step="0.1" value="0" class="weight-input" oninput="updatePreview()" /><span class="unit-label">kg</span></div>
+            </div>
+            <div class="trash-input-group organic-group">
+              <div class="trash-label"><span class="trash-emoji">🌿</span><div><strong>Organic</strong><small th:text="${multipliers.get('ORGANIC')} + ' pts per kg'">10 pts/kg</small></div></div>
+              <div class="trash-input-row"><input type="number" name="organicKg" id="organicKg" min="0" step="0.1" value="0" class="weight-input" oninput="updatePreview()" /><span class="unit-label">kg</span></div>
+            </div>
+            <div class="trash-input-group hazardous-group">
+              <div class="trash-label"><span class="trash-emoji">⚠️</span><div><strong>Hazardous</strong><small th:text="${multipliers.get('HAZARDOUS')} + ' pts per kg'">20 pts/kg</small></div></div>
+              <div class="trash-input-row"><input type="number" name="hazardousKg" id="hazardousKg" min="0" step="0.1" value="0" class="weight-input" oninput="updatePreview()" /><span class="unit-label">kg</span></div>
+            </div>
+            <div class="trash-input-group general-group">
+              <div class="trash-label"><span class="trash-emoji">🗑</span><div><strong>General Waste</strong><small th:text="${multipliers.get('GENERAL')} + ' pts per kg'">5 pts/kg</small></div></div>
+              <div class="trash-input-row"><input type="number" name="generalKg" id="generalKg" min="0" step="0.1" value="0" class="weight-input" oninput="updatePreview()" /><span class="unit-label">kg</span></div>
+            </div>
+            <div class="points-preview">
+              <span>Estimated Points:</span>
+              <strong id="pointsPreview">0 pts</strong>
+            </div>
+            <button type="submit" class="btn-primary btn-full">Submit and Earn Points</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<script>
+const multipliers = { recyclable: [[${multipliers.get('RECYCLABLE')}]], organic: [[${multipliers.get('ORGANIC')}]], hazardous: [[${multipliers.get('HAZARDOUS')}]], general: [[${multipliers.get('GENERAL')}]] };
+function updatePreview() {
+  const r = parseFloat(document.getElementById('recyclableKg').value) || 0;
+  const o = parseFloat(document.getElementById('organicKg').value) || 0;
+  const h = parseFloat(document.getElementById('hazardousKg').value) || 0;
+  const g = parseFloat(document.getElementById('generalKg').value) || 0;
+  const total = Math.round(r * multipliers.recyclable + o * multipliers.organic + h * multipliers.hazardous + g * multipliers.general);
+  document.getElementById('pointsPreview').textContent = total + ' pts';
+}
+</script>
+</body>
+</html>

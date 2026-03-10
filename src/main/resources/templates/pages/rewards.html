@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body>
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+<main>
+  <section class="page-hero">
+    <div class="container">
+      <div class="page-hero-content">
+        <h1>🎁 Rewards</h1>
+        <p>Redeem your recycling points for real benefits from the city government</p>
+      </div>
+    </div>
+  </section>
+  <section class="rewards-section">
+    <div class="container">
+      <div class="user-points-bar">
+        <span>Your Balance:</span>
+        <strong class="pts-display" th:text="${user.totalPoints} + ' points'">0 points</strong>
+      </div>
+      <div class="flash-success" th:if="${success}" th:text="${success}"></div>
+      <div class="flash-error" th:if="${error}" th:text="${error}"></div>
+      <div class="reward-category-section">
+        <h2 class="reward-cat-title">☕ Food and Drinks</h2>
+        <div class="rewards-grid">
+          <div class="reward-card" th:each="r : ${rewards}" th:if="${r.category == 'FOOD_DRINKS'}">
+            <div class="reward-icon" th:text="${r.icon}">🍱</div>
+            <div class="reward-info">
+              <h3 th:text="${r.name}">Reward Name</h3>
+              <p th:text="${r.description}">Description</p>
+              <small class="reward-provider" th:text="'by ' + ${r.provider}">by Provider</small>
+            </div>
+            <div class="reward-footer">
+              <div class="reward-cost"><span class="cost-num" th:text="${r.pointsCost}">100</span><span class="cost-label">pts</span></div>
+              <form th:action="@{/rewards/{id}/redeem(id=${r.id})}" method="post">
+                <button type="submit" class="btn-redeem" th:disabled="${user.totalPoints < r.pointsCost}" th:classappend="${user.totalPoints < r.pointsCost} ? 'btn-disabled' : ''">Redeem</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reward-category-section">
+        <h2 class="reward-cat-title">🚌 Public Transport</h2>
+        <div class="rewards-grid">
+          <div class="reward-card" th:each="r : ${rewards}" th:if="${r.category == 'TRANSPORT'}">
+            <div class="reward-icon" th:text="${r.icon}">🚇</div>
+            <div class="reward-info">
+              <h3 th:text="${r.name}">Reward Name</h3>
+              <p th:text="${r.description}">Description</p>
+              <small class="reward-provider" th:text="'by ' + ${r.provider}">by Provider</small>
+            </div>
+            <div class="reward-footer">
+              <div class="reward-cost"><span class="cost-num" th:text="${r.pointsCost}">200</span><span class="cost-label">pts</span></div>
+              <form th:action="@{/rewards/{id}/redeem(id=${r.id})}" method="post">
+                <button type="submit" class="btn-redeem" th:disabled="${user.totalPoints < r.pointsCost}" th:classappend="${user.totalPoints < r.pointsCost} ? 'btn-disabled' : ''">Redeem</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reward-category-section">
+        <h2 class="reward-cat-title">💡 Bill Discounts</h2>
+        <div class="rewards-grid">
+          <div class="reward-card" th:each="r : ${rewards}" th:if="${r.category == 'BILLS'}">
+            <div class="reward-icon" th:text="${r.icon}">⚡</div>
+            <div class="reward-info">
+              <h3 th:text="${r.name}">Reward Name</h3>
+              <p th:text="${r.description}">Description</p>
+              <small class="reward-provider" th:text="'by ' + ${r.provider}">by Provider</small>
+            </div>
+            <div class="reward-footer">
+              <div class="reward-cost"><span class="cost-num" th:text="${r.pointsCost}">400</span><span class="cost-label">pts</span></div>
+              <form th:action="@{/rewards/{id}/redeem(id=${r.id})}" method="post">
+                <button type="submit" class="btn-redeem" th:disabled="${user.totalPoints < r.pointsCost}" th:classappend="${user.totalPoints < r.pointsCost} ? 'btn-disabled' : ''">Redeem</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>
