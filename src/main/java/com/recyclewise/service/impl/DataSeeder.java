@@ -1,116 +1,86 @@
 package com.recyclewise.service.impl;
 
-import com.recyclewise.model.RecyclingTip;
-import com.recyclewise.model.WasteItem;
-import com.recyclewise.repository.RecyclingTipRepository;
-import com.recyclewise.repository.WasteItemRepository;
+import com.recyclewise.model.*;
+import com.recyclewise.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-/**
- * Seeds the database with initial demo data on startup.
- *
- * SOLID — (S) Single Responsibility: exists only to populate initial data.
- *         Completely separate from service logic.
- */
 @Component
 @RequiredArgsConstructor
 public class DataSeeder implements CommandLineRunner {
 
     private final WasteItemRepository wasteItemRepository;
     private final RecyclingTipRepository recyclingTipRepository;
+    private final TrashStationRepository trashStationRepository;
+    private final RewardRepository rewardRepository;
 
     @Override
     public void run(String... args) {
+        seedWasteItems();
+        seedTips();
+        seedStations();
+        seedRewards();
+    }
+
+    private void seedWasteItems() {
         if (wasteItemRepository.count() > 0) return;
+        wasteItemRepository.save(WasteItem.builder().name("Plastic Bottle").category("RECYCLABLE").icon("🍶").disposalInstructions("Rinse thoroughly, remove cap & label, flatten before placing in blue recycling bin.").tips("Reuse as a water bottle before recycling.").recyclable(true).binColor("blue").build());
+        wasteItemRepository.save(WasteItem.builder().name("Glass Jar").category("RECYCLABLE").icon("🫙").disposalInstructions("Rinse clean. Remove metal lids. Place in glass recycling bin.").tips("Glass is 100% recyclable forever!").recyclable(true).binColor("green").build());
+        wasteItemRepository.save(WasteItem.builder().name("Cardboard Box").category("RECYCLABLE").icon("📦").disposalInstructions("Flatten completely. Remove tape. Keep dry.").tips("Wet cardboard cannot be recycled.").recyclable(true).binColor("blue").build());
+        wasteItemRepository.save(WasteItem.builder().name("Aluminum Can").category("RECYCLABLE").icon("🥫").disposalInstructions("Rinse and crush. Place in metal recycling bin.").tips("Recycling aluminum uses 95% less energy!").recyclable(true).binColor("yellow").build());
+        wasteItemRepository.save(WasteItem.builder().name("Food Scraps").category("ORGANIC").icon("🥦").disposalInstructions("Place in green organic/compost bin.").tips("Composting reduces methane emissions significantly.").recyclable(false).binColor("green").build());
+        wasteItemRepository.save(WasteItem.builder().name("Yard Waste").category("ORGANIC").icon("🍂").disposalInstructions("Bundle branches, bag leaves, place in organic bin.").tips("Yard waste compost makes excellent garden fertilizer.").recyclable(false).binColor("green").build());
+        wasteItemRepository.save(WasteItem.builder().name("Old Battery").category("HAZARDOUS").icon("🔋").disposalInstructions("NEVER in regular bins. Take to hazardous waste facility.").tips("Many stores have free battery collection points.").recyclable(false).binColor("red").build());
+        wasteItemRepository.save(WasteItem.builder().name("Paint Can").category("HAZARDOUS").icon("🪣").disposalInstructions("Take to hazardous household waste facility.").tips("Donate leftover usable paint to community projects.").recyclable(false).binColor("red").build());
+        wasteItemRepository.save(WasteItem.builder().name("Old Electronics").category("HAZARDOUS").icon("💻").disposalInstructions("Take to certified e-waste recycler.").tips("Electronics contain valuable recoverable materials.").recyclable(false).binColor("red").build());
+        wasteItemRepository.save(WasteItem.builder().name("Styrofoam").category("GENERAL").icon("📤").disposalInstructions("Check for local drop-off foam recycling programs.").tips("Avoid buying products with styrofoam packaging.").recyclable(false).binColor("black").build());
+        wasteItemRepository.save(WasteItem.builder().name("Plastic Bag").category("GENERAL").icon("🛍️").disposalInstructions("Return to supermarket collection points.").tips("One reusable bag replaces 500+ plastic bags!").recyclable(false).binColor("black").build());
+        wasteItemRepository.save(WasteItem.builder().name("Newspaper").category("RECYCLABLE").icon("📰").disposalInstructions("Bundle with string. Keep dry. Put in paper recycling.").tips("Shredded paper should go in compost.").recyclable(true).binColor("blue").build());
+        wasteItemRepository.save(WasteItem.builder().name("Coffee Grounds").category("ORGANIC").icon("☕").disposalInstructions("Add to home compost or green organic bin.").tips("Coffee grounds are nitrogen-rich and great for gardens!").recyclable(false).binColor("green").build());
+        wasteItemRepository.save(WasteItem.builder().name("Medicine / Pills").category("HAZARDOUS").icon("💊").disposalInstructions("Return to pharmacy take-back program. Never flush.").tips("Flushing medicine pollutes waterways.").recyclable(false).binColor("red").build());
+        wasteItemRepository.save(WasteItem.builder().name("Egg Carton").category("ORGANIC").icon("🥚").disposalInstructions("Cardboard cartons go in paper recycling.").tips("Cardboard egg cartons are great for seedling starters!").recyclable(true).binColor("blue").build());
+        System.out.println("✅ Seeded " + wasteItemRepository.count() + " waste items");
+    }
 
-        // --- Waste Items ---
-        wasteItemRepository.save(WasteItem.builder().name("Plastic Bottle").category("RECYCLABLE").icon("🍶")
-                .disposalInstructions("Rinse thoroughly, remove cap & label, flatten before placing in blue recycling bin.")
-                .tips("Reuse as a water bottle before recycling. Avoid single-use plastics when possible.").recyclable(true).binColor("blue").build());
+    private void seedTips() {
+        if (recyclingTipRepository.count() > 0) return;
+        recyclingTipRepository.save(RecyclingTip.builder().title("Rinse Before Recycling").icon("💧").description("Always rinse containers before placing in recycling. Food residue contaminates entire batches.").category("RECYCLE").impactScore(9).build());
+        recyclingTipRepository.save(RecyclingTip.builder().title("Start a Home Compost").icon("🌱").description("Composting kitchen scraps reduces household waste by up to 30%.").category("COMPOST").impactScore(10).build());
+        recyclingTipRepository.save(RecyclingTip.builder().title("Buy in Bulk").icon("🛒").description("Purchasing in bulk reduces packaging waste significantly.").category("REDUCE").impactScore(8).build());
+        recyclingTipRepository.save(RecyclingTip.builder().title("Repair Before Replacing").icon("🔧").description("Before throwing something away, consider if it can be repaired.").category("REUSE").impactScore(9).build());
+        recyclingTipRepository.save(RecyclingTip.builder().title("Flatten Cardboard").icon("📦").description("Always flatten cardboard boxes before recycling to save sorting space.").category("RECYCLE").impactScore(6).build());
+        recyclingTipRepository.save(RecyclingTip.builder().title("Choose Reusable Bags").icon("👜").description("One durable bag can replace 500+ single-use plastic bags.").category("REDUCE").impactScore(7).build());
+        recyclingTipRepository.save(RecyclingTip.builder().title("Donate Unwanted Items").icon("🎁").description("Before discarding, consider donating to charities or thrift stores.").category("REUSE").impactScore(8).build());
+        recyclingTipRepository.save(RecyclingTip.builder().title("Separate Hazardous Waste").icon("⚠️").description("Batteries, electronics, paint need special disposal. Never mix with regular waste.").category("RECYCLE").impactScore(10).build());
+        System.out.println("✅ Seeded " + recyclingTipRepository.count() + " tips");
+    }
 
-        wasteItemRepository.save(WasteItem.builder().name("Glass Jar").category("RECYCLABLE").icon("🫙")
-                .disposalInstructions("Rinse clean. Remove metal lids (recycle separately). Place in glass recycling bin.")
-                .tips("Glass is 100% recyclable forever without losing quality!").recyclable(true).binColor("green").build());
+    private void seedStations() {
+        if (trashStationRepository.count() > 0) return;
+        trashStationRepository.save(TrashStation.builder().name("Central Park Station").address("Jl. Sudirman No. 1, Central Park").district("Central").operatingHours("Mon-Sat 07:00-18:00").icon("🏢").active(true).latitude(-6.2088).longitude(106.8456).build());
+        trashStationRepository.save(TrashStation.builder().name("Kebon Jeruk Eco Hub").address("Jl. Panjang No. 45, Kebon Jeruk").district("West").operatingHours("Mon-Sat 08:00-17:00").icon("🌿").active(true).latitude(-6.1944).longitude(106.7829).build());
+        trashStationRepository.save(TrashStation.builder().name("Kemang Green Point").address("Jl. Kemang Raya No. 12, Kemang").district("South").operatingHours("Tue-Sun 09:00-16:00").icon("♻").active(true).latitude(-6.2607).longitude(106.8147).build());
+        trashStationRepository.save(TrashStation.builder().name("Kelapa Gading RecycleHub").address("Jl. Boulevard Raya No. 88, Kelapa Gading").district("North").operatingHours("Mon-Fri 08:00-17:00").icon("🗑").active(true).latitude(-6.1601).longitude(106.9009).build());
+        trashStationRepository.save(TrashStation.builder().name("Cibubur Waste Center").address("Jl. Alternatif Cibubur No. 5").district("East").operatingHours("Mon-Sat 07:00-16:00").icon("🏭").active(true).latitude(-6.3622).longitude(106.8924).build());
+        trashStationRepository.save(TrashStation.builder().name("Menteng Eco Station").address("Jl. HOS Cokroaminoto No. 22, Menteng").district("Central").operatingHours("Mon-Sat 08:00-18:00").icon("🌍").active(true).latitude(-6.1983).longitude(106.8317).build());
+        System.out.println("✅ Seeded " + trashStationRepository.count() + " stations");
+    }
 
-        wasteItemRepository.save(WasteItem.builder().name("Cardboard Box").category("RECYCLABLE").icon("📦")
-                .disposalInstructions("Flatten completely. Remove tape and staples. Keep dry. Place in paper/cardboard bin.")
-                .tips("Wet cardboard cannot be recycled. Store in a dry place.").recyclable(true).binColor("blue").build());
-
-        wasteItemRepository.save(WasteItem.builder().name("Aluminum Can").category("RECYCLABLE").icon("🥫")
-                .disposalInstructions("Rinse and crush to save space. Place in metal recycling bin.")
-                .tips("Recycling aluminum uses 95% less energy than producing new aluminum!").recyclable(true).binColor("yellow").build());
-
-        wasteItemRepository.save(WasteItem.builder().name("Food Scraps").category("ORGANIC").icon("🥦")
-                .disposalInstructions("Collect in a sealed container. Place in green organic/compost bin or your home compost.")
-                .tips("Composting food scraps reduces methane emissions from landfills significantly.").recyclable(false).binColor("green").build());
-
-        wasteItemRepository.save(WasteItem.builder().name("Yard Waste").category("ORGANIC").icon("🍂")
-                .disposalInstructions("Bundle branches, bag leaves, place in organic waste bin or drop-off composting site.")
-                .tips("Yard waste compost makes excellent garden fertilizer.").recyclable(false).binColor("green").build());
-
-        wasteItemRepository.save(WasteItem.builder().name("Old Battery").category("HAZARDOUS").icon("🔋")
-                .disposalInstructions("NEVER put in regular bins. Take to designated hazardous waste facility or electronics store drop-off.")
-                .tips("Many supermarkets and electronics shops have free battery collection points.").recyclable(false).binColor("red").build());
-
-        wasteItemRepository.save(WasteItem.builder().name("Paint Can").category("HAZARDOUS").icon("🪣")
-                .disposalInstructions("Take to hazardous household waste facility. Never pour down drain or in general bin.")
-                .tips("Donate leftover usable paint to community projects or charities.").recyclable(false).binColor("red").build());
-
-        wasteItemRepository.save(WasteItem.builder().name("Old Electronics").category("HAZARDOUS").icon("💻")
-                .disposalInstructions("Take to certified e-waste recycler or retailer take-back program. Never in general waste.")
-                .tips("Electronics contain valuable materials like gold and copper that can be recovered.").recyclable(false).binColor("red").build());
-
-        wasteItemRepository.save(WasteItem.builder().name("Styrofoam").category("GENERAL").icon("📤")
-                .disposalInstructions("Most curbside programs don't accept styrofoam. Check for local drop-off foam recycling programs.")
-                .tips("Avoid buying products with styrofoam packaging when possible.").recyclable(false).binColor("black").build());
-
-        wasteItemRepository.save(WasteItem.builder().name("Plastic Bag").category("GENERAL").icon("🛍️")
-                .disposalInstructions("Return to supermarket collection points. Do NOT put in curbside recycling bins.")
-                .tips("Switch to reusable bags — one reusable bag can replace 500+ plastic bags over its lifetime!").recyclable(false).binColor("black").build());
-
-        wasteItemRepository.save(WasteItem.builder().name("Newspaper").category("RECYCLABLE").icon("📰")
-                .disposalInstructions("Bundle with string or place in paper bag. Put in paper recycling bin. Keep dry.")
-                .tips("Shredded paper should go in compost, not recycling — it's too small for sorting machines.").recyclable(true).binColor("blue").build());
-
-        wasteItemRepository.save(WasteItem.builder().name("Egg Carton").category("ORGANIC").icon("🥚")
-                .disposalInstructions("Cardboard cartons go in paper recycling. Styrofoam cartons go in general waste or foam drop-off.")
-                .tips("Clean cardboard egg cartons are great for seedling starters!").recyclable(true).binColor("blue").build());
-
-        wasteItemRepository.save(WasteItem.builder().name("Medicine / Pills").category("HAZARDOUS").icon("💊")
-                .disposalInstructions("Return to pharmacy take-back program. Never flush or put in household trash.")
-                .tips("Flushing medicine pollutes waterways and harms aquatic life.").recyclable(false).binColor("red").build());
-
-        wasteItemRepository.save(WasteItem.builder().name("Coffee Grounds").category("ORGANIC").icon("☕")
-                .disposalInstructions("Add directly to home compost or green organic bin. Excellent worm food.")
-                .tips("Coffee grounds are nitrogen-rich and help aerate compost. Great as garden fertilizer!").recyclable(false).binColor("green").build());
-
-        // --- Recycling Tips ---
-        recyclingTipRepository.save(RecyclingTip.builder().title("Rinse Before Recycling").icon("💧")
-                .description("Always rinse containers before placing them in recycling. Food residue contaminates entire batches of recyclables, sending them to landfill instead.").category("RECYCLE").impactScore(9).build());
-
-        recyclingTipRepository.save(RecyclingTip.builder().title("Start a Home Compost").icon("🌱")
-                .description("Composting kitchen scraps and garden waste reduces household waste by up to 30% and creates nutrient-rich soil for your garden.").category("COMPOST").impactScore(10).build());
-
-        recyclingTipRepository.save(RecyclingTip.builder().title("Buy in Bulk").icon("🛒")
-                .description("Purchasing in bulk reduces packaging waste significantly. Bring your own containers to zero-waste stores to eliminate packaging entirely.").category("REDUCE").impactScore(8).build());
-
-        recyclingTipRepository.save(RecyclingTip.builder().title("Repair Before Replacing").icon("🔧")
-                .description("Before throwing something away, consider if it can be repaired. Repair cafes and online tutorials make fixing items easier than ever.").category("REUSE").impactScore(9).build());
-
-        recyclingTipRepository.save(RecyclingTip.builder().title("Flatten Cardboard").icon("📦")
-                .description("Always flatten cardboard boxes before recycling. Unflattened boxes take up truck space and can jam sorting machinery at recycling facilities.").category("RECYCLE").impactScore(6).build());
-
-        recyclingTipRepository.save(RecyclingTip.builder().title("Choose Reusable Bags").icon("👜")
-                .description("Switching to reusable shopping bags eliminates hundreds of plastic bags per year. One durable bag can replace 500+ single-use plastic bags.").category("REDUCE").impactScore(7).build());
-
-        recyclingTipRepository.save(RecyclingTip.builder().title("Donate Unwanted Items").icon("🎁")
-                .description("Before discarding clothing, furniture, or electronics, consider donating to charities, thrift stores, or community groups who can give items a second life.").category("REUSE").impactScore(8).build());
-
-        recyclingTipRepository.save(RecyclingTip.builder().title("Separate Hazardous Waste").icon("⚠️")
-                .description("Batteries, electronics, paint, and chemicals need special disposal. Mixing them with regular waste contaminates recycling and harms the environment.").category("RECYCLE").impactScore(10).build());
-
-        System.out.println("✅ RecycleWise seeded: " + wasteItemRepository.count() + " items, " + recyclingTipRepository.count() + " tips.");
+    private void seedRewards() {
+        if (rewardRepository.count() > 0) return;
+        // Food & Drinks
+        rewardRepository.save(Reward.builder().name("Free Coffee Voucher").description("One free coffee at any participating government cafeteria.").pointsCost(100).category("FOOD_DRINKS").icon("☕").provider("City Government Cafeteria").available(true).stockRemaining(200).build());
+        rewardRepository.save(Reward.builder().name("Free Lunch Box").description("Free nutritious lunch from the government meal program.").pointsCost(250).category("FOOD_DRINKS").icon("🍱").provider("City Nutrition Program").available(true).stockRemaining(100).build());
+        rewardRepository.save(Reward.builder().name("Healthy Snack Pack").description("A curated pack of healthy snacks and drinks.").pointsCost(150).category("FOOD_DRINKS").icon("🥗").provider("City Health Department").available(true).stockRemaining(150).build());
+        // Transport
+        rewardRepository.save(Reward.builder().name("Bus Pass (1 Day)").description("Free unlimited bus travel for one day on all city routes.").pointsCost(200).category("TRANSPORT").icon("🚌").provider("City Transport Authority").available(true).stockRemaining(500).build());
+        rewardRepository.save(Reward.builder().name("MRT Credit — 20,000 IDR").description("20,000 IDR top-up credit for MRT card.").pointsCost(300).category("TRANSPORT").icon("🚇").provider("City MRT").available(true).stockRemaining(300).build());
+        rewardRepository.save(Reward.builder().name("Weekly Transit Pass").description("7-day unlimited travel on all public transport.").pointsCost(800).category("TRANSPORT").icon("🎫").provider("City Transport Authority").available(true).stockRemaining(100).build());
+        // Bill Discounts
+        rewardRepository.save(Reward.builder().name("Water Bill Discount — 10%").description("10% discount applied to your next monthly water bill.").pointsCost(400).category("BILLS").icon("💧").provider("City Water Authority").available(true).stockRemaining(200).build());
+        rewardRepository.save(Reward.builder().name("Electricity Discount — 5%").description("5% discount on your next electricity bill.").pointsCost(500).category("BILLS").icon("⚡").provider("City Electric Company").available(true).stockRemaining(200).build());
+        rewardRepository.save(Reward.builder().name("Water + Electricity Bundle").description("Combined 10% discount on both water and electricity bills.").pointsCost(850).category("BILLS").icon("🏠").provider("City Government").available(true).stockRemaining(50).build());
+        System.out.println("✅ Seeded " + rewardRepository.count() + " rewards");
     }
 }

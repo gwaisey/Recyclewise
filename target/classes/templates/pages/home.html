@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body>
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">🌍 Sustainable Living Guide</div>
+            <h1 class="hero-title">
+                Know What<br>
+                <em>Goes Where</em>
+            </h1>
+            <p class="hero-subtitle">
+                Your complete guide to recycling, composting, and responsible waste disposal.
+                Search any item and get instant, clear instructions.
+            </p>
+            <div class="hero-search">
+                <form action="/guide" method="get" class="search-form">
+                    <input type="text" name="search" placeholder="Search: plastic bottle, battery, coffee grounds..." class="search-input" />
+                    <button type="submit" class="search-btn">Search</button>
+                </form>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="bin-grid">
+                <div class="bin-card" style="--clr: #22c55e">
+                    <span class="bin-icon">♻</span>
+                    <span>Recycle</span>
+                </div>
+                <div class="bin-card" style="--clr: #84cc16">
+                    <span class="bin-icon">🌿</span>
+                    <span>Organic</span>
+                </div>
+                <div class="bin-card" style="--clr: #ef4444">
+                    <span class="bin-icon">⚠️</span>
+                    <span>Hazardous</span>
+                </div>
+                <div class="bin-card" style="--clr: #6b7280">
+                    <span class="bin-icon">🗑</span>
+                    <span>General</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Strip -->
+    <section class="stats-strip">
+        <div class="stats-inner">
+            <div class="stat-item">
+                <span class="stat-num" th:text="${stats.getOrDefault('RECYCLABLE', 0)}">0</span>
+                <span class="stat-label">Recyclable Items</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-num" th:text="${stats.getOrDefault('ORGANIC', 0)}">0</span>
+                <span class="stat-label">Organic Items</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-num" th:text="${stats.getOrDefault('HAZARDOUS', 0)}">0</span>
+                <span class="stat-label">Hazardous Items</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-num">3R</span>
+                <span class="stat-label">Reduce, Reuse, Recycle</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category Cards -->
+    <section class="categories-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Browse by Category</h2>
+                <p>Find the right bin for every type of waste</p>
+            </div>
+            <div class="category-grid">
+                <a href="/guide?category=RECYCLABLE" class="category-card recyclable">
+                    <div class="cat-icon">♻</div>
+                    <div class="cat-info">
+                        <h3>Recyclable</h3>
+                        <p>Plastic, glass, paper, metal — items that get a second life</p>
+                    </div>
+                    <span class="cat-arrow">→</span>
+                </a>
+                <a href="/guide?category=ORGANIC" class="category-card organic">
+                    <div class="cat-icon">🌿</div>
+                    <div class="cat-info">
+                        <h3>Organic / Compost</h3>
+                        <p>Food scraps and garden waste that become valuable compost</p>
+                    </div>
+                    <span class="cat-arrow">→</span>
+                </a>
+                <a href="/guide?category=HAZARDOUS" class="category-card hazardous">
+                    <div class="cat-icon">⚠️</div>
+                    <div class="cat-info">
+                        <h3>Hazardous Waste</h3>
+                        <p>Batteries, chemicals, electronics — handle with care</p>
+                    </div>
+                    <span class="cat-arrow">→</span>
+                </a>
+                <a href="/guide?category=GENERAL" class="category-card general">
+                    <div class="cat-icon">🗑</div>
+                    <div class="cat-info">
+                        <h3>General Waste</h3>
+                        <p>Items that cannot be recycled — the last resort bin</p>
+                    </div>
+                    <span class="cat-arrow">→</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Top Tips Section -->
+    <section class="tips-preview-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Top Eco Tips</h2>
+                <p>High-impact actions to reduce your environmental footprint</p>
+            </div>
+            <div class="tips-grid">
+                <div class="tip-card" th:each="tip : ${topTips}">
+                    <div class="tip-icon" th:text="${tip.icon}">💡</div>
+                    <div class="tip-category-badge" th:text="${tip.category}">RECYCLE</div>
+                    <h3 th:text="${tip.title}">Tip Title</h3>
+                    <p th:text="${tip.description}">Tip description here.</p>
+                    <div class="impact-bar">
+                        <span class="impact-label">Impact</span>
+                        <div class="impact-track">
+                            <div class="impact-fill" th:style="'width: ' + ${tip.impactScore * 10} + '%'"></div>
+                        </div>
+                        <span class="impact-score" th:text="${tip.impactScore} + '/10'">9/10</span>
+                    </div>
+                </div>
+            </div>
+            <div class="section-cta">
+                <a href="/tips" class="btn-outline">View All Tips →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <section class="cta-banner">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Not sure where something goes?</h2>
+                <p>Search our complete waste database for instant guidance</p>
+                <a href="/guide" class="btn-primary">Open Waste Guide</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>
