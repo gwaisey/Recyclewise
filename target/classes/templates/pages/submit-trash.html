@@ -1,79 +1,168 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header :: head}"></head>
-<body>
+<body style="margin:0; background:#f5f2eb;">
 <nav th:replace="~{fragments/header :: navbar}"></nav>
 <main>
-  <section class="page-hero">
-    <div class="container">
-      <a href="/stations" class="back-link">← Back to Stations</a>
-      <div class="page-hero-content">
-        <span class="detail-emoji" th:text="${station.icon}">🏢</span>
-        <h1 th:text="${station.name}">Station Name</h1>
-        <p th:text="${station.address}">Station address</p>
+
+  <section style="background:#0d2b1a; padding:36px 0; border-bottom:4px solid #b7f34d;">
+    <div style="max-width:1180px; margin:0 auto; padding:0 24px;">
+      <a href="/stations" style="display:inline-block; color:rgba(255,255,255,0.5); font-size:0.85rem; margin-bottom:16px; text-decoration:none;">&larr; Back to Stations</a>
+      <div style="display:flex; align-items:center; gap:16px;">
+        <span style="font-size:2.5rem;" th:text="${station.icon}">&#127970;</span>
+        <div>
+          <h1 style="font-family:Syne,sans-serif; font-size:1.8rem; font-weight:800; color:white; margin-bottom:4px;" th:text="${station.name}">Station</h1>
+          <p style="color:rgba(255,255,255,0.5); font-size:0.875rem;" th:text="${station.address}">Address</p>
+        </div>
       </div>
     </div>
   </section>
-  <section class="submit-section">
-    <div class="container">
-      <div class="submit-wrapper">
-        <div class="submit-info">
-          <h2>How it works</h2>
-          <div class="step-list">
-            <div class="step"><span class="step-num">1</span><p>Enter the weight (kg) of each waste category</p></div>
-            <div class="step"><span class="step-num">2</span><p>Submit — points are calculated automatically</p></div>
-            <div class="step"><span class="step-num">3</span><p>Bring your trash to the station</p></div>
-            <div class="step"><span class="step-num">4</span><p>Points are added to your account instantly</p></div>
+
+  <section style="padding:48px 0 80px;">
+    <div style="max-width:1180px; margin:0 auto; padding:0 24px; display:grid; grid-template-columns:1fr 1.4fr; gap:40px; align-items:start;">
+
+      <div>
+        <h2 style="font-family:Syne,sans-serif; font-size:1.2rem; font-weight:700; color:#0d2b1a; margin-bottom:20px;">How it works</h2>
+        <div style="display:flex; flex-direction:column; gap:14px; margin-bottom:28px;">
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <span style="width:26px; height:26px; background:#0d2b1a; color:#b7f34d; border-radius:50%; font-family:Syne,sans-serif; font-weight:700; font-size:0.75rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px;">1</span>
+            <p style="font-size:0.875rem; color:#4a5c4e; margin:0;">Enter the weight in kg for each waste category you are dropping off</p>
           </div>
-          <div class="points-preview-box">
-            <h3>Points Rate</h3>
-            <div class="rate-row"><span>♻ Recyclable</span><strong th:text="${multipliers.get('RECYCLABLE')} + ' pts/kg'">15 pts/kg</strong></div>
-            <div class="rate-row"><span>🌿 Organic</span><strong th:text="${multipliers.get('ORGANIC')} + ' pts/kg'">10 pts/kg</strong></div>
-            <div class="rate-row"><span>⚠️ Hazardous</span><strong th:text="${multipliers.get('HAZARDOUS')} + ' pts/kg'">20 pts/kg</strong></div>
-            <div class="rate-row"><span>🗑 General</span><strong th:text="${multipliers.get('GENERAL')} + ' pts/kg'">5 pts/kg</strong></div>
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <span style="width:26px; height:26px; background:#0d2b1a; color:#b7f34d; border-radius:50%; font-family:Syne,sans-serif; font-weight:700; font-size:0.75rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px;">2</span>
+            <p style="font-size:0.875rem; color:#4a5c4e; margin:0;">Submit the form and points are calculated automatically</p>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <span style="width:26px; height:26px; background:#0d2b1a; color:#b7f34d; border-radius:50%; font-family:Syne,sans-serif; font-weight:700; font-size:0.75rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px;">3</span>
+            <p style="font-size:0.875rem; color:#4a5c4e; margin:0;">Bring your trash to this station and hand it to staff</p>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <span style="width:26px; height:26px; background:#0d2b1a; color:#b7f34d; border-radius:50%; font-family:Syne,sans-serif; font-weight:700; font-size:0.75rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px;">4</span>
+            <p style="font-size:0.875rem; color:#4a5c4e; margin:0;">Points are added to your account instantly</p>
           </div>
         </div>
-        <div class="submit-form-card">
-          <h2>Submit Your Trash</h2>
-          <p class="submit-station-label">📍 <span th:text="${station.name}">Station</span></p>
-          <form th:action="@{/stations/{id}/submit(id=${station.id})}" method="post" class="trash-form">
-            <div class="trash-input-group recyclable-group">
-              <div class="trash-label"><span class="trash-emoji">♻</span><div><strong>Recyclable</strong><small th:text="${multipliers.get('RECYCLABLE')} + ' pts per kg'">15 pts/kg</small></div></div>
-              <div class="trash-input-row"><input type="number" name="recyclableKg" id="recyclableKg" min="0" step="0.1" value="0" class="weight-input" oninput="updatePreview()" /><span class="unit-label">kg</span></div>
-            </div>
-            <div class="trash-input-group organic-group">
-              <div class="trash-label"><span class="trash-emoji">🌿</span><div><strong>Organic</strong><small th:text="${multipliers.get('ORGANIC')} + ' pts per kg'">10 pts/kg</small></div></div>
-              <div class="trash-input-row"><input type="number" name="organicKg" id="organicKg" min="0" step="0.1" value="0" class="weight-input" oninput="updatePreview()" /><span class="unit-label">kg</span></div>
-            </div>
-            <div class="trash-input-group hazardous-group">
-              <div class="trash-label"><span class="trash-emoji">⚠️</span><div><strong>Hazardous</strong><small th:text="${multipliers.get('HAZARDOUS')} + ' pts per kg'">20 pts/kg</small></div></div>
-              <div class="trash-input-row"><input type="number" name="hazardousKg" id="hazardousKg" min="0" step="0.1" value="0" class="weight-input" oninput="updatePreview()" /><span class="unit-label">kg</span></div>
-            </div>
-            <div class="trash-input-group general-group">
-              <div class="trash-label"><span class="trash-emoji">🗑</span><div><strong>General Waste</strong><small th:text="${multipliers.get('GENERAL')} + ' pts per kg'">5 pts/kg</small></div></div>
-              <div class="trash-input-row"><input type="number" name="generalKg" id="generalKg" min="0" step="0.1" value="0" class="weight-input" oninput="updatePreview()" /><span class="unit-label">kg</span></div>
-            </div>
-            <div class="points-preview">
-              <span>Estimated Points:</span>
-              <strong id="pointsPreview">0 pts</strong>
-            </div>
-            <button type="submit" class="btn-primary btn-full">Submit and Earn Points</button>
-          </form>
+        <div style="background:#0d2b1a; border-radius:14px; padding:20px 24px;">
+          <p style="font-family:Syne,sans-serif; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:#b7f34d; margin-bottom:12px;">Points Rate</p>
+          <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:0.875rem; color:rgba(255,255,255,0.6);">
+            <span>&#9851; Recyclable</span><strong style="color:#b7f34d;" th:text="${multipliers.get('RECYCLABLE')} + ' pts/kg'">15 pts/kg</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:0.875rem; color:rgba(255,255,255,0.6);">
+            <span>&#127807; Organic</span><strong style="color:#b7f34d;" th:text="${multipliers.get('ORGANIC')} + ' pts/kg'">10 pts/kg</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:0.875rem; color:rgba(255,255,255,0.6);">
+            <span>&#9888; Hazardous</span><strong style="color:#b7f34d;" th:text="${multipliers.get('HAZARDOUS')} + ' pts/kg'">20 pts/kg</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:8px 0; font-size:0.875rem; color:rgba(255,255,255,0.6);">
+            <span>&#128465; General</span><strong style="color:#b7f34d;" th:text="${multipliers.get('GENERAL')} + ' pts/kg'">5 pts/kg</strong>
+          </div>
         </div>
       </div>
+
+      <div style="background:white; border-radius:16px; padding:36px; box-shadow:0 8px 32px rgba(13,43,26,0.1); border:1px solid #e8e4d9;">
+        <h2 style="font-family:Syne,sans-serif; font-size:1.3rem; font-weight:700; color:#0d2b1a; margin-bottom:6px;">Submit Your Trash</h2>
+        <p style="font-size:0.85rem; color:#7a8c7e; margin-bottom:28px;" th:text="'&#128205; ' + ${station.name}">Station</p>
+
+        <form th:action="@{/stations/{id}/submit(id=${station.id})}" method="post" style="display:flex; flex-direction:column; gap:14px;">
+
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:16px; border-radius:12px; border:2px solid #e8e4d9; background:#fafaf8;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <span style="font-size:1.8rem;">&#9851;</span>
+              <div>
+                <div style="font-family:Syne,sans-serif; font-weight:700; font-size:0.9rem; color:#0d2b1a;">Recyclable</div>
+                <div style="font-size:0.75rem; color:#7a8c7e;" th:text="${multipliers.get('RECYCLABLE')} + ' pts per kg'">15 pts/kg</div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <input type="number" name="recyclableKg" id="recyclableKg" min="0" step="0.1" value="0"
+                style="width:80px; padding:10px 12px; border:2px solid #e8e4d9; border-radius:10px; font-family:Syne,sans-serif; font-size:1rem; font-weight:700; text-align:center; outline:none; background:white;"
+                oninput="updatePreview()"
+                onfocus="this.style.borderColor='#0d2b1a'" onblur="this.style.borderColor='#e8e4d9'" />
+              <span style="font-size:0.85rem; color:#7a8c7e; font-weight:600;">kg</span>
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:16px; border-radius:12px; border:2px solid #e8e4d9; background:#fafaf8;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <span style="font-size:1.8rem;">&#127807;</span>
+              <div>
+                <div style="font-family:Syne,sans-serif; font-weight:700; font-size:0.9rem; color:#0d2b1a;">Organic</div>
+                <div style="font-size:0.75rem; color:#7a8c7e;" th:text="${multipliers.get('ORGANIC')} + ' pts per kg'">10 pts/kg</div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <input type="number" name="organicKg" id="organicKg" min="0" step="0.1" value="0"
+                style="width:80px; padding:10px 12px; border:2px solid #e8e4d9; border-radius:10px; font-family:Syne,sans-serif; font-size:1rem; font-weight:700; text-align:center; outline:none; background:white;"
+                oninput="updatePreview()"
+                onfocus="this.style.borderColor='#0d2b1a'" onblur="this.style.borderColor='#e8e4d9'" />
+              <span style="font-size:0.85rem; color:#7a8c7e; font-weight:600;">kg</span>
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:16px; border-radius:12px; border:2px solid #e8e4d9; background:#fafaf8;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <span style="font-size:1.8rem;">&#9888;</span>
+              <div>
+                <div style="font-family:Syne,sans-serif; font-weight:700; font-size:0.9rem; color:#0d2b1a;">Hazardous</div>
+                <div style="font-size:0.75rem; color:#7a8c7e;" th:text="${multipliers.get('HAZARDOUS')} + ' pts per kg'">20 pts/kg</div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <input type="number" name="hazardousKg" id="hazardousKg" min="0" step="0.1" value="0"
+                style="width:80px; padding:10px 12px; border:2px solid #e8e4d9; border-radius:10px; font-family:Syne,sans-serif; font-size:1rem; font-weight:700; text-align:center; outline:none; background:white;"
+                oninput="updatePreview()"
+                onfocus="this.style.borderColor='#0d2b1a'" onblur="this.style.borderColor='#e8e4d9'" />
+              <span style="font-size:0.85rem; color:#7a8c7e; font-weight:600;">kg</span>
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:16px; border-radius:12px; border:2px solid #e8e4d9; background:#fafaf8;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <span style="font-size:1.8rem;">&#128465;</span>
+              <div>
+                <div style="font-family:Syne,sans-serif; font-weight:700; font-size:0.9rem; color:#0d2b1a;">General Waste</div>
+                <div style="font-size:0.75rem; color:#7a8c7e;" th:text="${multipliers.get('GENERAL')} + ' pts per kg'">5 pts/kg</div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <input type="number" name="generalKg" id="generalKg" min="0" step="0.1" value="0"
+                style="width:80px; padding:10px 12px; border:2px solid #e8e4d9; border-radius:10px; font-family:Syne,sans-serif; font-size:1rem; font-weight:700; text-align:center; outline:none; background:white;"
+                oninput="updatePreview()"
+                onfocus="this.style.borderColor='#0d2b1a'" onblur="this.style.borderColor='#e8e4d9'" />
+              <span style="font-size:0.85rem; color:#7a8c7e; font-weight:600;">kg</span>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#f5f2eb; border-radius:12px; padding:16px 20px; margin-top:4px;">
+            <span style="font-size:0.9rem; color:#4a5c4e; font-weight:600;">Estimated Points:</span>
+            <strong id="pointsPreview" style="font-family:Syne,sans-serif; font-size:1.4rem; color:#0d2b1a;">0 pts</strong>
+          </div>
+
+          <button type="submit"
+            style="background:#b7f34d; color:#0d2b1a; font-family:Syne,sans-serif; font-weight:700; font-size:1rem; padding:16px 24px; border-radius:100px; border:none; cursor:pointer; margin-top:4px;"
+            onmouseover="this.style.background='#a3e040'" onmouseout="this.style.background='#b7f34d'">
+            Submit and Earn Points &#8594;
+          </button>
+        </form>
+      </div>
+
     </div>
   </section>
 </main>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
-<script>
-const multipliers = { recyclable: [[${multipliers.get('RECYCLABLE')}]], organic: [[${multipliers.get('ORGANIC')}]], hazardous: [[${multipliers.get('HAZARDOUS')}]], general: [[${multipliers.get('GENERAL')}]] };
+<script th:inline="javascript">
+const multipliers = {
+  recyclable: [[${multipliers.get("RECYCLABLE")}]],
+  organic: [[${multipliers.get("ORGANIC")}]],
+  hazardous: [[${multipliers.get("HAZARDOUS")}]],
+  general: [[${multipliers.get("GENERAL")}]]
+};
 function updatePreview() {
-  const r = parseFloat(document.getElementById('recyclableKg').value) || 0;
-  const o = parseFloat(document.getElementById('organicKg').value) || 0;
-  const h = parseFloat(document.getElementById('hazardousKg').value) || 0;
-  const g = parseFloat(document.getElementById('generalKg').value) || 0;
+  const r = parseFloat(document.getElementById("recyclableKg").value) || 0;
+  const o = parseFloat(document.getElementById("organicKg").value) || 0;
+  const h = parseFloat(document.getElementById("hazardousKg").value) || 0;
+  const g = parseFloat(document.getElementById("generalKg").value) || 0;
   const total = Math.round(r * multipliers.recyclable + o * multipliers.organic + h * multipliers.hazardous + g * multipliers.general);
-  document.getElementById('pointsPreview').textContent = total + ' pts';
+  document.getElementById("pointsPreview").textContent = total + " pts";
 }
 </script>
 </body>

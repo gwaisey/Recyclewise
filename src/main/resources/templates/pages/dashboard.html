@@ -1,99 +1,102 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header :: head}"></head>
-<body>
+<body style="margin:0; background:#f5f2eb;">
 <nav th:replace="~{fragments/header :: navbar}"></nav>
 <main>
-  <section class="dashboard-hero">
-    <div class="container">
-      <div class="dashboard-welcome">
-        <div class="welcome-text">
-          <p class="welcome-label">Welcome back,</p>
-          <h1 th:text="${user.fullName}">User Name</h1>
-          <p class="welcome-sub">Keep recycling and earn more rewards!</p>
-        </div>
-        <div class="points-badge">
-          <div class="points-number" th:text="${user.totalPoints}">0</div>
-          <div class="points-label">♻ Total Points</div>
-        </div>
+
+  <section style="background:#0d2b1a; padding:40px 0; border-bottom:4px solid #b7f34d;">
+    <div style="max-width:1180px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:20px;">
+      <div>
+        <p style="color:rgba(255,255,255,0.5); font-size:0.8rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">Welcome back,</p>
+        <h1 style="font-family:Syne,sans-serif; font-size:2.2rem; font-weight:800; color:white; margin-bottom:6px;" th:text="${user.fullName}">User</h1>
+        <p style="color:rgba(255,255,255,0.5); font-size:0.9rem;">Keep recycling and earn more rewards!</p>
+      </div>
+      <div style="background:#b7f34d; border-radius:16px; padding:24px 36px; text-align:center; min-width:160px;">
+        <div style="font-family:Syne,sans-serif; font-size:3rem; font-weight:800; color:#0d2b1a; line-height:1;" th:text="${user.totalPoints}">0</div>
+        <div style="font-size:0.75rem; font-weight:700; color:#2d6a4f; text-transform:uppercase; letter-spacing:0.5px; margin-top:4px;">Total Points</div>
       </div>
     </div>
   </section>
-  <section class="dashboard-actions">
-    <div class="container">
-      <div class="action-cards">
-        <a href="/stations" class="action-card action-submit">
-          <span class="action-icon">🗑</span>
-          <h3>Submit Trash</h3>
-          <p>Drop off at a station near you and earn points</p>
-          <span class="action-arrow">→</span>
+
+  <section style="background:#e8e4d9; padding:28px 0;">
+    <div style="max-width:1180px; margin:0 auto; padding:0 24px;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+        <a href="/stations" style="background:white; border-radius:16px; padding:24px 28px; display:flex; align-items:center; gap:16px; box-shadow:0 4px 20px rgba(13,43,26,0.08); border:2px solid transparent; text-decoration:none;"
+          onmouseover="this.style.borderColor='#2d6a4f'" onmouseout="this.style.borderColor='transparent'">
+          <span style="font-size:2.2rem;">&#x1F5D1;</span>
+          <div style="flex:1;">
+            <h3 style="font-family:Syne,sans-serif; font-size:1rem; font-weight:700; color:#0d2b1a; margin-bottom:4px;">Submit Trash</h3>
+            <p style="font-size:0.8rem; color:#7a8c7e; margin:0;">Drop off at a station near you and earn points</p>
+          </div>
+          <span style="color:#b7f34d; background:#0d2b1a; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:1rem;">&#8594;</span>
         </a>
-        <a href="/rewards" class="action-card action-rewards">
-          <span class="action-icon">🎁</span>
-          <h3>Redeem Rewards</h3>
-          <p>Exchange your points for food, transport, and bill discounts</p>
-          <span class="action-arrow">→</span>
+        <a href="/rewards" style="background:white; border-radius:16px; padding:24px 28px; display:flex; align-items:center; gap:16px; box-shadow:0 4px 20px rgba(13,43,26,0.08); border:2px solid transparent; text-decoration:none;"
+          onmouseover="this.style.borderColor='#b7f34d'" onmouseout="this.style.borderColor='transparent'">
+          <span style="font-size:2.2rem;">&#x1F381;</span>
+          <div style="flex:1;">
+            <h3 style="font-family:Syne,sans-serif; font-size:1rem; font-weight:700; color:#0d2b1a; margin-bottom:4px;">Redeem Rewards</h3>
+            <p style="font-size:0.8rem; color:#7a8c7e; margin:0;">Exchange your points for food, transport, and bill discounts</p>
+          </div>
+          <span style="color:#b7f34d; background:#0d2b1a; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:1rem;">&#8594;</span>
         </a>
       </div>
     </div>
   </section>
-  <section class="dashboard-content">
-    <div class="container">
-      <div class="dashboard-grid">
-        <div class="dash-panel">
-          <div class="panel-header">
-            <h2>♻ Submission History</h2>
-            <a href="/stations" class="panel-link">+ New Submission</a>
+
+  <section style="padding:40px 0 80px;">
+    <div style="max-width:1180px; margin:0 auto; padding:0 24px;">
+      <div th:if="${success}" style="background:#dcfce7; border:1px solid #16a34a; color:#14532d; padding:14px 18px; border-radius:10px; margin-bottom:24px; font-size:0.875rem;" th:text="${success}"></div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+
+        <div style="background:white; border-radius:16px; padding:28px; box-shadow:0 4px 20px rgba(13,43,26,0.06); border:1px solid #e8e4d9;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h2 style="font-family:Syne,sans-serif; font-size:1.05rem; font-weight:700; color:#0d2b1a;">Submission History</h2>
+            <a href="/stations" style="font-size:0.78rem; color:#2d6a4f; font-weight:600; border:1px solid #2d6a4f; padding:5px 14px; border-radius:100px; text-decoration:none;">+ New</a>
           </div>
-          <div class="flash-success" th:if="${success}" th:text="${success}"></div>
-          <div class="empty-panel" th:if="${#lists.isEmpty(submissions)}">
-            <span>🗑</span>
-            <p>No submissions yet. Drop off trash at a station to get started!</p>
+          <div th:if="${#lists.isEmpty(submissions)}" style="text-align:center; padding:32px 16px;">
+            <p style="font-size:0.875rem; color:#7a8c7e; margin-bottom:14px;">No submissions yet. Drop off trash at a station to get started!</p>
+            <a href="/stations" style="display:inline-block; background:#0d2b1a; color:#b7f34d; font-family:Syne,sans-serif; font-weight:700; font-size:0.8rem; padding:10px 20px; border-radius:100px; text-decoration:none;">Find a Station</a>
           </div>
-          <div class="submission-list" th:unless="${#lists.isEmpty(submissions)}">
-            <div class="submission-item" th:each="sub : ${submissions}">
-              <div class="sub-top">
-                <div class="sub-station">
-                  <span class="sub-icon">📍</span>
-                  <span th:text="${sub.station.name}">Station Name</span>
-                </div>
-                <div class="sub-status"
-                     th:classappend="'status-' + ${#strings.toLowerCase(sub.status.name())}"
-                     th:text="${sub.status}">PENDING</div>
+          <div th:unless="${#lists.isEmpty(submissions)}" style="display:flex; flex-direction:column; gap:12px;">
+            <div th:each="sub : ${submissions}" style="border:1px solid #e8e4d9; border-radius:10px; padding:14px 16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <span style="font-size:0.875rem; font-weight:600; color:#0d2b1a;" th:text="${sub.station.name}">Station</span>
+                <span th:text="${sub.status}" class="badge-pending" th:classappend="${sub.status.name() == 'CONFIRMED'} ? ' badge-confirmed'"></span>
               </div>
-              <div class="sub-footer">
-                <span th:text="${#temporals.format(sub.submittedAt, 'dd MMM yyyy, HH:mm')}">Date</span>
-                <strong th:text="'Total: +' + ${sub.pointsEarned} + ' pts'">+0 pts</strong>
+              <div style="display:flex; justify-content:space-between; font-size:0.78rem; color:#7a8c7e; padding-top:8px; border-top:1px solid #f0ede6;">
+                <span th:text="${#temporals.format(sub.submittedAt, 'dd MMM yyyy')}">Date</span>
+                <strong style="color:#2d6a4f;" th:text="'+' + ${sub.pointsEarned} + ' pts'">+0 pts</strong>
               </div>
             </div>
           </div>
         </div>
-        <div class="dash-panel">
-          <div class="panel-header">
-            <h2>🎁 My Vouchers</h2>
-            <a href="/rewards" class="panel-link">Browse Rewards</a>
+
+        <div style="background:white; border-radius:16px; padding:28px; box-shadow:0 4px 20px rgba(13,43,26,0.06); border:1px solid #e8e4d9;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h2 style="font-family:Syne,sans-serif; font-size:1.05rem; font-weight:700; color:#0d2b1a;">My Vouchers</h2>
+            <a href="/rewards" style="font-size:0.78rem; color:#2d6a4f; font-weight:600; border:1px solid #2d6a4f; padding:5px 14px; border-radius:100px; text-decoration:none;">Browse</a>
           </div>
-          <div class="empty-panel" th:if="${#lists.isEmpty(redemptions)}">
-            <span>🎫</span>
-            <p>No vouchers yet. Redeem your points for great benefits!</p>
+          <div th:if="${#lists.isEmpty(redemptions)}" style="text-align:center; padding:32px 16px;">
+            <p style="font-size:0.875rem; color:#7a8c7e; margin-bottom:14px;">No vouchers yet. Redeem your points for great benefits!</p>
+            <a href="/rewards" style="display:inline-block; background:#b7f34d; color:#0d2b1a; font-family:Syne,sans-serif; font-weight:700; font-size:0.8rem; padding:10px 20px; border-radius:100px; text-decoration:none;">See Rewards</a>
           </div>
-          <div class="voucher-list" th:unless="${#lists.isEmpty(redemptions)}">
-            <div class="voucher-card" th:each="r : ${redemptions}">
-              <div class="voucher-icon" th:text="${r.reward.icon}">🎁</div>
-              <div class="voucher-info">
-                <h4 th:text="${r.reward.name}">Reward Name</h4>
-                <p class="voucher-code" th:text="${r.voucherCode}">RW-XXXXXXXX</p>
-                <p class="voucher-date" th:text="${#temporals.format(r.redeemedAt, 'dd MMM yyyy')}">Date</p>
+          <div th:unless="${#lists.isEmpty(redemptions)}" style="display:flex; flex-direction:column; gap:12px;">
+            <div th:each="r : ${redemptions}" style="display:flex; align-items:center; gap:14px; border:1px solid #e8e4d9; border-radius:10px; padding:14px 16px;">
+              <span style="font-size:1.8rem;" th:text="${r.reward.icon}">&#x1F381;</span>
+              <div style="flex:1;">
+                <h4 style="font-size:0.875rem; font-weight:700; color:#0d2b1a; margin-bottom:3px;" th:text="${r.reward.name}">Reward</h4>
+                <code style="font-size:0.8rem; color:#2d6a4f; background:#f0f9f0; padding:2px 8px; border-radius:4px;" th:text="${r.voucherCode}">RW-XXXX</code>
               </div>
-              <div class="voucher-status"
-                   th:classappend="'vstatus-' + ${#strings.toLowerCase(r.status.name())}"
-                   th:text="${r.status}">ACTIVE</div>
+              <span style="font-size:0.65rem; font-weight:700; padding:3px 10px; border-radius:100px; background:#dcfce7; color:#14532d; text-transform:uppercase; letter-spacing:1px;" th:text="${r.status}">ACTIVE</span>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   </section>
+
 </main>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>

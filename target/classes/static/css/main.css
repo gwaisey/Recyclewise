@@ -1009,3 +1009,8 @@ a { text-decoration: none; color: inherit; }
 
   .detail-actions { flex-direction: column; }
 }
+.badge-confirmed { background:#dcfce7; color:#14532d; }
+.badge-pending { background:#fef9c3; color:#854d0e; }
+.badge-rejected { background:#fee2e2; color:#7f1d1d; }
+.badge-pending { background:#fef9c3; color:#854d0e; font-size:0.65rem; font-weight:700; padding:3px 10px; border-radius:100px; text-transform:uppercase; letter-spacing:1px; }
+.badge-confirmed { background:#dcfce7 !important; color:#14532d !important; }

@@ -1,40 +1,60 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header :: head}"></head>
-<body>
+<body style="margin:0; background:#f5f2eb;">
 <nav th:replace="~{fragments/header :: navbar}"></nav>
 <main>
-  <section class="page-hero">
-    <div class="container">
-      <div class="page-hero-content">
-        <h1>📍 Trash Stations</h1>
-        <p>Find an organized trash station near you and submit your waste to earn points</p>
-      </div>
+
+  <section style="background:#0d2b1a; padding:48px 0; border-bottom:4px solid #b7f34d; text-align:center;">
+    <div style="max-width:1180px; margin:0 auto; padding:0 24px;">
+      <h1 style="font-family:Syne,sans-serif; font-size:2.8rem; font-weight:800; color:white; margin-bottom:10px;">Trash Stations</h1>
+      <p style="color:rgba(255,255,255,0.6); font-size:1rem;">Find an organized trash station near you and submit your waste to earn points</p>
     </div>
   </section>
-  <section class="stations-section">
-    <div class="container">
-      <div class="multiplier-banner">
-        <h3>💡 How Points Are Calculated</h3>
-        <div class="multiplier-grid">
-          <div class="mult-card"><span>♻</span><strong>Recyclable</strong><span class="mult-val" th:text="${multipliers.get('RECYCLABLE')} + ' pts/kg'">15 pts/kg</span></div>
-          <div class="mult-card"><span>🌿</span><strong>Organic</strong><span class="mult-val" th:text="${multipliers.get('ORGANIC')} + ' pts/kg'">10 pts/kg</span></div>
-          <div class="mult-card"><span>⚠️</span><strong>Hazardous</strong><span class="mult-val" th:text="${multipliers.get('HAZARDOUS')} + ' pts/kg'">20 pts/kg</span></div>
-          <div class="mult-card"><span>🗑</span><strong>General</strong><span class="mult-val" th:text="${multipliers.get('GENERAL')} + ' pts/kg'">5 pts/kg</span></div>
+
+  <section style="padding:48px 0 80px;">
+    <div style="max-width:1180px; margin:0 auto; padding:0 24px;">
+
+      <div style="background:#0d2b1a; border-radius:16px; padding:28px 32px; margin-bottom:40px; display:grid; grid-template-columns:repeat(4,1fr); gap:12px;">
+        <div style="text-align:center; background:rgba(255,255,255,0.06); border-radius:10px; padding:16px 12px;">
+          <div style="font-size:1.5rem; margin-bottom:6px;">&#9851;</div>
+          <div style="font-family:Syne,sans-serif; font-weight:700; color:white; font-size:0.85rem; margin-bottom:4px;">Recyclable</div>
+          <div style="font-family:Syne,sans-serif; font-weight:700; color:#b7f34d; font-size:1rem;" th:text="${multipliers.get('RECYCLABLE')} + ' pts/kg'">15 pts/kg</div>
+        </div>
+        <div style="text-align:center; background:rgba(255,255,255,0.06); border-radius:10px; padding:16px 12px;">
+          <div style="font-size:1.5rem; margin-bottom:6px;">&#127807;</div>
+          <div style="font-family:Syne,sans-serif; font-weight:700; color:white; font-size:0.85rem; margin-bottom:4px;">Organic</div>
+          <div style="font-family:Syne,sans-serif; font-weight:700; color:#b7f34d; font-size:1rem;" th:text="${multipliers.get('ORGANIC')} + ' pts/kg'">10 pts/kg</div>
+        </div>
+        <div style="text-align:center; background:rgba(255,255,255,0.06); border-radius:10px; padding:16px 12px;">
+          <div style="font-size:1.5rem; margin-bottom:6px;">&#9888;</div>
+          <div style="font-family:Syne,sans-serif; font-weight:700; color:white; font-size:0.85rem; margin-bottom:4px;">Hazardous</div>
+          <div style="font-family:Syne,sans-serif; font-weight:700; color:#b7f34d; font-size:1rem;" th:text="${multipliers.get('HAZARDOUS')} + ' pts/kg'">20 pts/kg</div>
+        </div>
+        <div style="text-align:center; background:rgba(255,255,255,0.06); border-radius:10px; padding:16px 12px;">
+          <div style="font-size:1.5rem; margin-bottom:6px;">&#128465;</div>
+          <div style="font-family:Syne,sans-serif; font-weight:700; color:white; font-size:0.85rem; margin-bottom:4px;">General</div>
+          <div style="font-family:Syne,sans-serif; font-weight:700; color:#b7f34d; font-size:1rem;" th:text="${multipliers.get('GENERAL')} + ' pts/kg'">5 pts/kg</div>
         </div>
       </div>
-      <div class="stations-grid">
-        <div class="station-card" th:each="station : ${stations}">
-          <div class="station-header">
-            <span class="station-emoji" th:text="${station.icon}">🏢</span>
-            <div class="station-badge" th:text="${station.district}">District</div>
+
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:20px;">
+        <div th:each="station : ${stations}" style="background:white; border-radius:16px; padding:24px; box-shadow:0 4px 20px rgba(13,43,26,0.08); border:2px solid #e8e4d9; display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <span style="font-size:2rem;" th:text="${station.icon}">&#127970;</span>
+            <span style="font-family:Syne,sans-serif; font-size:0.65rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; background:#0d2b1a; color:#b7f34d; padding:3px 10px; border-radius:100px;" th:text="${station.district}">District</span>
           </div>
-          <h3 class="station-name" th:text="${station.name}">Station Name</h3>
-          <p class="station-address">📍 <span th:text="${station.address}">Address</span></p>
-          <p class="station-hours">🕐 <span th:text="${station.operatingHours}">Hours</span></p>
-          <a th:href="@{/stations/{id}/submit(id=${station.id})}" class="btn-station-submit">Submit Trash Here →</a>
+          <h3 style="font-family:Syne,sans-serif; font-size:1rem; font-weight:700; color:#0d2b1a; margin:0;" th:text="${station.name}">Station Name</h3>
+          <p style="font-size:0.8rem; color:#7a8c7e; margin:0;" th:text="'&#128205; ' + ${station.address}">Address</p>
+          <p style="font-size:0.8rem; color:#7a8c7e; margin:0;" th:text="'&#128336; ' + ${station.operatingHours}">Hours</p>
+          <a th:href="@{/stations/{id}/submit(id=${station.id})}"
+             style="display:block; margin-top:8px; background:#0d2b1a; color:#b7f34d; font-family:Syne,sans-serif; font-weight:700; font-size:0.85rem; padding:12px 20px; border-radius:100px; text-align:center; text-decoration:none;"
+             onmouseover="this.style.background='#2d6a4f'" onmouseout="this.style.background='#0d2b1a'">
+            Submit Trash Here &#8594;
+          </a>
         </div>
       </div>
+
     </div>
   </section>
 </main>

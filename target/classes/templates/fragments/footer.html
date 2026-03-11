@@ -1,31 +1,86 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<footer th:fragment="footer" class="site-footer">
-    <div class="footer-inner">
-        <div class="footer-brand">
-            <span class="logo-leaf">♻</span>
-            <span class="logo-text">RecycleWise</span>
-            <p>Making responsible waste disposal simple for everyone.</p>
+<footer th:fragment="footer" style="background:#0d2b1a; padding:48px 0 0 0; margin-top:auto;">
+  <div style="max-width:1180px; margin:0 auto; padding:0 24px;">
+
+    <div style="display:grid; grid-template-columns:1.8fr 1fr 1fr; gap:48px; padding-bottom:40px; border-bottom:1px solid rgba(255,255,255,0.08);">
+
+      <!-- Brand + About -->
+      <div>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:14px;">
+          <span style="font-size:1.4rem;">♻</span>
+          <span style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.2rem; color:#b7f34d;">RecycleWise</span>
         </div>
-        <div class="footer-links">
-            <h4>Navigate</h4>
-            <a href="/">Home</a>
-            <a href="/guide">Waste Guide</a>
-            <a href="/tips">Eco Tips</a>
+        <p style="font-size:0.85rem; color:rgba(255,255,255,0.5); line-height:1.7; max-width:280px; margin-bottom:20px;">
+          Making responsible waste disposal simple for everyone. Together we can build a cleaner, greener city.
+        </p>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; align-items:flex-start; gap:10px;">
+            <span style="font-size:0.9rem; flex-shrink:0;">📍</span>
+            <span style="font-size:0.8rem; color:rgba(255,255,255,0.45); line-height:1.6;">Jl. Lingkungan Hijau No. 88,<br/>Kebayoran Baru, Jakarta Selatan 12110</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:0.9rem;">🕐</span>
+            <span style="font-size:0.8rem; color:rgba(255,255,255,0.45);">Mon – Sat, 08:00 – 17:00 WIB</span>
+          </div>
         </div>
-        <div class="footer-categories">
-            <h4>Categories</h4>
-            <a href="/guide?category=RECYCLABLE">♻ Recyclable</a>
-            <a href="/guide?category=ORGANIC">🌿 Organic</a>
-            <a href="/guide?category=HAZARDOUS">⚠️ Hazardous</a>
-            <a href="/guide?category=GENERAL">🗑 General</a>
+      </div>
+
+      <!-- Contact -->
+      <div>
+        <h4 style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:#b7f34d; margin-bottom:18px;">Contact Us</h4>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div>
+            <p style="font-size:0.7rem; color:rgba(255,255,255,0.3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px;">General Enquiries</p>
+            <a href="mailto:hello@recyclewise.id" style="font-size:0.85rem; color:rgba(255,255,255,0.65);">hello@recyclewise.id</a>
+          </div>
+          <div>
+            <p style="font-size:0.7rem; color:rgba(255,255,255,0.3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px;">Support</p>
+            <a href="mailto:support@recyclewise.id" style="font-size:0.85rem; color:rgba(255,255,255,0.65);">support@recyclewise.id</a>
+          </div>
+          <div>
+            <p style="font-size:0.7rem; color:rgba(255,255,255,0.3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px;">Hotline</p>
+            <a href="tel:+62211234567" style="font-size:0.85rem; color:rgba(255,255,255,0.65);">(021) 123-4567</a>
+          </div>
+          <div>
+            <p style="font-size:0.7rem; color:rgba(255,255,255,0.3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px;">WhatsApp</p>
+            <a href="https://wa.me/6281234567890" style="font-size:0.85rem; color:rgba(255,255,255,0.65);">+62 812-3456-7890</a>
+          </div>
         </div>
+      </div>
+
+      <!-- Help -->
+      <div>
+        <h4 style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:#b7f34d; margin-bottom:18px;">Need Help?</h4>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div>
+            <p style="font-size:0.7rem; color:rgba(255,255,255,0.3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px;">Report an Issue</p>
+            <a href="mailto:report@recyclewise.id" style="font-size:0.85rem; color:rgba(255,255,255,0.65);">report@recyclewise.id</a>
+          </div>
+          <div>
+            <p style="font-size:0.7rem; color:rgba(255,255,255,0.3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px;">Station Complaints</p>
+            <a href="mailto:stations@recyclewise.id" style="font-size:0.85rem; color:rgba(255,255,255,0.65);">stations@recyclewise.id</a>
+          </div>
+          <div>
+            <p style="font-size:0.7rem; color:rgba(255,255,255,0.3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px;">Points and Rewards</p>
+            <a href="mailto:rewards@recyclewise.id" style="font-size:0.85rem; color:rgba(255,255,255,0.65);">rewards@recyclewise.id</a>
+          </div>
+          <div style="margin-top:4px; background:rgba(183,243,77,0.08); border:1px solid rgba(183,243,77,0.2); border-radius:8px; padding:10px 12px;">
+            <p style="font-size:0.75rem; color:rgba(255,255,255,0.5); line-height:1.5; margin:0;">Response time: <span style="color:#b7f34d; font-weight:600;">1–2 business days</span></p>
+          </div>
+        </div>
+      </div>
+
     </div>
-    <div class="footer-bottom">
-        <p>🌍 Every small action counts. Built with Spring Boot + Thymeleaf.</p>
+
+    <!-- Bottom bar -->
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:18px 0; flex-wrap:wrap; gap:8px;">
+      <p style="font-size:0.75rem; color:rgba(255,255,255,0.25); margin:0;">© 2026 RecycleWise. All rights reserved.</p>
+      <p style="font-size:0.75rem; color:rgba(255,255,255,0.25); margin:0;">🌍 Built with Spring Boot + Thymeleaf</p>
     </div>
+
+  </div>
 </footer>
-<script th:src="@{/js/main.js}"></script>
 </body>
 </html>
