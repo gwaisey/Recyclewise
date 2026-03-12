@@ -1,6 +1,7 @@
 /workspaces/Recyclewise/src/main/java/com/recyclewise/controller/AuthController.java
 /workspaces/Recyclewise/src/main/java/com/recyclewise/service/TipService.java
 /workspaces/Recyclewise/src/main/java/com/recyclewise/model/TrashSubmission.java
+/workspaces/Recyclewise/src/main/java/com/recyclewise/controller/AdminController.java
 /workspaces/Recyclewise/src/main/java/com/recyclewise/service/impl/TipServiceImpl.java
 /workspaces/Recyclewise/src/main/java/com/recyclewise/service/impl/SubmissionServiceImpl.java
 /workspaces/Recyclewise/src/main/java/com/recyclewise/model/RecyclingTip.java

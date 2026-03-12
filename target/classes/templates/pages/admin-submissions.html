@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body style="margin:0; background:#f5f2eb;">
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+<main>
+  <section style="background:#0d2b1a; padding:36px 0; border-bottom:4px solid #b7f34d;">
+    <div style="max-width:1180px; margin:0 auto; padding:0 24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+      <div>
+        <p style="color:rgba(255,255,255,0.5); font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Admin Panel</p>
+        <h1 style="font-family:Syne,sans-serif; font-size:1.8rem; font-weight:800; color:white;">Submission Review</h1>
+      </div>
+      <a href="/admin/logout" style="background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.6); font-family:Syne,sans-serif; font-weight:600; font-size:0.8rem; padding:10px 20px; border-radius:100px; text-decoration:none; border:1px solid rgba(255,255,255,0.15);">Logout</a>
+    </div>
+  </section>
+  <section style="padding:40px 0 80px;">
+    <div style="max-width:1180px; margin:0 auto; padding:0 24px;">
+      <div th:if="${success}" style="background:#dcfce7; border:1px solid #16a34a; color:#14532d; padding:14px 18px; border-radius:10px; margin-bottom:24px; font-size:0.875rem;" th:text="${success}"></div>
+      <div th:if="${error}" style="background:#fee2e2; border:1px solid #dc2626; color:#7f1d1d; padding:14px 18px; border-radius:10px; margin-bottom:24px; font-size:0.875rem;" th:text="${error}"></div>
+
+      <div style="margin-bottom:40px;">
+        <h2 style="font-family:Syne,sans-serif; font-size:1.1rem; font-weight:700; color:#0d2b1a; margin-bottom:16px; display:flex; align-items:center; gap:10px;">
+          Pending Submissions
+          <span style="background:#fef9c3; color:#854d0e; font-size:0.7rem; font-weight:700; padding:3px 10px; border-radius:100px;" th:text="${#lists.size(pending)} + ' awaiting'">0 awaiting</span>
+        </h2>
+        <div th:if="${#lists.isEmpty(pending)}" style="background:white; border-radius:14px; padding:32px; text-align:center; border:1px solid #e8e4d9; color:#7a8c7e; font-size:0.875rem;">
+          No pending submissions. All caught up! &#9989;
+        </div>
+        <div th:unless="${#lists.isEmpty(pending)}" style="display:flex; flex-direction:column; gap:12px;">
+          <div th:each="sub : ${pending}" style="background:white; border-radius:14px; padding:20px 24px; border:2px solid #fef9c3; box-shadow:0 2px 12px rgba(13,43,26,0.06); display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
+            <div style="flex:1; min-width:200px;">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                <span style="font-family:Syne,sans-serif; font-weight:700; font-size:0.95rem; color:#0d2b1a;" th:text="${sub.user.username}">user</span>
+                <span style="font-size:0.65rem; background:#fef9c3; color:#854d0e; font-weight:700; padding:2px 8px; border-radius:100px;">PENDING</span>
+              </div>
+              <p style="font-size:0.8rem; color:#7a8c7e; margin:0 0 3px;" th:text="'Station: ' + ${sub.station.name}">Station</p>
+              <p style="font-size:0.8rem; color:#7a8c7e; margin:0;" th:text="${#temporals.format(sub.submittedAt, 'dd MMM yyyy, HH:mm')}">Date</p>
+            </div>
+            <div style="min-width:140px;">
+              <p style="font-size:0.7rem; color:#a0b0a4; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">Waste Items</p>
+              <div th:each="item : ${sub.items}" style="font-size:0.8rem; color:#4a5c4e; margin-bottom:2px;">
+                <span th:text="${item.category}">CAT</span> — <span th:text="${item.weightKg} + ' kg'">0 kg</span>
+              </div>
+            </div>
+            <div style="text-align:center; min-width:80px;">
+              <p style="font-size:0.7rem; color:#a0b0a4; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">Points</p>
+              <p style="font-family:Syne,sans-serif; font-size:1.5rem; font-weight:800; color:#0d2b1a;" th:text="${sub.pointsEarned}">0</p>
+            </div>
+            <div style="display:flex; gap:10px; flex-shrink:0;">
+              <form th:action="@{/admin/submissions/{id}/confirm(id=${sub.id})}" method="post">
+                <button type="submit" style="background:#16a34a; color:white; font-family:Syne,sans-serif; font-weight:700; font-size:0.85rem; padding:11px 22px; border-radius:100px; border:none; cursor:pointer;"
+                  onmouseover="this.style.background='#15803d'" onmouseout="this.style.background='#16a34a'">
+                  &#10003; Confirm
+                </button>
+              </form>
+              <form th:action="@{/admin/submissions/{id}/reject(id=${sub.id})}" method="post">
+                <button type="submit" style="background:#dc2626; color:white; font-family:Syne,sans-serif; font-weight:700; font-size:0.85rem; padding:11px 22px; border-radius:100px; border:none; cursor:pointer;"
+                  onmouseover="this.style.background='#b91c1c'" onmouseout="this.style.background='#dc2626'">
+                  &#10007; Reject
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h2 style="font-family:Syne,sans-serif; font-size:1.1rem; font-weight:700; color:#0d2b1a; margin-bottom:16px;">Resolved Submissions</h2>
+        <div th:if="${#lists.isEmpty(resolved)}" style="background:white; border-radius:14px; padding:32px; text-align:center; border:1px solid #e8e4d9; color:#7a8c7e; font-size:0.875rem;">No resolved submissions yet.</div>
+        <div th:unless="${#lists.isEmpty(resolved)}" style="display:flex; flex-direction:column; gap:8px;">
+          <div th:each="sub : ${resolved}" style="background:white; border-radius:12px; padding:16px 24px; border:1px solid #e8e4d9; display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
+            <div style="flex:1; min-width:200px;">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                <span style="font-family:Syne,sans-serif; font-weight:700; font-size:0.9rem; color:#0d2b1a;" th:text="${sub.user.username}">user</span>
+                <span th:text="${sub.status}" th:style="${sub.status.name() == 'CONFIRMED'} ? 'font-size:0.65rem; background:#dcfce7; color:#14532d; font-weight:700; padding:2px 8px; border-radius:100px; text-transform:uppercase;' : 'font-size:0.65rem; background:#fee2e2; color:#7f1d1d; font-weight:700; padding:2px 8px; border-radius:100px; text-transform:uppercase;'">STATUS</span>
+              </div>
+              <p style="font-size:0.78rem; color:#7a8c7e; margin:0;" th:text="${sub.station.name} + ' | ' + ${#temporals.format(sub.submittedAt, 'dd MMM yyyy')}">Info</p>
+            </div>
+            <div style="font-family:Syne,sans-serif; font-size:1.1rem; font-weight:800; color:#4a5c4e;" th:text="${sub.pointsEarned} + ' pts'">0 pts</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>
