@@ -7,26 +7,120 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/main.css}" />
+            <style>
+      .nav-link-default, .nav-link-login, .nav-link-logout, .nav-link-register {
+        display: inline-flex !important;
+        align-items: center !important;
+        line-height: 1.5 !important;
+        font-family: Syne, sans-serif !important;
+        font-size: 0.875rem !important;
+        text-decoration: none !important;
+        border-radius: 100px !important;
+        transition: color 0.18s, background 0.18s, transform 0.1s !important;
+      }
+      .nav-link-default {
+        color: rgba(255,255,255,0.65) !important;
+        padding: 8px 16px !important;
+        font-weight: 600 !important;
+      }
+      .nav-link-default:hover {
+        color: white !important;
+        background: rgba(255,255,255,0.08) !important;
+      }
+      .nav-link-default.active {
+        background: #b7f34d !important;
+        color: #0d2b1a !important;
+        font-weight: 700 !important;
+      }
+      .nav-link-default.active:hover {
+        background: #c8f76a !important;
+        color: #0d2b1a !important;
+      }
+      .nav-link-login {
+        color: rgba(255,255,255,0.65) !important;
+        padding: 8px 16px !important;
+        font-weight: 600 !important;
+      }
+      .nav-link-login:hover {
+        color: white !important;
+        background: rgba(255,255,255,0.08) !important;
+      }
+      .nav-link-logout {
+        color: rgba(255,255,255,0.35) !important;
+        padding: 8px 16px !important;
+        font-weight: 600 !important;
+      }
+      .nav-link-logout:hover { color: rgba(255,255,255,0.6) !important; }
+      .nav-link-register {
+        color: #b7f34d !important;
+        background: transparent !important;
+        border: 2px solid #b7f34d !important;
+        padding: 7px 20px !important;
+        font-weight: 700 !important;
+      }
+      .nav-link-register:hover {
+        background: #b7f34d !important;
+        color: #0d2b1a !important;
+      }
+      .nav-link-register:active {
+        transform: scale(0.96) !important;
+        background: #a3e040 !important;
+      }
+      .navbar {
+        background: #0d2b1a !important;
+        border-bottom: 3px solid #b7f34d !important;
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 100 !important;
+      }
+      .nav-inner {
+        max-width: 1180px !important;
+        margin: 0 auto !important;
+        padding: 0 24px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        height: 62px !important;
+      }
+      .nav-logo {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        text-decoration: none !important;
+        font-family: Syne, sans-serif !important;
+        font-size: 1.2rem !important;
+        font-weight: 800 !important;
+        color: #b7f34d !important;
+      }
+      .nav-links {
+        display: flex !important;
+        align-items: center !important;
+        gap: 2px !important;
+        list-style: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .nav-links li { list-style: none !important; }
+    </style>
 </head>
 <body>
 <nav th:fragment="navbar" class="navbar">
     <div class="nav-inner">
         <a href="/" class="nav-logo">
-            <span class="logo-leaf">♻</span>
-            <span class="logo-text">RecycleWise</span>
+            <span>&#9851;</span>
+            <span>RecycleWise</span>
         </a>
         <ul class="nav-links">
-            <li><a href="/" th:classappend="${activePage == 'home'} ? 'active'">Home</a></li>
-            <li><a href="/guide" th:classappend="${activePage == 'guide'} ? 'active'">Waste Guide</a></li>
-            <li><a href="/tips" th:classappend="${activePage == 'tips'} ? 'active'">Eco Tips</a></li>
-            <li th:if="${session.userId != null}"><a href="/stations" th:classappend="${activePage == 'stations'} ? 'active'">Stations</a></li>
-            <li th:if="${session.userId != null}"><a href="/rewards" th:classappend="${activePage == 'rewards'} ? 'active'">Rewards</a></li>
-            <li th:if="${session.userId != null}"><a href="/dashboard" th:classappend="${activePage == 'dashboard'} ? 'active'">Dashboard</a></li>
-            <li th:if="${session.userId != null}"><a href="/logout" style="color: rgba(255,255,255,0.5);">Logout</a></li>
-            <li th:if="${session.userId == null}"><a href="/login">Login</a></li>
-            <li th:if="${session.userId == null}"><a href="/register" style="background: var(--lime); color: var(--forest); border-radius: 100px; padding: 8px 18px;">Register</a></li>
+            <li><a href="/" class="nav-link-default" th:classappend="${activePage == 'home'} ? ' active'">Home</a></li>
+            <li><a href="/guide" class="nav-link-default" th:classappend="${activePage == 'guide'} ? ' active'">Waste Guide</a></li>
+            <li><a href="/tips" class="nav-link-default" th:classappend="${activePage == 'tips'} ? ' active'">Eco Tips</a></li>
+            <li th:if="${session.userId != null}"><a href="/stations" class="nav-link-default" th:classappend="${activePage == 'stations'} ? ' active'">Stations</a></li>
+            <li th:if="${session.userId != null}"><a href="/rewards" class="nav-link-default" th:classappend="${activePage == 'rewards'} ? ' active'">Rewards</a></li>
+            <li th:if="${session.userId != null}"><a href="/dashboard" class="nav-link-default" th:classappend="${activePage == 'dashboard'} ? ' active'">Dashboard</a></li>
+            <li th:if="${session.userId != null}"><a href="/logout" class="nav-link-logout">Logout</a></li>
+            <li th:if="${session.userId == null}"><a href="/login" class="nav-link-login">Login</a></li>
+            <li th:if="${session.userId == null}" style="margin-left:6px;"><a href="/register" class="nav-link-register">Register</a></li>
         </ul>
-        <button class="nav-toggle" onclick="toggleNav()">☰</button>
     </div>
 </nav>
 </body>

@@ -29,6 +29,20 @@ public class RewardController {
         return "pages/rewards";
     }
 
+    @PostMapping("/{id}/mark-used")
+    public String markUsed(@PathVariable Long id, HttpSession session,
+                           org.springframework.web.servlet.mvc.support.RedirectAttributes ra) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) return "redirect:/login";
+        try {
+            rewardService.markAsUsed(id, userId);
+            ra.addFlashAttribute("success", "Voucher marked as used.");
+        } catch (Exception e) {
+            ra.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:/dashboard";
+    }
+
     @PostMapping("/{id}/redeem")
     public String redeem(@PathVariable Long id,
                          HttpSession session,

@@ -14,4 +14,6 @@ public interface RewardService {
     Reward findById(Long id);
     Redemption redeem(Long userId, Long rewardId);
     List<Redemption> getRedemptionsForUser(User user);
+    void markAsUsed(Long redemptionId, Long userId);
+    void autoExpireRedemptions(User user);
 }

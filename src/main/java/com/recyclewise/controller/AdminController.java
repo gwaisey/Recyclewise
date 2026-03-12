@@ -56,7 +56,9 @@ public class AdminController {
         TrashSubmission sub = submissionRepository.findById(id).orElseThrow();
         sub.setStatus(TrashSubmission.SubmissionStatus.CONFIRMED);
         submissionRepository.save(sub);
-        ra.addFlashAttribute("success", "Confirmed! Points awarded to " + sub.getUser().getUsername());
+        // Award points NOW — only on admin confirmation
+        userService.addPoints(sub.getUser(), sub.getPointsEarned());
+        ra.addFlashAttribute("success", "Confirmed! +" + sub.getPointsEarned() + " pts awarded to " + sub.getUser().getUsername());
         return "redirect:/admin/submissions";
     }
 

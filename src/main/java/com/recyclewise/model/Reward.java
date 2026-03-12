@@ -33,7 +33,9 @@ public class Reward {
 
     private String icon;
 
-    private String provider; // e.g. "City Government", "TransJakarta"
+    private String provider;
+
+    private String location; // e.g. "City Government", "TransJakarta"
 
     @Column(nullable = false)
     @Builder.Default

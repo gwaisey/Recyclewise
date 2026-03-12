@@ -39,11 +39,11 @@ public class Redemption {
     @Column(nullable = false, unique = true)
     private String voucherCode; // auto-generated unique code
 
+    private LocalDateTime expiresAt;
+
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private RedemptionStatus status = RedemptionStatus.ACTIVE;
 
-    public enum RedemptionStatus {
-        ACTIVE, USED, EXPIRED
-    }
+    public enum RedemptionStatus { ACTIVE, USED, EXPIRED }
 }

@@ -75,7 +75,7 @@ public class SubmissionServiceImpl implements SubmissionService {
         submissionRepository.save(saved);
 
         // Award points immediately on submission (confirmed on arrival)
-        userService.addPoints(user, totalPoints);
+        // Points are NOT awarded here — only when admin confirms the submission
 
         return saved;
     }

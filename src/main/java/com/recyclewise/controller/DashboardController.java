@@ -24,6 +24,11 @@ public class DashboardController {
         if (userId == null) return "redirect:/login";
 
         User user = userService.findById(userId);
+
+        // Auto-expire any vouchers past their expiry date
+        rewardService.autoExpireRedemptions(user);
+
+        // Only count points from CONFIRMED submissions
         model.addAttribute("user", user);
         model.addAttribute("submissions", submissionService.getSubmissionsForUser(user));
         model.addAttribute("redemptions", rewardService.getRedemptionsForUser(user));

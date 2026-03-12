@@ -1,82 +1,129 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header :: head}"></head>
-<body>
+<body style="margin:0; background:#f5f2eb;">
 <nav th:replace="~{fragments/header :: navbar}"></nav>
 <main>
-  <section class="page-hero">
-    <div class="container">
-      <div class="page-hero-content">
-        <h1>🎁 Rewards</h1>
-        <p>Redeem your recycling points for real benefits from the city government</p>
+
+  <section style="background:#0d2b1a; padding:48px 0; border-bottom:4px solid #b7f34d; text-align:center;">
+    <div style="max-width:1180px; margin:0 auto; padding:0 24px;">
+      <h1 style="font-family:Syne,sans-serif; font-size:2.8rem; font-weight:800; color:white; margin-bottom:10px;">Rewards</h1>
+      <p style="color:rgba(255,255,255,0.6); font-size:1rem; margin-bottom:20px;">Redeem your recycling points for real benefits from the city government</p>
+      <div style="display:inline-flex; align-items:center; gap:10px; background:rgba(183,243,77,0.15); border:1px solid rgba(183,243,77,0.3); border-radius:100px; padding:10px 24px;">
+        <span style="color:rgba(255,255,255,0.6); font-size:0.85rem;">Your Balance:</span>
+        <span style="font-family:Syne,sans-serif; font-size:1.3rem; font-weight:800; color:#b7f34d;" th:text="${user.totalPoints} + ' pts'">0 pts</span>
       </div>
     </div>
   </section>
-  <section class="rewards-section">
-    <div class="container">
-      <div class="user-points-bar">
-        <span>Your Balance:</span>
-        <strong class="pts-display" th:text="${user.totalPoints} + ' points'">0 points</strong>
-      </div>
-      <div class="flash-success" th:if="${success}" th:text="${success}"></div>
-      <div class="flash-error" th:if="${error}" th:text="${error}"></div>
-      <div class="reward-category-section">
-        <h2 class="reward-cat-title">☕ Food and Drinks</h2>
-        <div class="rewards-grid">
-          <div class="reward-card" th:each="r : ${rewards}" th:if="${r.category == 'FOOD_DRINKS'}">
-            <div class="reward-icon" th:text="${r.icon}">🍱</div>
-            <div class="reward-info">
-              <h3 th:text="${r.name}">Reward Name</h3>
-              <p th:text="${r.description}">Description</p>
-              <small class="reward-provider" th:text="'by ' + ${r.provider}">by Provider</small>
+
+  <section style="padding:48px 0 80px;">
+    <div style="max-width:1180px; margin:0 auto; padding:0 24px;">
+
+      <div th:if="${success}" style="background:#dcfce7; border:1px solid #16a34a; color:#14532d; padding:14px 18px; border-radius:10px; margin-bottom:32px; font-size:0.875rem;" th:text="${success}"></div>
+      <div th:if="${error}" style="background:#fee2e2; border:1px solid #dc2626; color:#7f1d1d; padding:14px 18px; border-radius:10px; margin-bottom:32px; font-size:0.875rem;" th:text="${error}"></div>
+
+      <!-- Food and Drinks -->
+      <div style="margin-bottom:48px;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px; padding-bottom:12px; border-bottom:2px solid #e8e4d9;">
+          <span style="font-size:1.5rem;">&#x2615;</span>
+          <h2 style="font-family:Syne,sans-serif; font-size:1.2rem; font-weight:700; color:#0d2b1a;">Food and Drinks</h2>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:18px;">
+          <div th:each="r : ${rewards}" th:if="${r.category == 'FOOD_DRINKS'}"
+               style="background:white; border-radius:16px; padding:24px; box-shadow:0 4px 20px rgba(13,43,26,0.07); border:1px solid #e8e4d9; display:flex; flex-direction:column; gap:12px;">
+            <div style="font-size:2.2rem;" th:text="${r.icon}">&#x1F375;</div>
+            <div style="flex:1;">
+              <h3 style="font-family:Syne,sans-serif; font-size:0.95rem; font-weight:700; color:#0d2b1a; margin-bottom:6px;" th:text="${r.name}">Reward</h3>
+              <p style="font-size:0.8rem; color:#7a8c7e; line-height:1.5; margin-bottom:6px;" th:text="${r.description}">Description</p>
+              <p style="font-size:0.75rem; color:#a0b0a4;" th:text="'by ' + ${r.provider}">Provider</p>
+              <p th:if="${r.location != null}" style="font-size:0.78rem; color:#4a5c4e; margin-top:6px; display:flex; align-items:flex-start; gap:4px;">
+                <span>&#128205;</span><span th:text="${r.location}">Location</span>
+              </p>
             </div>
-            <div class="reward-footer">
-              <div class="reward-cost"><span class="cost-num" th:text="${r.pointsCost}">100</span><span class="cost-label">pts</span></div>
+            <div style="display:flex; align-items:center; justify-content:space-between; padding-top:12px; border-top:1px solid #e8e4d9;">
+              <div style="display:flex; align-items:baseline; gap:3px;">
+                <span style="font-family:Syne,sans-serif; font-size:1.5rem; font-weight:800; color:#0d2b1a;" th:text="${r.pointsCost}">100</span>
+                <span style="font-size:0.75rem; color:#7a8c7e; font-weight:600; text-transform:uppercase;">pts</span>
+              </div>
               <form th:action="@{/rewards/{id}/redeem(id=${r.id})}" method="post">
-                <button type="submit" class="btn-redeem" th:disabled="${user.totalPoints < r.pointsCost}" th:classappend="${user.totalPoints < r.pointsCost} ? 'btn-disabled' : ''">Redeem</button>
+                <button type="submit"
+                  th:disabled="${user.totalPoints < r.pointsCost}"
+                  th:style="${user.totalPoints >= r.pointsCost} ? 'background:#0d2b1a; color:#b7f34d; font-family:Syne,sans-serif; font-weight:700; font-size:0.8rem; padding:10px 20px; border-radius:100px; border:none; cursor:pointer;' : 'background:#e8e4d9; color:#a0b0a4; font-family:Syne,sans-serif; font-weight:700; font-size:0.8rem; padding:10px 20px; border-radius:100px; border:none; cursor:not-allowed;'"
+                  th:text="${user.totalPoints >= r.pointsCost} ? 'Redeem' : 'Need ' + (${r.pointsCost} - ${user.totalPoints}) + ' more'">Redeem</button>
               </form>
             </div>
           </div>
         </div>
       </div>
-      <div class="reward-category-section">
-        <h2 class="reward-cat-title">🚌 Public Transport</h2>
-        <div class="rewards-grid">
-          <div class="reward-card" th:each="r : ${rewards}" th:if="${r.category == 'TRANSPORT'}">
-            <div class="reward-icon" th:text="${r.icon}">🚇</div>
-            <div class="reward-info">
-              <h3 th:text="${r.name}">Reward Name</h3>
-              <p th:text="${r.description}">Description</p>
-              <small class="reward-provider" th:text="'by ' + ${r.provider}">by Provider</small>
+
+      <!-- Transport -->
+      <div style="margin-bottom:48px;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px; padding-bottom:12px; border-bottom:2px solid #e8e4d9;">
+          <span style="font-size:1.5rem;">&#x1F68C;</span>
+          <h2 style="font-family:Syne,sans-serif; font-size:1.2rem; font-weight:700; color:#0d2b1a;">Public Transport</h2>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:18px;">
+          <div th:each="r : ${rewards}" th:if="${r.category == 'TRANSPORT'}"
+               style="background:white; border-radius:16px; padding:24px; box-shadow:0 4px 20px rgba(13,43,26,0.07); border:1px solid #e8e4d9; display:flex; flex-direction:column; gap:12px;">
+            <div style="font-size:2.2rem;" th:text="${r.icon}">&#x1F68C;</div>
+            <div style="flex:1;">
+              <h3 style="font-family:Syne,sans-serif; font-size:0.95rem; font-weight:700; color:#0d2b1a; margin-bottom:6px;" th:text="${r.name}">Reward</h3>
+              <p style="font-size:0.8rem; color:#7a8c7e; line-height:1.5; margin-bottom:6px;" th:text="${r.description}">Description</p>
+              <p style="font-size:0.75rem; color:#a0b0a4;" th:text="'by ' + ${r.provider}">Provider</p>
+              <p th:if="${r.location != null}" style="font-size:0.78rem; color:#4a5c4e; margin-top:6px; display:flex; align-items:flex-start; gap:4px;">
+                <span>&#128205;</span><span th:text="${r.location}">Location</span>
+              </p>
             </div>
-            <div class="reward-footer">
-              <div class="reward-cost"><span class="cost-num" th:text="${r.pointsCost}">200</span><span class="cost-label">pts</span></div>
+            <div style="display:flex; align-items:center; justify-content:space-between; padding-top:12px; border-top:1px solid #e8e4d9;">
+              <div style="display:flex; align-items:baseline; gap:3px;">
+                <span style="font-family:Syne,sans-serif; font-size:1.5rem; font-weight:800; color:#0d2b1a;" th:text="${r.pointsCost}">200</span>
+                <span style="font-size:0.75rem; color:#7a8c7e; font-weight:600; text-transform:uppercase;">pts</span>
+              </div>
               <form th:action="@{/rewards/{id}/redeem(id=${r.id})}" method="post">
-                <button type="submit" class="btn-redeem" th:disabled="${user.totalPoints < r.pointsCost}" th:classappend="${user.totalPoints < r.pointsCost} ? 'btn-disabled' : ''">Redeem</button>
+                <button type="submit"
+                  th:disabled="${user.totalPoints < r.pointsCost}"
+                  th:style="${user.totalPoints >= r.pointsCost} ? 'background:#0d2b1a; color:#b7f34d; font-family:Syne,sans-serif; font-weight:700; font-size:0.8rem; padding:10px 20px; border-radius:100px; border:none; cursor:pointer;' : 'background:#e8e4d9; color:#a0b0a4; font-family:Syne,sans-serif; font-weight:700; font-size:0.8rem; padding:10px 20px; border-radius:100px; border:none; cursor:not-allowed;'"
+                  th:text="${user.totalPoints >= r.pointsCost} ? 'Redeem' : 'Need ' + (${r.pointsCost} - ${user.totalPoints}) + ' more'">Redeem</button>
               </form>
             </div>
           </div>
         </div>
       </div>
-      <div class="reward-category-section">
-        <h2 class="reward-cat-title">💡 Bill Discounts</h2>
-        <div class="rewards-grid">
-          <div class="reward-card" th:each="r : ${rewards}" th:if="${r.category == 'BILLS'}">
-            <div class="reward-icon" th:text="${r.icon}">⚡</div>
-            <div class="reward-info">
-              <h3 th:text="${r.name}">Reward Name</h3>
-              <p th:text="${r.description}">Description</p>
-              <small class="reward-provider" th:text="'by ' + ${r.provider}">by Provider</small>
+
+      <!-- Bills -->
+      <div style="margin-bottom:48px;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px; padding-bottom:12px; border-bottom:2px solid #e8e4d9;">
+          <span style="font-size:1.5rem;">&#x1F4A1;</span>
+          <h2 style="font-family:Syne,sans-serif; font-size:1.2rem; font-weight:700; color:#0d2b1a;">Bill Discounts</h2>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:18px;">
+          <div th:each="r : ${rewards}" th:if="${r.category == 'BILLS'}"
+               style="background:white; border-radius:16px; padding:24px; box-shadow:0 4px 20px rgba(13,43,26,0.07); border:1px solid #e8e4d9; display:flex; flex-direction:column; gap:12px;">
+            <div style="font-size:2.2rem;" th:text="${r.icon}">&#x26A1;</div>
+            <div style="flex:1;">
+              <h3 style="font-family:Syne,sans-serif; font-size:0.95rem; font-weight:700; color:#0d2b1a; margin-bottom:6px;" th:text="${r.name}">Reward</h3>
+              <p style="font-size:0.8rem; color:#7a8c7e; line-height:1.5; margin-bottom:6px;" th:text="${r.description}">Description</p>
+              <p style="font-size:0.75rem; color:#a0b0a4;" th:text="'by ' + ${r.provider}">Provider</p>
+              <p th:if="${r.location != null}" style="font-size:0.78rem; color:#4a5c4e; margin-top:6px; display:flex; align-items:flex-start; gap:4px;">
+                <span>&#128205;</span><span th:text="${r.location}">Location</span>
+              </p>
             </div>
-            <div class="reward-footer">
-              <div class="reward-cost"><span class="cost-num" th:text="${r.pointsCost}">400</span><span class="cost-label">pts</span></div>
+            <div style="display:flex; align-items:center; justify-content:space-between; padding-top:12px; border-top:1px solid #e8e4d9;">
+              <div style="display:flex; align-items:baseline; gap:3px;">
+                <span style="font-family:Syne,sans-serif; font-size:1.5rem; font-weight:800; color:#0d2b1a;" th:text="${r.pointsCost}">400</span>
+                <span style="font-size:0.75rem; color:#7a8c7e; font-weight:600; text-transform:uppercase;">pts</span>
+              </div>
               <form th:action="@{/rewards/{id}/redeem(id=${r.id})}" method="post">
-                <button type="submit" class="btn-redeem" th:disabled="${user.totalPoints < r.pointsCost}" th:classappend="${user.totalPoints < r.pointsCost} ? 'btn-disabled' : ''">Redeem</button>
+                <button type="submit"
+                  th:disabled="${user.totalPoints < r.pointsCost}"
+                  th:style="${user.totalPoints >= r.pointsCost} ? 'background:#0d2b1a; color:#b7f34d; font-family:Syne,sans-serif; font-weight:700; font-size:0.8rem; padding:10px 20px; border-radius:100px; border:none; cursor:pointer;' : 'background:#e8e4d9; color:#a0b0a4; font-family:Syne,sans-serif; font-weight:700; font-size:0.8rem; padding:10px 20px; border-radius:100px; border:none; cursor:not-allowed;'"
+                  th:text="${user.totalPoints >= r.pointsCost} ? 'Redeem' : 'Need ' + (${r.pointsCost} - ${user.totalPoints}) + ' more'">Redeem</button>
               </form>
             </div>
           </div>
         </div>
       </div>
+
     </div>
   </section>
 </main>

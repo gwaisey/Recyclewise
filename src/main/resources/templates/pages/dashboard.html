@@ -77,21 +77,68 @@
             <h2 style="font-family:Syne,sans-serif; font-size:1.05rem; font-weight:700; color:#0d2b1a;">My Vouchers</h2>
             <a href="/rewards" style="font-size:0.78rem; color:#2d6a4f; font-weight:600; border:1px solid #2d6a4f; padding:5px 14px; border-radius:100px; text-decoration:none;">Browse</a>
           </div>
-          <div th:if="${#lists.isEmpty(redemptions)}" style="text-align:center; padding:32px 16px;">
-            <p style="font-size:0.875rem; color:#7a8c7e; margin-bottom:14px;">No vouchers yet. Redeem your points for great benefits!</p>
-            <a href="/rewards" style="display:inline-block; background:#b7f34d; color:#0d2b1a; font-family:Syne,sans-serif; font-weight:700; font-size:0.8rem; padding:10px 20px; border-radius:100px; text-decoration:none;">See Rewards</a>
-          </div>
-          <div th:unless="${#lists.isEmpty(redemptions)}" style="display:flex; flex-direction:column; gap:12px;">
-            <div th:each="r : ${redemptions}" style="display:flex; align-items:center; gap:14px; border:1px solid #e8e4d9; border-radius:10px; padding:14px 16px;">
-              <span style="font-size:1.8rem;" th:text="${r.reward.icon}">&#x1F381;</span>
-              <div style="flex:1;">
-                <h4 style="font-size:0.875rem; font-weight:700; color:#0d2b1a; margin-bottom:3px;" th:text="${r.reward.name}">Reward</h4>
-                <code style="font-size:0.8rem; color:#2d6a4f; background:#f0f9f0; padding:2px 8px; border-radius:4px;" th:text="${r.voucherCode}">RW-XXXX</code>
+                        <div th:if="${#lists.isEmpty(redemptions)}" style="text-align:center; padding:32px 0; color:#7a8c7e; font-size:0.875rem;">
+                No vouchers yet. Redeem your points for great benefits!
+                <br/><a href="/rewards" style="display:inline-block; margin-top:16px; background:#b7f34d; color:#0d2b1a; font-family:Syne,sans-serif; font-weight:700; font-size:0.85rem; padding:10px 24px; border-radius:100px; text-decoration:none;">See Rewards</a>
               </div>
-              <span style="font-size:0.65rem; font-weight:700; padding:3px 10px; border-radius:100px; background:#dcfce7; color:#14532d; text-transform:uppercase; letter-spacing:1px;" th:text="${r.status}">ACTIVE</span>
-            </div>
-          </div>
-        </div>
+
+              <div th:each="r : ${redemptions}" style="background:#fafaf8; border-radius:12px; padding:16px; border:1px solid #e8e4d9; margin-bottom:10px;">
+                <div style="display:flex; align-items:flex-start; gap:12px;">
+                  <span style="font-size:1.6rem;" th:text="${r.reward.icon}">&#127873;</span>
+                  <div style="flex:1; min-width:0;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
+                      <span style="font-family:Syne,sans-serif; font-weight:700; font-size:0.875rem; color:#0d2b1a;" th:text="${r.reward.name}">Reward</span>
+                      <!-- Status badge -->
+                      <span th:if="${r.status.name() == 'ACTIVE'}"
+                            style="font-size:0.65rem; font-weight:700; padding:3px 10px; border-radius:100px; background:#dcfce7; color:#14532d; text-transform:uppercase; letter-spacing:1px;">ACTIVE</span>
+                      <span th:if="${r.status.name() == 'USED'}"
+                            style="font-size:0.65rem; font-weight:700; padding:3px 10px; border-radius:100px; background:#e8e4d9; color:#6b7280; text-transform:uppercase; letter-spacing:1px;">USED</span>
+                      <span th:if="${r.status.name() == 'EXPIRED'}"
+                            style="font-size:0.65rem; font-weight:700; padding:3px 10px; border-radius:100px; background:#fee2e2; color:#dc2626; text-transform:uppercase; letter-spacing:1px;">EXPIRED</span>
+                    </div>
+                    <!-- Voucher code - strikethrough if used/expired -->
+                    <code th:style="${r.status.name() == 'ACTIVE'} ? 'font-size:0.8rem; color:#2d6a4f; background:#f0f9f0; padding:2px 8px; border-radius:4px; display:inline-block; margin-top:4px;' : 'font-size:0.8rem; color:#9ca3af; background:#f5f5f5; padding:2px 8px; border-radius:4px; display:inline-block; margin-top:4px; text-decoration:line-through;'"
+                          th:text="${r.voucherCode}">RW-XXXX</code>
+                    <!-- Expiry countdown -->
+                    <div th:if="${r.status.name() == 'ACTIVE' and r.expiresAt != null}"
+                         th:with="daysLeft=${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDateTime).now(), r.expiresAt)}"
+                         style="margin-top:6px;">
+                      <span th:if="${daysLeft > 7}"
+                            style="font-size:0.75rem; color:#7a8c7e;">
+                        &#128197; Expires <span th:text="${#temporals.format(r.expiresAt, 'dd MMM yyyy')}">date</span>
+                        (<span th:text="${daysLeft}">30</span> days left)
+                      </span>
+                      <span th:if="${daysLeft <= 7 and daysLeft > 0}"
+                            style="font-size:0.75rem; color:#dc2626; font-weight:700;">
+                        &#9888; Expires soon — <span th:text="${daysLeft}">3</span> days left!
+                      </span>
+                      <span th:if="${daysLeft <= 0}"
+                            style="font-size:0.75rem; color:#dc2626; font-weight:700;">
+                        &#9888; Expired
+                      </span>
+                    </div>
+                    <div th:if="${r.status.name() == 'EXPIRED'}" style="margin-top:4px;">
+                      <span style="font-size:0.75rem; color:#dc2626;">Expired on <span th:text="${#temporals.format(r.expiresAt, 'dd MMM yyyy')}">date</span></span>
+                    </div>
+                    <div th:if="${r.status.name() == 'USED'}" style="margin-top:4px;">
+                      <span style="font-size:0.75rem; color:#6b7280;">&#10003; Used on <span th:text="${#temporals.format(r.redeemedAt, 'dd MMM yyyy')}">date</span></span>
+                    </div>
+                    <!-- Mark as Used button — only for ACTIVE -->
+                    <form th:if="${r.status.name() == 'ACTIVE'}"
+                          th:action="@{/rewards/{id}/mark-used(id=${r.id})}" method="post"
+                          style="margin-top:10px;">
+                      <button type="submit"
+                        style="background:transparent; border:1.5px solid #0d2b1a; color:#0d2b1a; font-family:Syne,sans-serif; font-weight:600; font-size:0.75rem; padding:6px 16px; border-radius:100px; cursor:pointer;"
+                        onmouseover="this.style.background='#0d2b1a'; this.style.color='#b7f34d'"
+                        onmouseout="this.style.background='transparent'; this.style.color='#0d2b1a'"
+                        onclick="return confirm('Mark this voucher as used? This cannot be undone.')">
+                        &#10003; Mark as Used
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              </div>
 
       </div>
     </div>

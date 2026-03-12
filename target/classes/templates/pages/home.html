@@ -5,51 +5,36 @@
 <nav th:replace="~{fragments/header :: navbar}"></nav>
 
 <main>
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-bg">
-            <div class="orb orb-1"></div>
-            <div class="orb orb-2"></div>
-            <div class="orb orb-3"></div>
-        </div>
-        <div class="hero-content">
-            <div class="hero-badge">🌍 Sustainable Living Guide</div>
-            <h1 class="hero-title">
-                Know What<br>
-                <em>Goes Where</em>
-            </h1>
-            <p class="hero-subtitle">
-                Your complete guide to recycling, composting, and responsible waste disposal.
-                Search any item and get instant, clear instructions.
-            </p>
-            <div class="hero-search">
-                <form action="/guide" method="get" class="search-form">
-                    <input type="text" name="search" placeholder="Search: plastic bottle, battery, coffee grounds..." class="search-input" />
-                    <button type="submit" class="search-btn">Search</button>
-                </form>
-            </div>
-        </div>
-        <div class="hero-visual">
-            <div class="bin-grid">
-                <div class="bin-card" style="--clr: #22c55e">
-                    <span class="bin-icon">♻</span>
-                    <span>Recycle</span>
-                </div>
-                <div class="bin-card" style="--clr: #84cc16">
-                    <span class="bin-icon">🌿</span>
-                    <span>Organic</span>
-                </div>
-                <div class="bin-card" style="--clr: #ef4444">
-                    <span class="bin-icon">⚠️</span>
-                    <span>Hazardous</span>
-                </div>
-                <div class="bin-card" style="--clr: #6b7280">
-                    <span class="bin-icon">🗑</span>
-                    <span>General</span>
-                </div>
-            </div>
-        </div>
-    </section>
+      <!-- Hero -->
+  <section style="position:relative; overflow:hidden; background:#f5f2eb; min-height:88vh; display:flex; align-items:center;">
+    <div style="position:absolute; inset:0; pointer-events:none; overflow:hidden;">
+      <div style="position:absolute; top:-80px; right:-80px; width:520px; height:520px; background:radial-gradient(circle, rgba(183,243,77,0.35) 0%, transparent 70%); border-radius:50%;" class="hero-blob-1"></div>
+      <div style="position:absolute; bottom:-60px; right:120px; width:300px; height:300px; background:radial-gradient(circle, rgba(183,243,77,0.18) 0%, transparent 70%); border-radius:50%;" class="hero-blob-2"></div>
+      <div style="position:absolute; top:40%; left:-80px; width:280px; height:280px; background:radial-gradient(circle, rgba(13,43,26,0.06) 0%, transparent 70%); border-radius:50%;" class="hero-blob-3"></div>
+    </div>
+    <div style="max-width:1180px; margin:0 auto; padding:80px 24px; display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; width:100%; position:relative; z-index:1;">
+      <div>
+        <div style="display:inline-flex; align-items:center; gap:8px; background:#0d2b1a; color:#b7f34d; font-family:Syne,sans-serif; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:2px; padding:8px 16px; border-radius:100px; margin-bottom:28px;" class="hero-badge">&#x1F30D; Sustainable Living Guide</div>
+        <h1 style="font-family:Syne,sans-serif; font-size:4rem; font-weight:900; color:#0d2b1a; line-height:1.05; margin-bottom:20px;" class="hero-title">Know What<br><em style="font-style:italic; color:#2d6a4f; text-decoration:underline; text-decoration-color:#b7f34d; text-underline-offset:6px;">Goes Where</em></h1>
+        <p style="font-size:1rem; color:#4a5c4e; line-height:1.7; max-width:460px; margin-bottom:36px;" class="hero-sub">Your complete guide to recycling, composting, and responsible waste disposal. Search any item and get instant, clear instructions.</p>
+        <form action="/guide" method="get" class="search-form" style="display:flex; align-items:center; max-width:500px; background:white; border-radius:100px; border:2px solid #0d2b1a; box-shadow:4px 4px 0 #0d2b1a; padding:6px 6px 6px 22px;">
+          <input type="text" name="search" placeholder="Search: plastic bottle, battery..." 
+            style="flex:1; border:none; outline:none; font-family:DM Sans,sans-serif; font-size:0.9rem; background:transparent; color:#0d2b1a; min-width:0;" />
+          <button type="submit"
+            style="flex-shrink:0; background:#0d2b1a; color:#b7f34d; font-family:Syne,sans-serif; font-weight:700; font-size:0.875rem; padding:11px 24px; border-radius:100px; border:none; cursor:pointer; white-space:nowrap;"
+            onmouseover="this.style.background='#2d6a4f'" onmouseout="this.style.background='#0d2b1a'">
+            Search
+          </button>
+        </form>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;" class="hero-grid">
+        <div style="background:white; border-radius:20px; padding:32px 20px; text-align:center; border:2px solid #22c55e; box-shadow:4px 4px 0 rgba(34,197,94,0.2);" class="bin-card"><div style="font-size:2.4rem; margin-bottom:10px;">&#9851;</div><div style="font-family:Syne,sans-serif; font-weight:700; color:#16a34a;">Recycle</div></div>
+        <div style="background:white; border-radius:20px; padding:32px 20px; text-align:center; border:2px solid #84cc16; box-shadow:4px 4px 0 rgba(132,204,22,0.2);" class="bin-card"><div style="font-size:2.4rem; margin-bottom:10px;">&#127807;</div><div style="font-family:Syne,sans-serif; font-weight:700; color:#65a30d;">Organic</div></div>
+        <div style="background:white; border-radius:20px; padding:32px 20px; text-align:center; border:2px solid #ef4444; box-shadow:4px 4px 0 rgba(239,68,68,0.2);" class="bin-card"><div style="font-size:2.4rem; margin-bottom:10px;">&#9888;</div><div style="font-family:Syne,sans-serif; font-weight:700; color:#dc2626;">Hazardous</div></div>
+        <div style="background:white; border-radius:20px; padding:32px 20px; text-align:center; border:2px solid #9ca3af; box-shadow:4px 4px 0 rgba(107,114,128,0.2);" class="bin-card"><div style="font-size:2.4rem; margin-bottom:10px;">&#128465;</div><div style="font-family:Syne,sans-serif; font-weight:700; color:#6b7280;">General</div></div>
+      </div>
+    </div>
+  </section>
 
     <!-- Stats Strip -->
     <section class="stats-strip">

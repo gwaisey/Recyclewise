@@ -70,11 +70,11 @@ public class DataSeeder implements CommandLineRunner {
     private void seedRewards() {
         if (rewardRepository.count() > 0) return;
         // Food & Drinks
-        rewardRepository.save(Reward.builder().name("Free Coffee Voucher").description("One free coffee at any participating government cafeteria.").pointsCost(100).category("FOOD_DRINKS").icon("☕").provider("City Government Cafeteria").available(true).stockRemaining(200).build());
-        rewardRepository.save(Reward.builder().name("Free Lunch Box").description("Free nutritious lunch from the government meal program.").pointsCost(250).category("FOOD_DRINKS").icon("🍱").provider("City Nutrition Program").available(true).stockRemaining(100).build());
-        rewardRepository.save(Reward.builder().name("Healthy Snack Pack").description("A curated pack of healthy snacks and drinks.").pointsCost(150).category("FOOD_DRINKS").icon("🥗").provider("City Health Department").available(true).stockRemaining(150).build());
+        rewardRepository.save(Reward.builder().name("Free Coffee Voucher").location("All city government cafeterias, Mon-Fri 07:00-15:00").description("One free coffee at any participating government cafeteria.").pointsCost(100).category("FOOD_DRINKS").icon("☕").provider("City Government Cafeteria").available(true).stockRemaining(200).build());
+        rewardRepository.save(Reward.builder().name("Free Lunch Box").location("City Nutrition Program centers, Mon-Fri 11:00-13:00").description("Free nutritious lunch from the government meal program.").pointsCost(250).category("FOOD_DRINKS").icon("🍱").provider("City Nutrition Program").available(true).stockRemaining(100).build());
+        rewardRepository.save(Reward.builder().name("Healthy Snack Pack").location("City Health Department offices, collect within 7 days").description("A curated pack of healthy snacks and drinks.").pointsCost(150).category("FOOD_DRINKS").icon("🥗").provider("City Health Department").available(true).stockRemaining(150).build());
         // Transport
-        rewardRepository.save(Reward.builder().name("Bus Pass (1 Day)").description("Free unlimited bus travel for one day on all city routes.").pointsCost(200).category("TRANSPORT").icon("🚌").provider("City Transport Authority").available(true).stockRemaining(500).build());
+        rewardRepository.save(Reward.builder().name("Bus Pass (1 Day)").location("Transjakarta all routes, valid any day").description("Free unlimited bus travel for one day on all city routes.").pointsCost(200).category("TRANSPORT").icon("🚌").provider("City Transport Authority").available(true).stockRemaining(500).build());
         rewardRepository.save(Reward.builder().name("MRT Credit — 20,000 IDR").description("20,000 IDR top-up credit for MRT card.").pointsCost(300).category("TRANSPORT").icon("🚇").provider("City MRT").available(true).stockRemaining(300).build());
         rewardRepository.save(Reward.builder().name("Weekly Transit Pass").description("7-day unlimited travel on all public transport.").pointsCost(800).category("TRANSPORT").icon("🎫").provider("City Transport Authority").available(true).stockRemaining(100).build());
         // Bill Discounts

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -60,15 +61,46 @@ public class RewardServiceImpl implements RewardService {
         rewardRepository.save(reward);
 
         // Create redemption with unique voucher code
+        LocalDateTime now = LocalDateTime.now();
         Redemption redemption = Redemption.builder()
                 .user(user)
                 .reward(reward)
                 .pointsSpent(reward.getPointsCost())
                 .voucherCode(generateVoucherCode())
+                .redeemedAt(now)
+                .expiresAt(now.plusDays(30))
                 .status(Redemption.RedemptionStatus.ACTIVE)
                 .build();
 
         return redemptionRepository.save(redemption);
+    }
+
+    @Override
+    @Transactional
+    public void markAsUsed(Long redemptionId, Long userId) {
+        Redemption r = redemptionRepository.findById(redemptionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Redemption", "id", redemptionId));
+        if (!r.getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException("Not authorized.");
+        }
+        if (r.getStatus() == Redemption.RedemptionStatus.ACTIVE) {
+            r.setStatus(Redemption.RedemptionStatus.USED);
+            redemptionRepository.save(r);
+        }
+    }
+
+    @Override
+    public void autoExpireRedemptions(User user) {
+        LocalDateTime now = LocalDateTime.now();
+        List<Redemption> active = redemptionRepository.findByUserOrderByRedeemedAtDesc(user);
+        for (Redemption r : active) {
+            if (r.getStatus() == Redemption.RedemptionStatus.ACTIVE
+                    && r.getExpiresAt() != null
+                    && now.isAfter(r.getExpiresAt())) {
+                r.setStatus(Redemption.RedemptionStatus.EXPIRED);
+                redemptionRepository.save(r);
+            }
+        }
     }
 
     @Override
