@@ -13,6 +13,7 @@ public class DataSeeder implements CommandLineRunner {
     private final WasteItemRepository wasteItemRepository;
     private final RecyclingTipRepository recyclingTipRepository;
     private final TrashStationRepository trashStationRepository;
+    private final AdminUserRepository adminUserRepository;
     private final RewardRepository rewardRepository;
 
     @Override
@@ -21,6 +22,7 @@ public class DataSeeder implements CommandLineRunner {
         seedTips();
         seedStations();
         seedRewards();
+        seedAdmins();
     }
 
     private void seedWasteItems() {
@@ -83,4 +85,33 @@ public class DataSeeder implements CommandLineRunner {
         rewardRepository.save(Reward.builder().name("Water + Electricity Bundle").description("Combined 10% discount on both water and electricity bills.").pointsCost(850).category("BILLS").icon("🏠").provider("City Government").available(true).stockRemaining(50).build());
         System.out.println("✅ Seeded " + rewardRepository.count() + " rewards");
     }
+
+    private void seedAdmins() {
+        if (adminUserRepository.count() > 0) return;
+
+        adminUserRepository.save(AdminUser.builder()
+            .fullName("Super Admin")
+            .email("superadmin@recyclewise.id")
+            .password("Admin@2026")
+            .role(AdminUser.AdminRole.SUPER_ADMIN)
+            .active(true)
+            .build());
+
+        java.util.List<com.recyclewise.model.TrashStation> stations = trashStationRepository.findAll();
+        String[] names = {"Budi Santoso", "Siti Rahayu", "Ahmad Fauzi", "Dewi Kusuma", "Reza Pratama", "Nur Hidayah"};
+        String[] emails = {"budi@recyclewise.id", "siti@recyclewise.id", "ahmad@recyclewise.id",
+                           "dewi@recyclewise.id", "reza@recyclewise.id", "nur@recyclewise.id"};
+        for (int i = 0; i < Math.min(stations.size(), names.length); i++) {
+            adminUserRepository.save(AdminUser.builder()
+                .fullName(names[i])
+                .email(emails[i])
+                .password("Staff@2026")
+                .role(AdminUser.AdminRole.STATION_STAFF)
+                .assignedStation(stations.get(i))
+                .active(true)
+                .build());
+        }
+        System.out.println("✅ Seeded " + adminUserRepository.count() + " admin users");
+    }
+
 }

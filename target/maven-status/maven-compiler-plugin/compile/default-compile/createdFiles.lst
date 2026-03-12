@@ -1,9 +1,12 @@
 com/recyclewise/controller/TipsController.class
 com/recyclewise/controller/AuthController.class
 com/recyclewise/model/SubmissionItem.class
+com/recyclewise/repository/AdminUserRepository.class
 com/recyclewise/service/impl/WasteItemServiceImpl.class
 com/recyclewise/model/Reward.class
 com/recyclewise/model/User$UserBuilder.class
+com/recyclewise/model/AdminUser$AdminUserBuilder.class
+com/recyclewise/controller/AdminController.class
 com/recyclewise/model/SubmissionItem$SubmissionItemBuilder.class
 com/recyclewise/repository/RedemptionRepository.class
 com/recyclewise/controller/StationController.class
@@ -42,7 +45,9 @@ com/recyclewise/service/SubmissionService.class
 com/recyclewise/controller/RewardController.class
 com/recyclewise/service/impl/UserServiceImpl.class
 com/recyclewise/service/PointsCalculator.class
+com/recyclewise/model/AdminUser$AdminRole.class
 com/recyclewise/repository/SubmissionItemRepository.class
+com/recyclewise/model/AdminUser.class
 com/recyclewise/service/impl/DataSeeder.class
 com/recyclewise/service/WasteItemService.class
 com/recyclewise/model/Redemption$RedemptionStatus.class

@@ -1,33 +1,40 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header :: head}"></head>
-<body style="margin:0; background:#f5f2eb;">
-<nav th:replace="~{fragments/header :: navbar}"></nav>
-<main style="min-height:80vh; display:flex; align-items:center; justify-content:center; padding:60px 24px;">
-  <div style="background:white; border-radius:20px; padding:48px 44px; width:100%; max-width:400px; box-shadow:0 12px 48px rgba(13,43,26,0.15); border:1px solid #e8e4d9;">
-    <div style="text-align:center; margin-bottom:32px;">
-      <div style="font-size:2.5rem; margin-bottom:12px;">&#x1F510;</div>
-      <h1 style="font-family:Syne,sans-serif; font-size:1.7rem; font-weight:800; color:#0d2b1a; margin-bottom:6px;">Admin Access</h1>
-      <p style="color:#7a8c7e; font-size:0.875rem;">Station staff only. Enter your PIN to continue.</p>
+<body style="margin:0; background:#0d2b1a; min-height:100vh; display:flex; align-items:center; justify-content:center;">
+<main style="width:100%; padding:40px 24px; display:flex; align-items:center; justify-content:center;">
+  <div style="background:white; border-radius:20px; padding:48px 44px; width:100%; max-width:420px; box-shadow:0 24px 64px rgba(0,0,0,0.3);">
+    <div style="text-align:center; margin-bottom:36px;">
+      <div style="display:inline-flex; align-items:center; justify-content:center; width:56px; height:56px; background:#0d2b1a; border-radius:14px; margin-bottom:16px;">
+        <span style="font-size:1.6rem;">&#9851;</span>
+      </div>
+      <h1 style="font-family:Syne,sans-serif; font-size:1.6rem; font-weight:800; color:#0d2b1a; margin-bottom:4px;">RecycleWise Admin</h1>
+      <p style="color:#7a8c7e; font-size:0.875rem;">Station staff & management portal</p>
     </div>
     <div th:if="${error}" style="background:#fee2e2; border:1px solid #dc2626; color:#7f1d1d; padding:12px 16px; border-radius:10px; font-size:0.875rem; margin-bottom:20px;" th:text="${error}"></div>
     <form action="/admin/login" method="post" style="display:flex; flex-direction:column; gap:16px;">
       <div style="display:flex; flex-direction:column; gap:6px;">
-        <label style="font-family:Syne,sans-serif; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:#4a5c4e;">Admin PIN</label>
-        <input type="password" name="pin" placeholder="Enter PIN" required autofocus
-          style="padding:13px 16px; border:2px solid #e8e4d9; border-radius:10px; font-size:1.2rem; letter-spacing:6px; text-align:center; outline:none; background:#f5f2eb;"
+        <label style="font-family:Syne,sans-serif; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:#4a5c4e;">Email Address</label>
+        <input type="email" name="email" placeholder="staff@recyclewise.id" required autofocus
+          style="padding:13px 16px; border:2px solid #e8e4d9; border-radius:10px; font-size:0.9rem; outline:none; background:#f5f2eb; color:#0d2b1a;"
+          onfocus="this.style.borderColor='#0d2b1a'; this.style.background='white'"
+          onblur="this.style.borderColor='#e8e4d9'; this.style.background='#f5f2eb'" />
+      </div>
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <label style="font-family:Syne,sans-serif; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:#4a5c4e;">Password</label>
+        <input type="password" name="password" placeholder="••••••••" required
+          style="padding:13px 16px; border:2px solid #e8e4d9; border-radius:10px; font-size:0.9rem; outline:none; background:#f5f2eb; color:#0d2b1a;"
           onfocus="this.style.borderColor='#0d2b1a'; this.style.background='white'"
           onblur="this.style.borderColor='#e8e4d9'; this.style.background='#f5f2eb'" />
       </div>
       <button type="submit"
-        style="background:#0d2b1a; color:#b7f34d; font-family:Syne,sans-serif; font-weight:700; font-size:0.95rem; padding:14px 24px; border-radius:100px; border:none; cursor:pointer;"
+        style="background:#0d2b1a; color:#b7f34d; font-family:Syne,sans-serif; font-weight:700; font-size:0.95rem; padding:14px 24px; border-radius:100px; border:none; cursor:pointer; margin-top:4px;"
         onmouseover="this.style.background='#2d6a4f'" onmouseout="this.style.background='#0d2b1a'">
-        Enter Admin Panel &#8594;
+        Sign In to Admin Portal
       </button>
     </form>
-    <p style="text-align:center; margin-top:20px; font-size:0.8rem; color:#a0b0a4;">Not staff? <a href="/" style="color:#2d6a4f; font-weight:600;">Go back home</a></p>
+    <p style="text-align:center; margin-top:24px; font-size:0.8rem; color:#a0b0a4;">Not staff? <a href="/" style="color:#2d6a4f; font-weight:600;">Go back to RecycleWise</a></p>
   </div>
 </main>
-<footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 </html>

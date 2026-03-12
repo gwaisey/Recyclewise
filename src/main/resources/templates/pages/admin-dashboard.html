@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body style="margin:0; background:#f5f2eb;">
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+<main>
+  <section style="background:#0d2b1a; padding:32px 0; border-bottom:4px solid #b7f34d;">
+    <div style="max-width:1180px; margin:0 auto; padding:0 24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+      <div>
+        <p style="color:rgba(255,255,255,0.4); font-size:0.7rem; text-transform:uppercase; letter-spacing:2px; margin-bottom:4px;">Super Admin</p>
+        <h1 style="font-family:Syne,sans-serif; font-size:1.6rem; font-weight:800; color:white; margin-bottom:2px;">Admin Dashboard</h1>
+        <p style="color:rgba(255,255,255,0.5); font-size:0.85rem;">Welcome back, <span th:text="${adminName}">Admin</span></p>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <a href="/admin/submissions" style="background:rgba(183,243,77,0.15); color:#b7f34d; font-family:Syne,sans-serif; font-weight:600; font-size:0.8rem; padding:10px 20px; border-radius:100px; text-decoration:none; border:1px solid rgba(183,243,77,0.3);">View Submissions</a>
+        <a href="/admin/logout" style="background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.5); font-family:Syne,sans-serif; font-weight:600; font-size:0.8rem; padding:10px 20px; border-radius:100px; text-decoration:none;">Logout</a>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:40px 0 80px;">
+    <div style="max-width:1180px; margin:0 auto; padding:0 24px;">
+
+      <!-- Stats -->
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:40px;">
+        <div style="background:white; border-radius:16px; padding:24px; border:1px solid #e8e4d9; box-shadow:0 2px 12px rgba(13,43,26,0.06);">
+          <p style="font-size:0.75rem; color:#7a8c7e; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Pending Review</p>
+          <p style="font-family:Syne,sans-serif; font-size:2.2rem; font-weight:800; color:#854d0e;" th:text="${totalPending}">0</p>
+        </div>
+        <div style="background:white; border-radius:16px; padding:24px; border:1px solid #e8e4d9; box-shadow:0 2px 12px rgba(13,43,26,0.06);">
+          <p style="font-size:0.75rem; color:#7a8c7e; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Confirmed</p>
+          <p style="font-family:Syne,sans-serif; font-size:2.2rem; font-weight:800; color:#16a34a;" th:text="${totalConfirmed}">0</p>
+        </div>
+        <div style="background:white; border-radius:16px; padding:24px; border:1px solid #e8e4d9; box-shadow:0 2px 12px rgba(13,43,26,0.06);">
+          <p style="font-size:0.75rem; color:#7a8c7e; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Rejected</p>
+          <p style="font-family:Syne,sans-serif; font-size:2.2rem; font-weight:800; color:#dc2626;" th:text="${totalRejected}">0</p>
+        </div>
+      </div>
+
+      <!-- Staff Management -->
+      <div style="background:white; border-radius:16px; padding:32px; border:1px solid #e8e4d9; box-shadow:0 2px 12px rgba(13,43,26,0.06); margin-bottom:24px;">
+        <div th:if="${success}" style="background:#dcfce7; border:1px solid #16a34a; color:#14532d; padding:12px 16px; border-radius:10px; font-size:0.875rem; margin-bottom:20px;" th:text="${success}"></div>
+        <div th:if="${error}" style="background:#fee2e2; border:1px solid #dc2626; color:#7f1d1d; padding:12px 16px; border-radius:10px; font-size:0.875rem; margin-bottom:20px;" th:text="${error}"></div>
+
+        <h2 style="font-family:Syne,sans-serif; font-size:1.1rem; font-weight:700; color:#0d2b1a; margin-bottom:20px;">Station Staff Accounts</h2>
+
+        <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:28px;">
+          <div th:each="staff : ${staffList}"
+               style="display:flex; align-items:center; justify-content:space-between; padding:14px 18px; background:#f5f2eb; border-radius:12px; flex-wrap:wrap; gap:10px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div style="width:36px; height:36px; background:#0d2b1a; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#b7f34d; font-family:Syne,sans-serif; font-weight:700; font-size:0.8rem;"
+                   th:text="${#strings.substring(staff.fullName, 0, 1)}">A</div>
+              <div>
+                <p style="font-family:Syne,sans-serif; font-weight:700; font-size:0.875rem; color:#0d2b1a; margin:0;" th:text="${staff.fullName}">Name</p>
+                <p style="font-size:0.75rem; color:#7a8c7e; margin:0;" th:text="${staff.email}">email</p>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px;">
+              <span style="font-size:0.75rem; background:#e8f5e9; color:#2d6a4f; padding:3px 10px; border-radius:100px; font-weight:600;"
+                    th:text="${staff.assignedStation != null ? staff.assignedStation.name : 'Unassigned'}">Station</span>
+              <form th:action="@{/admin/staff/{id}/deactivate(id=${staff.id})}" method="post">
+                <button type="submit"
+                  style="background:transparent; border:1.5px solid #dc2626; color:#dc2626; font-family:Syne,sans-serif; font-weight:600; font-size:0.75rem; padding:5px 14px; border-radius:100px; cursor:pointer;"
+                  onclick="return confirm('Deactivate this staff account?')"
+                  onmouseover="this.style.background='#dc2626'; this.style.color='white'"
+                  onmouseout="this.style.background='transparent'; this.style.color='#dc2626'">
+                  Deactivate
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add new staff form -->
+        <div style="border-top:2px solid #e8e4d9; padding-top:24px;">
+          <h3 style="font-family:Syne,sans-serif; font-size:0.9rem; font-weight:700; color:#0d2b1a; margin-bottom:16px;">Add New Staff Member</h3>
+          <form action="/admin/staff/create" method="post" style="display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:12px; align-items:end;">
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <label style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:#7a8c7e;">Full Name</label>
+              <input type="text" name="fullName" placeholder="Budi Santoso" required
+                style="padding:11px 14px; border:2px solid #e8e4d9; border-radius:10px; font-size:0.875rem; outline:none; background:#f5f2eb;"
+                onfocus="this.style.borderColor='#0d2b1a'; this.style.background='white'"
+                onblur="this.style.borderColor='#e8e4d9'; this.style.background='#f5f2eb'" />
+            </div>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <label style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:#7a8c7e;">Email</label>
+              <input type="email" name="email" placeholder="staff@recyclewise.id" required
+                style="padding:11px 14px; border:2px solid #e8e4d9; border-radius:10px; font-size:0.875rem; outline:none; background:#f5f2eb;"
+                onfocus="this.style.borderColor='#0d2b1a'; this.style.background='white'"
+                onblur="this.style.borderColor='#e8e4d9'; this.style.background='#f5f2eb'" />
+            </div>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <label style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:#7a8c7e;">Assign Station</label>
+              <select name="stationId" required
+                style="padding:11px 14px; border:2px solid #e8e4d9; border-radius:10px; font-size:0.875rem; outline:none; background:#f5f2eb; color:#0d2b1a;">
+                <option th:each="s : ${stations}" th:value="${s.id}" th:text="${s.name}">Station</option>
+              </select>
+            </div>
+            <button type="submit"
+              style="background:#0d2b1a; color:#b7f34d; font-family:Syne,sans-serif; font-weight:700; font-size:0.85rem; padding:12px 20px; border-radius:10px; border:none; cursor:pointer; white-space:nowrap;"
+              onmouseover="this.style.background='#2d6a4f'" onmouseout="this.style.background='#0d2b1a'">
+              + Add Staff
+            </button>
+          </form>
+          <p style="font-size:0.75rem; color:#a0b0a4; margin-top:10px;">Default password for new staff: <strong>Staff@2026</strong> — remind them to change it after first login.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>
