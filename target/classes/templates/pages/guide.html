@@ -42,7 +42,7 @@
 
             <div class="items-grid" th:if="${not #lists.isEmpty(items)}">
                 <a th:href="@{/guide/{id}(id=${item.id})}" class="item-card" th:each="item : ${items}"
-                   th:classappend="'item-' + ${#strings.toLowerCase(item.category)}">
+                   th:classappend="'item-bin-' + ${#strings.toLowerCase(item.binColor)}">
                     <div class="item-header">
                         <span class="item-emoji" th:text="${item.icon}">🍶</span>
                         <div class="item-bin-badge"

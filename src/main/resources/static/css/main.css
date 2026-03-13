@@ -391,10 +391,10 @@ a { text-decoration: none; color: inherit; }
 .category-card.general::before { background: linear-gradient(135deg, #f3f4f630, #e5e7eb20); }
 
 .category-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
-.category-card.recyclable:hover { border-color: #16a34a; }
-.category-card.organic:hover { border-color: #65a30d; }
-.category-card.hazardous:hover { border-color: #dc2626; }
-.category-card.general:hover { border-color: #6b7280; }
+.category-card.recyclable:hover { border-color: var(--bin-blue); }
+.category-card.organic:hover { border-color: var(--bin-green); }
+.category-card.hazardous:hover { border-color: var(--bin-red); }
+.category-card.general:hover { border-color: var(--bin-black); }
 
 .cat-icon {
   font-size: 2.5rem;
@@ -555,14 +555,14 @@ a { text-decoration: none; color: inherit; }
 
 .tab:hover { border-color: var(--forest); color: var(--forest); }
 .tab.active { background: var(--forest); border-color: var(--forest); color: var(--lime); }
-.tab-green:hover, .tab-green.active { border-color: #16a34a; }
-.tab-green.active { background: #16a34a; color: white; }
-.tab-lime:hover, .tab-lime.active { border-color: #65a30d; }
-.tab-lime.active { background: #65a30d; color: white; }
-.tab-red:hover, .tab-red.active { border-color: #dc2626; }
-.tab-red.active { background: #dc2626; color: white; }
-.tab-gray:hover, .tab-gray.active { border-color: #6b7280; }
-.tab-gray.active { background: #6b7280; color: white; }
+.tab-green:hover, .tab-green.active { border-color: var(--bin-blue); }
+.tab-green.active { background: var(--bin-blue); color: white; }
+.tab-lime:hover, .tab-lime.active { border-color: var(--bin-green); }
+.tab-lime.active { background: var(--bin-green); color: white; }
+.tab-red:hover, .tab-red.active { border-color: var(--bin-red); }
+.tab-red.active { background: var(--bin-red); color: white; }
+.tab-gray:hover, .tab-gray.active { border-color: var(--bin-black); }
+.tab-gray.active { background: var(--bin-black); color: white; }
 
 .results-info {
   display: flex;
@@ -603,10 +603,11 @@ a { text-decoration: none; color: inherit; }
   box-shadow: var(--shadow-lg);
 }
 
-.item-recyclable:hover { border-color: var(--bin-blue); }
-.item-organic:hover { border-color: var(--bin-green); }
-.item-hazardous:hover { border-color: var(--bin-red); }
-.item-general:hover { border-color: var(--bin-black); }
+.item-bin-blue:hover { border-color: var(--bin-blue); }
+.item-bin-green:hover { border-color: var(--bin-green); }
+.item-bin-red:hover { border-color: var(--bin-red); }
+.item-bin-black:hover { border-color: var(--bin-black); }
+.item-bin-yellow:hover { border-color: var(--bin-yellow); }
 
 .item-header {
   display: flex;
