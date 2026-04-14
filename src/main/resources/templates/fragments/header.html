@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RecycleWise - Waste and Recycling Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+</head>
+<body>
+<nav th:fragment="navbar" class="navbar">
+    <div class="nav-inner">
+        <a href="/" class="nav-logo">
+            <span class="logo-leaf">♻</span>
+            <span class="logo-text">RecycleWise</span>
+        </a>
+        <button class="nav-toggle" onclick="toggleMenu()">
+            ☰
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="/" class="nav-link-default" th:classappend="${activePage == 'home'} ? ' active'">Home</a></li>
+            <li><a href="/guide" class="nav-link-default" th:classappend="${activePage == 'guide'} ? ' active'">Waste Guide</a></li>
+            <li><a href="/tips" class="nav-link-default" th:classappend="${activePage == 'tips'} ? ' active'">Eco Tips</a></li>
+            <li th:if="${session.userId != null}"><a href="/stations" class="nav-link-default" th:classappend="${activePage == 'stations'} ? ' active'">Stations</a></li>
+            <li th:if="${session.userId != null}"><a href="/rewards" class="nav-link-default" th:classappend="${activePage == 'rewards'} ? ' active'">Rewards</a></li>
+            <li th:if="${session.userId != null}"><a href="/dashboard" class="nav-link-default" th:classappend="${activePage == 'dashboard'} ? ' active'">Dashboard</a></li>
+            <li th:if="${session.userId != null}"><a href="/logout" class="nav-link-logout">Logout</a></li>
+            <li th:if="${session.userId == null}"><a href="/login" class="nav-link-login" th:classappend="${activePage == 'login'} ? ' active'">Login</a></li>
+            <li th:if="${session.userId == null}" style="margin-left:6px;"><a href="/register" class="nav-link-register" th:classappend="${activePage == 'register'} ? ' active'">Register</a></li>
+        </ul>
+    </div>
+
+  <script th:inline="javascript">
+  function toggleMenu() {
+    const nav = document.getElementById('navLinks');
+    nav.classList.toggle('open');
+  }
+  </script>
+
+</nav>
+</body>
+</html>

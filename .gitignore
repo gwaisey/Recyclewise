@@ -1,0 +1,14 @@
+target/
+*.class
+*.jar
+*.war
+.DS_Store
+.mvn/wrapper/maven-wrapper.jar
+mvnw
+mvnw.cmd
+tools/
+
+# Local data and secrets
+data/
+src/main/resources/application-local.properties
+.env

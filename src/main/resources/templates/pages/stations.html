@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body class="bg-cream">
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+<main>
+
+  <section class="page-hero">
+    <div class="container mobile-center">
+      <div class="page-hero-content">
+        <h1>🗑 Trash Stations</h1>
+        <p>Find an organized trash station near you and submit your waste to earn points</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="stations-section" style="padding: 60px 0;">
+    <div class="container">
+
+      <div class="stations-info-grid">
+        <div class="info-item">
+          <div class="item-icon">♻</div>
+          <div class="item-label">Recyclable</div>
+          <div class="item-value" th:text="${multipliers.get('RECYCLABLE')} + ' pts/kg'">15 pts/kg</div>
+        </div>
+        <div class="info-item">
+          <div class="item-icon">🌿</div>
+          <div class="item-label">Organic</div>
+          <div class="item-value" th:text="${multipliers.get('ORGANIC')} + ' pts/kg'">10 pts/kg</div>
+        </div>
+        <div class="info-item">
+          <div class="item-icon">⚠️</div>
+          <div class="item-label">Hazardous</div>
+          <div class="item-value" th:text="${multipliers.get('HAZARDOUS')} + ' pts/kg'">20 pts/kg</div>
+        </div>
+        <div class="info-item">
+          <div class="item-icon">🗑</div>
+          <div class="item-label">General</div>
+          <div class="item-value" th:text="${multipliers.get('GENERAL')} + ' pts/kg'">5 pts/kg</div>
+        </div>
+      </div>
+
+      <div class="items-grid">
+        <div th:each="station : ${stations}" class="item-card station-card">
+          <div class="item-header">
+            <span class="item-emoji" th:text="${station.icon}">🏢</span>
+            <span class="item-bin-badge" style="background: var(--forest);" th:text="${station.district}">District</span>
+          </div>
+          <h3 class="item-name" th:text="${station.name}">Station Name</h3>
+          <p class="item-hint">
+            <span style="display: block; margin-bottom: 4px;">📍 <span th:text="${station.address}">Address</span></span>
+            <span>🕒 <span th:text="${station.operatingHours}">Hours</span></span>
+          </p>
+          <a th:href="@{/stations/{id}/submit(id=${station.id})}" class="btn-primary" style="margin-top: 12px; width: 100%; justify-content: center; white-space: nowrap;">
+            Submit Trash Here →
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

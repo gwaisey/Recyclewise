@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body class="bg-cream">
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main style="min-height:85vh; display:flex; align-items:center; justify-content:center; padding: 60px 24px;">
+  <div class="detail-card" style="width:100%; max-width:440px; padding: 48px 40px; border-left: none; border: 1px solid var(--cream-dark);">
+
+    <div style="text-align:center; margin-bottom:32px;">
+      <div style="font-size:3rem; margin-bottom:12px;">♻</div>
+      <h1 style="font-size:1.8rem; margin-bottom:8px;">Welcome Back</h1>
+      <p style="color:var(--sage); font-size:0.9rem; opacity: 0.7;">Log in to track your recycling impact</p>
+    </div>
+
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+    <form action="/login" method="post" style="display:flex; flex-direction:column; gap:20px;">
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">Username</label>
+        <input type="text" name="username" placeholder="your_username" required
+          style="padding:14px; border:1px solid var(--cream-dark); border-radius:12px; font-family:'DM Sans',sans-serif; font-size:1rem; outline:none; background:var(--white);" />
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">Password</label>
+        <input type="password" name="password" placeholder="••••••••" required
+          style="padding:14px; border:1px solid var(--cream-dark); border-radius:12px; font-family:'DM Sans',sans-serif; font-size:1rem; outline:none; background:var(--white);" />
+      </div>
+      <button type="submit" class="btn-primary" style="padding: 16px; justify-content: center; margin-top: 8px;">
+        Log In →
+      </button>
+    </form>
+
+    <div style="display:flex; align-items:center; gap:16px; margin:36px 0;">
+      <div style="flex:1; height:1px; background:var(--cream-dark);"></div>
+      <span style="font-size:0.75rem; color:var(--sage); opacity:0.5; font-weight:700; text-transform: uppercase;">Or</span>
+      <div style="flex:1; height:1px; background:var(--cream-dark);"></div>
+    </div>
+
+    <div style="text-align:center;">
+      <p style="font-size:0.85rem; color:var(--sage); margin-bottom:16px; opacity:0.8;">Don't have an account yet?</p>
+      <a href="/register" class="btn-outline" style="color:var(--forest); border-color:var(--forest); width: 100%; justify-content: center;">
+        Create Account
+      </a>
+    </div>
+
+  </div>
+</main>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

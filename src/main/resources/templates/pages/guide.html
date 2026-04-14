@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body>
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main>
+    <section class="page-hero">
+        <div class="container">
+            <div class="page-hero-content">
+                <h1>♻ Waste Guide</h1>
+                <p>Search any item to find out how to dispose of it responsibly</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="guide-section">
+        <div class="container">
+
+            <!-- Bin Legend -->
+            <div style="display:flex; flex-wrap:wrap; gap:16px; margin-bottom:32px; background:var(--white); padding:20px; border-radius:16px; border:1px solid var(--cream-dark);">
+                <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem; font-weight:700;">
+                    <span style="width:12px; height:12px; border-radius:50%; background:var(--bin-blue);"></span> 📑 blue: paper
+                </div>
+                <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem; font-weight:700;">
+                    <span style="width:12px; height:12px; border-radius:50%; background:var(--bin-yellow);"></span> 🥫 yellow: plastic/metal
+                </div>
+                <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem; font-weight:700;">
+                    <span style="width:12px; height:12px; border-radius:50%; background:var(--bin-green);"></span> 🍎 green: organic
+                </div>
+                <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem; font-weight:700;">
+                    <span style="width:12px; height:12px; border-radius:50%; background:var(--bin-red);"></span> 🔋 red: hazardous
+                </div>
+                <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem; font-weight:700;">
+                    <span style="width:12px; height:12px; border-radius:50%; background:var(--bin-black);"></span> 🗑 black: residual
+                </div>
+            </div>
+
+            <div class="guide-search-bar">
+                <form action="/guide" method="get" class="guide-search-form" style="max-width: 100%; width: 100%;">
+                    <input type="text" name="search"
+                           th:value="${searchQuery}"
+                           placeholder="e.g. plastic bottle..."
+                           class="guide-search-input" />
+                    <button type="submit" class="search-btn">🔍 Search</button>
+                </form>
+            </div>
+
+            <div class="filter-tabs" style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:40px;">
+                <a href="/guide" class="tab" th:classappend="${activeCategory == null and searchQuery == null} ? 'active'">All Items</a>
+                <a href="/guide?category=PAPER" class="tab tab-blue" th:classappend="${activeCategory == 'PAPER'} ? 'active'">📑 Paper</a>
+                <a href="/guide?category=RECYCLABLES" class="tab tab-yellow" th:classappend="${activeCategory == 'RECYCLABLES'} ? 'active'">🥫 Recyclables</a>
+                <a href="/guide?category=ORGANIC" class="tab tab-green" th:classappend="${activeCategory == 'ORGANIC'} ? 'active'">🌿 Organic</a>
+                <a href="/guide?category=HAZARDOUS" class="tab tab-red" th:classappend="${activeCategory == 'HAZARDOUS'} ? 'active'">⚠️ Hazardous</a>
+                <a href="/guide?category=GENERAL" class="tab tab-black" th:classappend="${activeCategory == 'GENERAL'} ? 'active'">🗑 Residual</a>
+            </div>
+
+            <div class="results-info" th:if="${searchQuery != null}">
+                <span>Showing results for: <strong th:text="${searchQuery}"></strong></span>
+                <a href="/guide">Clear ×</a>
+            </div>
+
+            <div class="items-grid" th:if="${not #lists.isEmpty(items)}">
+                <a th:href="@{/guide/{id}(id=${item.id})}" class="item-card" th:each="item : ${items}"
+                   th:classappend="'item-bin-' + ${#strings.toLowerCase(item.binColor)}">
+                    <div class="item-header">
+                        <span class="item-emoji" th:text="${item.icon}">🍶</span>
+                        <div class="item-bin-badge"
+                             th:text="${item.binColor}"
+                             th:style="'background: var(--bin-' + ${item.binColor} + ')'">blue</div>
+                    </div>
+                    <h3 class="item-name" th:text="${item.name}">Item Name</h3>
+                    <div class="item-category-tag" th:text="${item.category}">RECYCLABLE</div>
+                    <p class="item-hint" th:text="${#strings.abbreviate(item.disposalInstructions, 80)}">Instructions...</p>
+                    <span class="item-read-more">View details →</span>
+                </a>
+            </div>
+
+            <div class="empty-state" th:if="${#lists.isEmpty(items)}">
+                <span class="empty-icon">🔍</span>
+                <h3>No items found</h3>
+                <p>Try a different search term or browse all categories</p>
+                <a href="/guide" class="btn-outline">Browse All Items</a>
+            </div>
+
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

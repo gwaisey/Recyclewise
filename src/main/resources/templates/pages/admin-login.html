@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: head}"></head>
+<body class="bg-forest" style="min-height:100vh; display:flex; align-items:center; justify-content:center;">
+<main style="width:100%; padding:40px 24px; display:flex; align-items:center; justify-content:center;">
+  <div class="detail-card" style="width:100%; max-width:440px; padding: 48px 40px; border-left: none; border: 1px solid rgba(255,255,255,0.1);">
+    <div style="text-align:center; margin-bottom:36px;">
+      <div style="display:inline-flex; align-items:center; justify-content:center; width:60px; height:60px; background:var(--lime); border-radius:16px; margin-bottom:16px; color:var(--forest); font-size:1.8rem;">
+        &#9851;
+      </div>
+      <h1 style="color:var(--forest); font-size:1.6rem; margin-bottom:4px;">RecycleWise Admin</h1>
+      <p style="color:var(--sage); font-size:0.9rem; opacity:0.7;">Station staff & management portal</p>
+    </div>
+
+    <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+    <form action="/admin/login" method="post" style="display:flex; flex-direction:column; gap:20px;">
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">Email Address</label>
+        <input type="email" name="email" placeholder="staff@recyclewise.id" required autofocus
+          style="padding:14px; border:1px solid var(--cream-dark); border-radius:12px; font-family:'DM Sans',sans-serif; font-size:1rem; outline:none; background:var(--white); color:var(--forest);" />
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">Password</label>
+        <input type="password" name="password" placeholder="••••••••" required
+          style="padding:14px; border:1px solid var(--cream-dark); border-radius:12px; font-family:'DM Sans',sans-serif; font-size:1rem; outline:none; background:var(--white); color:var(--forest);" />
+      </div>
+      <button type="submit" class="btn-primary" style="padding: 16px; justify-content: center; margin-top: 8px;">
+        Sign In to Portal →
+      </button>
+    </form>
+
+    <div style="text-align:center; margin-top:32px; border-top: 1px solid var(--cream-dark); padding-top: 24px;">
+      <p style="font-size:0.85rem; color:var(--sage); opacity:0.6;">Not staff? <a href="/" style="color:var(--forest); font-weight:800; text-decoration: underline;">Go back home</a></p>
+    </div>
+  </div>
+</main>
+</body>
+</html>
