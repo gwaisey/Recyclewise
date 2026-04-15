@@ -284,61 +284,21 @@ H2_CONSOLE_ENABLED=false
 
 # AI Chat (required for EcoBot)
 OPENROUTER_API_KEY=sk-or-v1-your-key
-
-# Admin password reset secret key (temporary)
-ADMIN_RESET_KEY=your-secret-key
 ```
 
-### Admin Password Reset
+### Admin Passwords
 
-Since passwords are BCrypt-hashed (one-way), you cannot "decode" them. To reset admin passwords:
+All admin passwords are automatically BCrypt-hashed on startup by `DataSeeder.java`.
 
-**Option 1: Quick Reset Endpoint (Recommended for Koyeb)**
+**Default admin credentials:**
+- Email: `superadmin@recyclewise.id`
+- Password: `changeme`
 
-1. Set an environment variable `ADMIN_RESET_KEY` with a secret key (e.g., `mysecret123`)
-2. Deploy the app
-3. Visit this URL (replace with your actual domain):
-   ```
-   https://your-app.koyeb.app/admin/reset-passwords?key=mysecret123
-   ```
-4. You'll see JSON response:
-   ```json
-   {"success":true,"message":"All 7 admin passwords reset to: changeme","password":"changeme","accounts_updated":7}
-   ```
-5. **Important**: After resetting, either:
-   - Remove the endpoint from code and redeploy, OR
-   - Remove the `ADMIN_RESET_KEY` environment variable
+**To change password:**
+1. Log in to admin dashboard
+2. Use the "Change Password" section to set a new password
 
-**Option 2: Direct Database Update**
-
-1. Connect to your database
-2. Generate a BCrypt hash online: https://bcrypt-generator.com/
-3. Run SQL:
-```sql
-UPDATE admin_users 
-SET password = '$2a$10$YourBcryptHashHere' 
-WHERE email = 'superadmin@recyclewise.id';
-```
-
-**Option 3: Via H2 Console (Local Dev Only)**
-1. Enable `H2_CONSOLE_ENABLED=true`
-2. Go to `/h2-console`
-3. Run the same UPDATE query above
-
-**Option 4: Create Migration Script**
-
-Add to `DataSeeder.java` or create a Flyway migration:
-```java
-// In DataSeeder.java - runs on every startup in dev
-@PostConstruct
-public void resetAdminPasswords() {
-    String bcryptHash = passwordEncoder.encode("changeme");
-    adminUserRepository.findAll().forEach(admin -> {
-        admin.setPassword(bcryptHash);
-        adminUserRepository.save(admin);
-    });
-}
-```
+**Note:** If the database is wiped, admins will be re-created with default credentials on next startup.
 
 ---
 

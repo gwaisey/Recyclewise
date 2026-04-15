@@ -234,35 +234,6 @@ public class AdminController {
         return "redirect:/admin/submissions";
     }
 
-    // ── Admin Password Reset (Temporary Endpoint) ─────────────────────────────
-    // Use this ONCE after deployment to reset all admin passwords
-    // URL: /admin/reset-passwords?key=YOUR_SECRET_KEY
-    
-    @GetMapping("/reset-passwords")
-    @ResponseBody
-    public Map<String, Object> resetAllAdminPasswords(@RequestParam String key) {
-        String secretKey = System.getenv("ADMIN_RESET_KEY");
-        if (secretKey == null || !secretKey.equals(key)) {
-            return Map.of("success", false, "message", "Invalid or missing secret key");
-        }
-        
-        String newPassword = "changeme";
-        String hashedPassword = passwordEncoder.encode(newPassword);
-        
-        List<AdminUser> admins = adminUserRepository.findAll();
-        for (AdminUser admin : admins) {
-            admin.setPassword(hashedPassword);
-            adminUserRepository.save(admin);
-        }
-        
-        return Map.of(
-            "success", true,
-            "message", "All " + admins.size() + " admin passwords reset to: " + newPassword,
-            "password", newPassword,
-            "accounts_updated", admins.size()
-        );
-    }
-
     // ── Change Password ─────────────────────────────────────────────────────
 
     @PostMapping("/change-password")

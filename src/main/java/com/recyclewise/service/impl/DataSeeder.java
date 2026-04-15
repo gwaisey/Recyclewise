@@ -4,6 +4,7 @@ import com.recyclewise.model.*;
 import com.recyclewise.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,6 +16,7 @@ public class DataSeeder implements CommandLineRunner {
     private final TrashStationRepository trashStationRepository;
     private final AdminUserRepository adminUserRepository;
     private final RewardRepository rewardRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) {
@@ -89,10 +91,13 @@ public class DataSeeder implements CommandLineRunner {
     private void seedAdmins() {
         if (adminUserRepository.count() > 0) return;
 
+        String defaultPassword = "changeme";
+        String encodedPassword = passwordEncoder.encode(defaultPassword);
+
         adminUserRepository.save(java.util.Objects.requireNonNull(AdminUser.builder()
             .fullName("Super Admin")
             .email("superadmin@recyclewise.id")
-            .password(System.getenv("ADMIN_PASSWORD") != null ? System.getenv("ADMIN_PASSWORD") : "changeme")
+            .password(encodedPassword)
             .role(AdminUser.AdminRole.SUPER_ADMIN)
             .active(true)
             .build()));
@@ -105,13 +110,13 @@ public class DataSeeder implements CommandLineRunner {
             adminUserRepository.save(java.util.Objects.requireNonNull(AdminUser.builder()
                 .fullName(names[i])
                 .email(emails[i])
-                .password(System.getenv("STAFF_PASSWORD") != null ? System.getenv("STAFF_PASSWORD") : "changeme")
+                .password(encodedPassword)
                 .role(AdminUser.AdminRole.STATION_STAFF)
                 .assignedStation(java.util.Objects.requireNonNull(stations.get(i)))
                 .active(true)
                 .build()));
         }
-        System.out.println("✅ Seeded " + adminUserRepository.count() + " admin users");
+        System.out.println("✅ Seeded " + adminUserRepository.count() + " admin users with BCrypt passwords");
     }
 
 }
