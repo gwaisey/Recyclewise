@@ -8,10 +8,11 @@ A full-stack web application built with **Spring Boot + Thymeleaf** that helps J
 
 | Layer | Technology |
 |---|---|
-| Backend | Java 21, Spring Boot 3.2 |
+| Backend | Java 17+, Spring Boot 3.2 |
 | Template Engine | Thymeleaf |
-| Database | H2 (persistent file-based) |
+| Database | H2 (dev) / PostgreSQL (prod) |
 | ORM | Spring Data JPA / Hibernate |
+| Security | Spring Security + BCrypt |
 | Build Tool | Maven |
 | Frontend | HTML5, Vanilla CSS, JS |
 | UI Style | Organic Brutalism (Custom System) |
@@ -22,22 +23,24 @@ A full-stack web application built with **Spring Boot + Thymeleaf** that helps J
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Java 17+
+- Java 17+ (recommended: Java 17 or 21)
 - Maven 3.8+
 
 ### Run the App
 ```bash
+# Development (with H2 console)
 .\mvnw spring-boot:run
+
+# Production (set environment variables first)
+H2_CONSOLE_ENABLED=false OPENROUTER_API_KEY=your-key .\mvnw spring-boot:run
 ```
 
 Then open: **http://localhost:8080**
 
-### H2 Console (Dev)
-Access the persistent file-based database at: **http://localhost:8080/h2-console**
-- JDBC URL: `jdbc:h2:file:./data/recyclewise`
-- Username: `sa` | Password: *(empty)*
+### H2 Console (Dev Only)
+Access at: **http://localhost:8080/h2-console** (requires `H2_CONSOLE_ENABLED=true`)
 
-> ⚠ To reset all data, delete the `data/` folder and restart the app.
+> ⚠️ H2 console is disabled by default. Enable only in development.
 
 ---
 
@@ -46,7 +49,7 @@ Access the persistent file-based database at: **http://localhost:8080/h2-console
 ### Regular Users
 Register at `/register` with any email and password.
 
-### Admin Accounts (Pre-seeded)
+### Admin Accounts (Pre-seeded with BCrypt passwords)
 
 | Role | Email | Password | Access |
 |---|---|---|---|
@@ -58,7 +61,9 @@ Register at `/register` with any email and password.
 | Station Staff | `reza@recyclewise.id` | `changeme` | Cibubur Waste Center only |
 | Station Staff | `nur@recyclewise.id` | `changeme` | Menteng Eco Station only |
 
-> Admin portal is accessible at `/admin/login` — separate from the user login.
+> Admin portal is accessible at `/admin/login` — separate from user login.
+
+> ⚠️ **Important**: On production deployment (e.g., Koyeb), you must reset admin passwords with BCrypt hashes. See [Admin Password Reset](#admin-password-reset) below.
 
 ---
 
@@ -254,20 +259,112 @@ On first startup, the app auto-seeds:
 
 ---
 
+## 🔐 Security Features
+
+The app includes production-ready security measures:
+
+| Feature | Status | Description |
+|---|---|---|
+| Password Hashing | ✅ Enabled | BCrypt for all passwords (users & admins) |
+| CSRF Protection | ✅ Enabled | Cookie-based CSRF tokens on all forms |
+| Security Headers | ✅ Enabled | CSP, X-Frame-Options, Referrer-Policy, etc. |
+| Session Hardening | ✅ Enabled | 30-min timeout, secure/HttpOnly cookies |
+| Rate Limiting | ✅ Enabled | 5 login attempts/min, 30 API requests/min |
+| Input Validation | ✅ Enabled | Bean validation on all user inputs |
+| H2 Console | ❌ Disabled by default | Enable only for local dev |
+
+### Environment Variables for Production
+
+```bash
+# Database (if using file-based H2)
+H2_PASSWORD=your-secure-password
+
+# Disable H2 console in production
+H2_CONSOLE_ENABLED=false
+
+# AI Chat (required for EcoBot)
+OPENROUTER_API_KEY=sk-or-v1-your-key
+
+# Admin password reset secret key (temporary)
+ADMIN_RESET_KEY=your-secret-key
+```
+
+### Admin Password Reset
+
+Since passwords are BCrypt-hashed (one-way), you cannot "decode" them. To reset admin passwords:
+
+**Option 1: Quick Reset Endpoint (Recommended for Koyeb)**
+
+1. Set an environment variable `ADMIN_RESET_KEY` with a secret key (e.g., `mysecret123`)
+2. Deploy the app
+3. Visit this URL (replace with your actual domain):
+   ```
+   https://your-app.koyeb.app/admin/reset-passwords?key=mysecret123
+   ```
+4. You'll see JSON response:
+   ```json
+   {"success":true,"message":"All 7 admin passwords reset to: changeme","password":"changeme","accounts_updated":7}
+   ```
+5. **Important**: After resetting, either:
+   - Remove the endpoint from code and redeploy, OR
+   - Remove the `ADMIN_RESET_KEY` environment variable
+
+**Option 2: Direct Database Update**
+
+1. Connect to your database
+2. Generate a BCrypt hash online: https://bcrypt-generator.com/
+3. Run SQL:
+```sql
+UPDATE admin_users 
+SET password = '$2a$10$YourBcryptHashHere' 
+WHERE email = 'superadmin@recyclewise.id';
+```
+
+**Option 3: Via H2 Console (Local Dev Only)**
+1. Enable `H2_CONSOLE_ENABLED=true`
+2. Go to `/h2-console`
+3. Run the same UPDATE query above
+
+**Option 4: Create Migration Script**
+
+Add to `DataSeeder.java` or create a Flyway migration:
+```java
+// In DataSeeder.java - runs on every startup in dev
+@PostConstruct
+public void resetAdminPasswords() {
+    String bcryptHash = passwordEncoder.encode("changeme");
+    adminUserRepository.findAll().forEach(admin -> {
+        admin.setPassword(bcryptHash);
+        adminUserRepository.save(admin);
+    });
+}
+```
+
+---
+
 ## 🔮 Production Setup
 
-For production, swap H2 for PostgreSQL or MySQL:
+### Database Configuration
+
+For production, swap H2 for PostgreSQL:
 
 ```properties
-# application.properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/recyclewise
-spring.datasource.username=your_user
-spring.datasource.password=your_password
+# Set via environment variables
+spring.datasource.url=${DATABASE_URL}
+spring.datasource.username=${DB_USER}
+spring.datasource.password=${DB_PASSWORD}
 spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
 spring.jpa.hibernate.ddl-auto=update
 ```
 
-Add the PostgreSQL dependency in `pom.xml`:
+### Koyeb Deployment
+
+1. Set environment variables in Koyeb dashboard:
+   - `H2_CONSOLE_ENABLED=false`
+   - `OPENROUTER_API_KEY=your-key`
+   - `DATABASE_URL=postgresql://...` (if using managed PostgreSQL)
+
+2. Add PostgreSQL dependency in `pom.xml`:
 ```xml
 <dependency>
     <groupId>org.postgresql</groupId>
@@ -275,7 +372,7 @@ Add the PostgreSQL dependency in `pom.xml`:
 </dependency>
 ```
 
-> For production, replace the plain-text password storage in `AdminUser` and `User` with **BCrypt hashing** via Spring Security.
+3. **Reset admin passwords** after deployment using one of the methods above.
 
 ---
 
@@ -319,5 +416,4 @@ Add the PostgreSQL dependency in `pom.xml`:
 
 ## 📝 License
 
-A full-stack web application with a Java Spring Boot backend, Thymeleaf server-side rendering, and H2 database. Frontend styling uses inline CSS due to static resource serving constraints in the development environment.
-nvironment.
+MIT License - See LICENSE file for details.

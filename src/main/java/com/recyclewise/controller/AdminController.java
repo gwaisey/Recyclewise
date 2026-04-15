@@ -7,13 +7,16 @@ import com.recyclewise.repository.TrashSubmissionRepository;
 import com.recyclewise.repository.TrashStationRepository;
 import com.recyclewise.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.constraints.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Controller
@@ -25,6 +28,7 @@ public class AdminController {
     private final TrashSubmissionRepository submissionRepository;
     private final TrashStationRepository stationRepository;
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     // ── Auth ────────────────────────────────────────────────────────────────
 
@@ -56,10 +60,17 @@ public class AdminController {
                         HttpSession session,
                         RedirectAttributes ra) {
         AdminUser admin = adminUserRepository.findByEmailAndActiveTrue(email).orElse(null);
-        if (admin == null || !admin.getPassword().equals(password)) {
+        if (admin == null) {
             ra.addFlashAttribute("error", "Invalid email or password.");
             return "redirect:/admin/login";
         }
+        
+        boolean passwordMatches = passwordEncoder.matches(password, admin.getPassword());
+        if (!passwordMatches) {
+            ra.addFlashAttribute("error", "Invalid email or password.");
+            return "redirect:/admin/login";
+        }
+        
         session.setAttribute("adminId", admin.getId());
         session.setAttribute("adminName", admin.getFullName());
         session.setAttribute("adminRole", admin.getRole().name());
@@ -98,29 +109,34 @@ public class AdminController {
     // ── Staff Management (Super Admin only) ─────────────────────────────────
 
     @PostMapping("/staff/create")
-    public String createStaff(@RequestParam String fullName,
-                               @RequestParam String email,
-                               @RequestParam Long stationId,
+    public String createStaff(@RequestParam @NotBlank(message = "Full name is required") @Size(min = 2, max = 100) String fullName,
+                               @RequestParam @NotBlank(message = "Email is required") @Email(message = "Valid email required") String email,
+                               @RequestParam @NotNull(message = "Station is required") Long stationId,
                                HttpSession session,
                                RedirectAttributes ra) {
         if (!isSuperAdmin(session)) return "redirect:/admin/login";
-        Objects.requireNonNull(stationId, "Station ID must not be null");
         if (adminUserRepository.findByEmailAndActiveTrue(email).isPresent()) {
             ra.addFlashAttribute("error", "Email already in use.");
             return "redirect:/admin/dashboard";
         }
         var station = stationRepository.findById(stationId).orElseThrow();
+        String tempPassword = System.getenv("STAFF_INITIAL_PASSWORD");
+        if (tempPassword == null || tempPassword.isBlank()) {
+            tempPassword = generateSecureTempPassword();
+        }
         AdminUser newStaff = AdminUser.builder()
             .fullName(fullName)
             .email(email)
-            .password(System.getenv("STAFF_PASSWORD") != null ? System.getenv("STAFF_PASSWORD") : "changeme")
+            .password(passwordEncoder.encode(tempPassword))
             .role(AdminUser.AdminRole.STATION_STAFF)
             .assignedStation(station)
             .active(true)
             .build();
+        session.setAttribute("tempStaffPassword", tempPassword);
         Objects.requireNonNull(newStaff, "AdminUser creation failed");
         adminUserRepository.save(newStaff);
-        ra.addFlashAttribute("success", fullName + " added as staff for " + station.getName() + ".");
+        ra.addFlashAttribute("success", fullName + " added as staff for " + station.getName() + ". Temp password: " + tempPassword);
+        session.removeAttribute("tempStaffPassword");
         return "redirect:/admin/dashboard";
     }
 
@@ -218,9 +234,48 @@ public class AdminController {
         return "redirect:/admin/submissions";
     }
 
+    // ── Admin Password Reset (Temporary Endpoint) ─────────────────────────────
+    // Use this ONCE after deployment to reset all admin passwords
+    // URL: /admin/reset-passwords?key=YOUR_SECRET_KEY
+    
+    @GetMapping("/reset-passwords")
+    @ResponseBody
+    public Map<String, Object> resetAllAdminPasswords(@RequestParam String key) {
+        String secretKey = System.getenv("ADMIN_RESET_KEY");
+        if (secretKey == null || !secretKey.equals(key)) {
+            return Map.of("success", false, "message", "Invalid or missing secret key");
+        }
+        
+        String newPassword = "changeme";
+        String hashedPassword = passwordEncoder.encode(newPassword);
+        
+        List<AdminUser> admins = adminUserRepository.findAll();
+        for (AdminUser admin : admins) {
+            admin.setPassword(hashedPassword);
+            adminUserRepository.save(admin);
+        }
+        
+        return Map.of(
+            "success", true,
+            "message", "All " + admins.size() + " admin passwords reset to: " + newPassword,
+            "password", newPassword,
+            "accounts_updated", admins.size()
+        );
+    }
+
     // ── Helpers ─────────────────────────────────────────────────────────────
 
     private boolean isSuperAdmin(HttpSession session) {
         return "SUPER_ADMIN".equals(session.getAttribute("adminRole")) && session.getAttribute("adminId") != null;
+    }
+
+    private String generateSecureTempPassword() {
+        String chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#$%";
+        java.security.SecureRandom random = new java.security.SecureRandom();
+        StringBuilder password = new StringBuilder();
+        for (int i = 0; i < 12; i++) {
+            password.append(chars.charAt(random.nextInt(chars.length())));
+        }
+        return password.toString();
     }
 }

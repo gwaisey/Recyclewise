@@ -4,6 +4,7 @@ import com.recyclewise.service.PointsCalculator;
 import com.recyclewise.service.StationService;
 import com.recyclewise.service.SubmissionService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.constraints.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,11 +43,11 @@ public class StationController {
 
     @PostMapping("/{id}/submit")
     public String submitTrash(@PathVariable Long id,
-                               @RequestParam(defaultValue = "0") double paperKg,
-                               @RequestParam(defaultValue = "0") double recyclablesKg,
-                               @RequestParam(defaultValue = "0") double organicKg,
-                               @RequestParam(defaultValue = "0") double hazardousKg,
-                               @RequestParam(defaultValue = "0") double generalKg,
+                               @RequestParam(defaultValue = "0") @DecimalMin(value = "0", message = "Weight cannot be negative") @DecimalMax(value = "100", message = "Weight cannot exceed 100 kg") double paperKg,
+                               @RequestParam(defaultValue = "0") @DecimalMin(value = "0", message = "Weight cannot be negative") @DecimalMax(value = "100", message = "Weight cannot exceed 100 kg") double recyclablesKg,
+                               @RequestParam(defaultValue = "0") @DecimalMin(value = "0", message = "Weight cannot be negative") @DecimalMax(value = "100", message = "Weight cannot exceed 100 kg") double organicKg,
+                               @RequestParam(defaultValue = "0") @DecimalMin(value = "0", message = "Weight cannot be negative") @DecimalMax(value = "100", message = "Weight cannot exceed 100 kg") double hazardousKg,
+                               @RequestParam(defaultValue = "0") @DecimalMin(value = "0", message = "Weight cannot be negative") @DecimalMax(value = "100", message = "Weight cannot exceed 100 kg") double generalKg,
                                HttpSession session,
                                RedirectAttributes ra) {
         Long userId = (Long) session.getAttribute("userId");

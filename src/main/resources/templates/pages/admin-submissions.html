@@ -56,11 +56,13 @@
 
             <div style="display:flex; gap:12px; flex-shrink:0;">
               <form th:action="@{/admin/submissions/{id}/confirm(id=${sub.id})}" method="post">
+                <input type="hidden" th:name="_csrf" th:value="${_csrf.token}" />
                 <button type="submit" class="btn-primary" style="padding: 10px 20px; font-size: 0.85rem; background: var(--bin-green); color: var(--white); border-color: var(--bin-green);">
                   ✓ Confirm
                 </button>
               </form>
               <form th:action="@{/admin/submissions/{id}/reject(id=${sub.id})}" method="post">
+                <input type="hidden" th:name="_csrf" th:value="${_csrf.token}" />
                 <button type="submit" class="btn-outline" style="padding: 10px 20px; font-size: 0.85rem; color: var(--bin-red); border-color: var(--bin-red);">
                   ✕ Reject
                 </button>
