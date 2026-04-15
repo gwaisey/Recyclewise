@@ -263,6 +263,42 @@ public class AdminController {
         );
     }
 
+    // ── Change Password ─────────────────────────────────────────────────────
+
+    @PostMapping("/change-password")
+    public String changePassword(@RequestParam String currentPassword,
+                                 @RequestParam String newPassword,
+                                 @RequestParam String confirmPassword,
+                                 HttpSession session,
+                                 RedirectAttributes ra) {
+        Long adminId = (Long) session.getAttribute("adminId");
+        if (adminId == null) return "redirect:/admin/login";
+        
+        if (!newPassword.equals(confirmPassword)) {
+            ra.addFlashAttribute("passwordError", "New passwords do not match.");
+            return "redirect:/admin/dashboard";
+        }
+        
+        if (newPassword.length() < 8) {
+            ra.addFlashAttribute("passwordError", "New password must be at least 8 characters.");
+            return "redirect:/admin/dashboard";
+        }
+        
+        AdminUser admin = adminUserRepository.findById(adminId).orElse(null);
+        if (admin == null) return "redirect:/admin/login";
+        
+        if (!passwordEncoder.matches(currentPassword, admin.getPassword())) {
+            ra.addFlashAttribute("passwordError", "Current password is incorrect.");
+            return "redirect:/admin/dashboard";
+        }
+        
+        admin.setPassword(passwordEncoder.encode(newPassword));
+        adminUserRepository.save(admin);
+        
+        ra.addFlashAttribute("passwordSuccess", "Password changed successfully!");
+        return "redirect:/admin/dashboard";
+    }
+
     // ── Helpers ─────────────────────────────────────────────────────────────
 
     private boolean isSuperAdmin(HttpSession session) {
