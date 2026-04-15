@@ -50,8 +50,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String username,
-                        @RequestParam String password,
+    public String login(@RequestParam @NotBlank(message = "Username is required") @Size(min = 3, max = 30) String username,
+                        @RequestParam @NotBlank(message = "Password is required") @Size(min = 1) String password,
                         HttpSession session,
                         RedirectAttributes ra) {
         try {

@@ -55,8 +55,8 @@ public class AdminController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String email,
-                        @RequestParam String password,
+    public String login(@RequestParam @NotBlank(message = "Email is required") @Email(message = "Valid email required") String email,
+                        @RequestParam @NotBlank(message = "Password is required") String password,
                         HttpSession session,
                         RedirectAttributes ra) {
         AdminUser admin = adminUserRepository.findByEmailAndActiveTrue(email).orElse(null);
@@ -237,9 +237,9 @@ public class AdminController {
     // ── Change Password ─────────────────────────────────────────────────────
 
     @PostMapping("/change-password")
-    public String changePassword(@RequestParam String currentPassword,
-                                 @RequestParam String newPassword,
-                                 @RequestParam String confirmPassword,
+    public String changePassword(@RequestParam @NotBlank(message = "Current password is required") String currentPassword,
+                                 @RequestParam @NotBlank(message = "New password is required") @Size(min = 8, max = 100, message = "Password must be 8-100 characters") String newPassword,
+                                 @RequestParam @NotBlank(message = "Please confirm your password") String confirmPassword,
                                  HttpSession session,
                                  RedirectAttributes ra) {
         Long adminId = (Long) session.getAttribute("adminId");
@@ -247,12 +247,7 @@ public class AdminController {
         
         if (!newPassword.equals(confirmPassword)) {
             ra.addFlashAttribute("passwordError", "New passwords do not match.");
-            return "redirect:/admin/dashboard";
-        }
-        
-        if (newPassword.length() < 8) {
-            ra.addFlashAttribute("passwordError", "New password must be at least 8 characters.");
-            return "redirect:/admin/dashboard";
+            return getRedirect(session);
         }
         
         AdminUser admin = adminUserRepository.findById(adminId).orElse(null);
@@ -260,14 +255,22 @@ public class AdminController {
         
         if (!passwordEncoder.matches(currentPassword, admin.getPassword())) {
             ra.addFlashAttribute("passwordError", "Current password is incorrect.");
-            return "redirect:/admin/dashboard";
+            return getRedirect(session);
         }
         
         admin.setPassword(passwordEncoder.encode(newPassword));
         adminUserRepository.save(admin);
         
         ra.addFlashAttribute("passwordSuccess", "Password changed successfully!");
-        return "redirect:/admin/dashboard";
+        return getRedirect(session);
+    }
+
+    private String getRedirect(HttpSession session) {
+        String role = (String) session.getAttribute("adminRole");
+        if ("SUPER_ADMIN".equals(role)) {
+            return "redirect:/admin/dashboard";
+        }
+        return "redirect:/admin/submissions";
     }
 
     // ── Helpers ─────────────────────────────────────────────────────────────

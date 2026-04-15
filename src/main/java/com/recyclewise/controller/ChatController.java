@@ -15,6 +15,9 @@ public class ChatController {
     @Value("${openrouter.api.key}")
     private String apiKey;
 
+    private static final int MAX_MESSAGE_LENGTH = 500;
+    private static final int MAX_TOTAL_HISTORY = 2000;
+
     private final RestTemplate restTemplate = new RestTemplate();
 
     @SuppressWarnings("unchecked")
@@ -22,7 +25,19 @@ public class ChatController {
     public ResponseEntity<Map<String, String>> chat(@RequestBody Map<String, String> body, HttpSession session) {
         String userMessage = body.get("message");
 
-        // Initialize or retrieve chat history from session
+        if (userMessage == null || userMessage.isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("reply", "Please enter a message."));
+        }
+
+        String sanitizedMessage = sanitizeInput(userMessage);
+        if (sanitizedMessage.length() > MAX_MESSAGE_LENGTH) {
+            return ResponseEntity.badRequest().body(Map.of("reply", "Message too long. Max " + MAX_MESSAGE_LENGTH + " characters."));
+        }
+
+        if (session.getAttribute("userId") == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("reply", "Please log in to use EcoBot."));
+        }
+
         List<Map<String, String>> history = (List<Map<String, String>>) session.getAttribute("chat_history");
         if (history == null) {
             history = new ArrayList<>();
@@ -36,7 +51,6 @@ public class ChatController {
 
         List<Map<String, Object>> messages = new ArrayList<>();
 
-        // 1. System Prompt (Education & Constraints)
         Map<String, Object> systemMsg = new HashMap<>();
         systemMsg.put("role", "system");
         systemMsg.put("content", "You are EcoBot. " +
@@ -47,15 +61,13 @@ public class ChatController {
                 "4. CONCISE: Max 15 words. No fluff.");
         messages.add(systemMsg);
 
-        // 2. Add History (context)
         for (Map<String, String> h : history) {
             messages.add(new HashMap<>(h));
         }
 
-        // 3. Add Current User Message
         Map<String, Object> currentUserMsg = new HashMap<>();
         currentUserMsg.put("role", "user");
-        currentUserMsg.put("content", userMessage);
+        currentUserMsg.put("content", sanitizedMessage);
         messages.add(currentUserMsg);
 
         Map<String, Object> request = new HashMap<>();
@@ -64,13 +76,10 @@ public class ChatController {
         request.put("temperature", 0.1);
         request.put("messages", messages);
 
-        System.out.println(">>> EcoBot Call: Using Key [" + (apiKey != null && apiKey.length() > 10 ? apiKey.substring(0, 10) + "..." : apiKey) + "] Model [" + request.get("model") + "]");
-
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(request, headers);
 
         try {
-            ParameterizedTypeReference<Map<String, Object>> typeRef = new ParameterizedTypeReference<Map<String, Object>>() {
-            };
+            ParameterizedTypeReference<Map<String, Object>> typeRef = new ParameterizedTypeReference<Map<String, Object>>() {};
             ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
                     "https://openrouter.ai/api/v1/chat/completions", java.util.Objects.requireNonNull(HttpMethod.POST), entity, typeRef);
 
@@ -78,7 +87,7 @@ public class ChatController {
             if (bodyResp == null || !bodyResp.containsKey("choices")) {
                 throw new RuntimeException("AI API returned an empty or invalid response body.");
             }
-            
+
             List<Map<String, Object>> choices = (List<Map<String, Object>>) bodyResp.get("choices");
             if (choices == null || choices.isEmpty()) {
                 throw new RuntimeException("AI API response contained no choices.");
@@ -86,32 +95,52 @@ public class ChatController {
             Map<String, Object> assistantMessage = (Map<String, Object>) choices.get(0).get("message");
             String reply = (String) assistantMessage.get("content");
 
-            // Update history and save to session
-            history.add(Map.of("role", "user", "content", userMessage));
+            history.add(Map.of("role", "user", "content", sanitizedMessage));
             history.add(Map.of("role", "assistant", "content", reply));
 
-            // Keep history lean (last 4 messages to avoid language stickiness)
             if (history.size() > 4) {
                 history = history.subList(history.size() - 4, history.size());
             }
+
+            if (getTotalHistoryLength(history) > MAX_TOTAL_HISTORY) {
+                history = new ArrayList<>();
+            }
+
             session.setAttribute("chat_history", history);
 
-            return ResponseEntity.ok(Map.of("reply", reply));
+            return ResponseEntity.ok(Map.of("reply", reply != null ? reply : "No response"));
         } catch (org.springframework.web.client.HttpStatusCodeException e) {
-            System.err.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            System.err.println("AI API ERROR BODY: " + e.getResponseBodyAsString());
-            System.err.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             return ResponseEntity.ok(Map.of("reply", "Sorry, I'm having trouble connecting to the brain. Please try again! ⚠️"));
         } catch (Exception e) {
-            System.err.println(">>> GENERAL ERROR: " + e.getMessage());
-            e.printStackTrace();
             return ResponseEntity.ok(Map.of("reply", "Sorry, I'm having trouble connecting to the brain. Please try again! ⚠️"));
         }
+    }
+
+    private String sanitizeInput(String input) {
+        if (input == null) return "";
+        return input
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll("\"", "&quot;")
+            .replaceAll("'", "&#x27;")
+            .replaceAll("/", "&#x2F;")
+            .trim();
+    }
+
+    private int getTotalHistoryLength(List<Map<String, String>> history) {
+        int total = 0;
+        for (Map<String, String> msg : history) {
+            total += msg.values().stream().mapToInt(v -> v != null ? v.length() : 0).sum();
+        }
+        return total;
     }
 
     @SuppressWarnings("unchecked")
     @GetMapping("/chat/history")
     public ResponseEntity<List<Map<String, String>>> getHistory(HttpSession session) {
+        if (session.getAttribute("userId") == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.emptyList());
+        }
         List<Map<String, String>> history = (List<Map<String, String>>) session.getAttribute("chat_history");
         return ResponseEntity.ok(history != null ? history : Collections.emptyList());
     }
