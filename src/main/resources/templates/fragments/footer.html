@@ -73,8 +73,8 @@
       <p>🌍 Built with Spring Boot + Thymeleaf</p>
     </div>
   </div>
-  <!-- EcoBot Floating Chat Widget (Authenticated Only) -->
-  <th:block sec:authorize="isAuthenticated()">
+  <!-- EcoBot Floating Chat Widget (Regular Users Only - Not Admins) -->
+  <th:block th:if="${session.userId != null}">
     <div id="ecobot-btn" onclick="toggleChat()">♻</div>
 
     <div id="ecobot-window">

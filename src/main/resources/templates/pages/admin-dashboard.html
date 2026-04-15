@@ -136,7 +136,7 @@
     <div class="container mobile-center" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
       <div style="overflow:hidden;">
         <p style="color:rgba(255,255,255,0.4); font-size:0.7rem; text-transform:uppercase; letter-spacing:2px; margin-bottom:4px;">Super Admin</p>
-        <h1 style="color:var(--white); font-size:1.8rem; margin: 0;">Admin Dashboard</h1>
+        <h1 style="font-family:'Syne',sans-serif; color:var(--white); font-size:1.8rem; margin: 0;">Admin Dashboard</h1>
         <p style="color:rgba(255,255,255,0.6); font-size:0.85rem; margin-top: 4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Welcome back, <span th:text="${adminName}">Admin</span></p>
       </div>
       <div class="hero-buttons" style="display:flex; gap:12px; flex-wrap:wrap;">
@@ -167,7 +167,7 @@
 
       <!-- Change Password Section -->
       <div class="detail-card" style="border: 1px solid var(--cream-dark); padding: 40px; margin-bottom: 32px; overflow:hidden;">
-        <h2 style="font-size: 1.3rem; margin-bottom: 24px;">Change Password</h2>
+        <h2 style="font-family:'Syne',sans-serif; font-size: 1.3rem; margin-bottom: 24px;">Change Password</h2>
         
         <div th:if="${passwordSuccess}" class="alert alert-success" style="margin-bottom: 20px;" th:text="${passwordSuccess}"></div>
         <div th:if="${passwordError}" class="alert alert-error" style="margin-bottom: 20px;" th:text="${passwordError}"></div>
@@ -177,17 +177,17 @@
           <div style="display:flex; flex-direction:column; gap:8px;">
             <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">Current Password</label>
             <input type="password" name="currentPassword" placeholder="Enter current password" required
-              style="padding:12px; border:1px solid var(--cream-dark); border-radius:10px; font-size:0.9rem; outline:none; background:var(--white); width:100%;" />
+              style="padding:12px; border:1px solid var(--cream-dark); border-radius:10px; font-size:0.9rem; outline:none; background:var(--white); width:100%; font-family:'DM Sans',sans-serif;" />
           </div>
           <div style="display:flex; flex-direction:column; gap:8px;">
             <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">New Password</label>
             <input type="password" name="newPassword" placeholder="Enter new password" required minlength="8"
-              style="padding:12px; border:1px solid var(--cream-dark); border-radius:10px; font-size:0.9rem; outline:none; background:var(--white); width:100%;" />
+              style="padding:12px; border:1px solid var(--cream-dark); border-radius:10px; font-size:0.9rem; outline:none; background:var(--white); width:100%; font-family:'DM Sans',sans-serif;" />
           </div>
           <div style="display:flex; flex-direction:column; gap:8px;">
             <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">Confirm Password</label>
             <input type="password" name="confirmPassword" placeholder="Confirm new password" required minlength="8"
-              style="padding:12px; border:1px solid var(--cream-dark); border-radius:10px; font-size:0.9rem; outline:none; background:var(--white); width:100%;" />
+              style="padding:12px; border:1px solid var(--cream-dark); border-radius:10px; font-size:0.9rem; outline:none; background:var(--white); width:100%; font-family:'DM Sans',sans-serif;" />
           </div>
           <div style="display:flex; align-items:end;">
             <button type="submit" class="btn-primary" style="padding: 13px 24px; white-space: nowrap; width: 100%;">Update Password</button>
@@ -201,7 +201,7 @@
         <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
         <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
 
-        <h2 style="font-size: 1.3rem; margin-bottom: 24px;">Station Staff Management</h2>
+        <h2 style="font-family:'Syne',sans-serif; font-size: 1.3rem; margin-bottom: 24px;">Station Staff Management</h2>
 
         <div style="margin-bottom: 48px; overflow-x: auto;">
           <div th:each="staff : ${staffList}" class="staff-card">
@@ -237,23 +237,23 @@
 
         <!-- Add Staff Form -->
         <div style="border-top: 1px solid var(--cream-dark); padding-top: 40px;">
-          <h3 style="font-size: 1.1rem; margin-bottom: 20px;">Add New Station Staff</h3>
+          <h3 style="font-family:'Syne',sans-serif; font-size: 1.1rem; margin-bottom: 20px;">Add New Station Staff</h3>
           <form action="/admin/staff/create" method="post" class="add-staff-form">
             <input type="hidden" th:name="_csrf" th:value="${_csrf.token}" />
             <div style="display:flex; flex-direction:column; gap:8px;">
               <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">Full Name</label>
               <input type="text" name="fullName" placeholder="Budi Santoso" required
-                style="padding:12px; border:1px solid var(--cream-dark); border-radius:10px; font-size:0.9rem; outline:none; background:var(--white); width:100%;" />
+                style="padding:12px; border:1px solid var(--cream-dark); border-radius:10px; font-size:0.9rem; outline:none; background:var(--white); width:100%; font-family:'DM Sans',sans-serif;" />
             </div>
             <div style="display:flex; flex-direction:column; gap:8px;">
               <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">Email</label>
               <input type="email" name="email" placeholder="staff@recyclewise.id" required
-                style="padding:12px; border:1px solid var(--cream-dark); border-radius:10px; font-size:0.9rem; outline:none; background:var(--white); width:100%;" />
+                style="padding:12px; border:1px solid var(--cream-dark); border-radius:10px; font-size:0.9rem; outline:none; background:var(--white); width:100%; font-family:'DM Sans',sans-serif;" />
             </div>
             <div style="display:flex; flex-direction:column; gap:8px;">
               <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">Station</label>
               <select name="stationId" required
-                style="padding:12px; border:1px solid var(--cream-dark); border-radius:10px; font-size:0.9rem; outline:none; background:var(--white); width:100%;">
+                style="padding:12px; border:1px solid var(--cream-dark); border-radius:10px; font-size:0.9rem; outline:none; background:var(--white); width:100%; font-family:'DM Sans',sans-serif;">
                 <option th:each="s : ${stations}" th:value="${s.id}" th:text="${s.name}">Station</option>
               </select>
             </div>
