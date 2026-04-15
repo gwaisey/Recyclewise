@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header :: head}"></head>
+<style>
+@media (max-width: 768px) {
+  .password-form {
+    grid-template-columns: 1fr !important;
+  }
+  .hero-buttons {
+    width: 100%;
+    justify-content: stretch;
+  }
+  .hero-buttons a {
+    flex: 1;
+    text-align: center;
+  }
+}
+</style>
 <body class="bg-cream">
 <nav th:replace="~{fragments/header :: navbar}"></nav>
 <main>
@@ -8,16 +23,57 @@
   <!-- Hero Header -->
   <section class="dashboard-hero" style="padding: 36px 0;">
     <div class="container mobile-center" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
-      <div>
-        <p style="color:rgba(255,255,255,0.4); font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Admin Panel</p>
+      <div style="overflow:hidden;">
+        <p style="color:rgba(255,255,255,0.4); font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">
+          <span th:text="${adminRole == 'SUPER_ADMIN' ? 'Super Admin' : 'Station Staff'}">Admin Panel</span>
+          <span th:if="${stationName != 'All Stations'}"> — <span th:text="${stationName}">Station</span></span>
+        </p>
         <h1 style="color:var(--white); font-size:1.8rem; margin: 0;">Submission Review</h1>
+        <p style="color:rgba(255,255,255,0.6); font-size:0.85rem; margin-top: 4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+          Nice to see you again, <span th:text="${adminName}">Admin</span>!
+        </p>
       </div>
-      <a href="/admin/logout" class="btn-outline" style="background:rgba(255,255,255,0.08); color:var(--white); border-color: rgba(255,255,255,0.2); padding: 10px 20px; font-size: 0.8rem;">Logout</a>
+      <div class="hero-buttons" style="display:flex; gap:12px; flex-wrap:wrap;">
+        <a href="/admin/logout" class="btn-outline" style="background:rgba(255,255,255,0.08); color:var(--white); border-color: rgba(255,255,255,0.2); padding: 10px 20px; font-size: 0.8rem;">Logout</a>
+      </div>
     </div>
   </section>
 
   <section style="padding:40px 0 100px;">
     <div class="container">
+
+      <!-- Change Password Section -->
+      <div class="detail-card" style="border: 1px solid var(--cream-dark); padding: 32px; margin-bottom: 32px; overflow:hidden;">
+        <h2 style="font-size: 1.2rem; margin-bottom: 20px;">Change Password</h2>
+        
+        <div th:if="${passwordSuccess}" class="alert alert-success" style="margin-bottom: 16px;" th:text="${passwordSuccess}"></div>
+        <div th:if="${passwordError}" class="alert alert-error" style="margin-bottom: 16px;" th:text="${passwordError}"></div>
+        
+        <form action="/admin/change-password" method="post" class="password-form" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 700px;">
+          <input type="hidden" th:name="_csrf" th:value="${_csrf.token}" />
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">Current Password</label>
+            <input type="password" name="currentPassword" placeholder="Current password" required
+              style="padding:10px 12px; border:1px solid var(--cream-dark); border-radius:8px; font-size:0.9rem; background:var(--white); width:100%;" />
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">New Password</label>
+            <input type="password" name="newPassword" placeholder="New password" required minlength="8"
+              style="padding:10px 12px; border:1px solid var(--cream-dark); border-radius:8px; font-size:0.9rem; background:var(--white); width:100%;" />
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">Confirm Password</label>
+            <input type="password" name="confirmPassword" placeholder="Confirm password" required minlength="8"
+              style="padding:10px 12px; border:1px solid var(--cream-dark); border-radius:8px; font-size:0.9rem; background:var(--white); width:100%;" />
+          </div>
+          <div style="grid-column: 1 / -1;">
+            <button type="submit" class="btn-primary" style="padding: 10px 20px; font-size: 0.85rem;">Update Password</button>
+          </div>
+        </form>
+        <p style="font-size:0.75rem; color:var(--sage); margin-top:12px; opacity:0.6;">Minimum 8 characters required.</p>
+      </div>
+
+      <!-- Alerts -->
       <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
       <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
 
