@@ -146,7 +146,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* Global Form Elements */
-input[type="text"],
+input[type="text"]:not(.search-input),
 input[type="password"],
 input[type="number"],
 input[type="email"],
@@ -329,13 +329,25 @@ input:focus, textarea:focus {
 }
 
 .search-input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   flex: 1;
-  border: none;
-  outline: none;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
   font-family: 'DM Sans', sans-serif;
   font-size: 0.95rem;
   background: transparent;
   color: var(--text-dark);
+}
+
+.search-input:focus {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 .search-input::placeholder { color: var(--text-light); }
@@ -400,14 +412,16 @@ input:focus, textarea:focus {
   max-width: 1180px;
   margin: 0 auto;
   padding: 0 clamp(1.5rem, 5vw, 4rem);
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
 .stat-item {
   text-align: center;
-  padding: 8px 48px;
+  padding: 8px 32px;
 }
 
 .stat-num {
@@ -429,6 +443,7 @@ input:focus, textarea:focus {
   width: 1px;
   height: 40px;
   background: rgba(255,255,255,0.15);
+  align-self: center;
 }
 
 /* ===================================  SECTIONS  === */
