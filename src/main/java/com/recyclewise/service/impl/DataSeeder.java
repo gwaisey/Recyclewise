@@ -89,32 +89,55 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     private void seedAdmins() {
-        if (adminUserRepository.count() > 0) return;
-
         String defaultPassword = "changeme";
         String encodedPassword = passwordEncoder.encode(defaultPassword);
 
-        adminUserRepository.save(java.util.Objects.requireNonNull(AdminUser.builder()
-            .fullName("Super Admin")
-            .email("superadmin@recyclewise.id")
-            .password(encodedPassword)
-            .role(AdminUser.AdminRole.SUPER_ADMIN)
-            .active(true)
-            .build()));
+        // Ensure Super Admin exists with default password
+        com.recyclewise.model.AdminUser superAdmin = adminUserRepository.findByEmailAndActiveTrue("superadmin@recyclewise.id").orElse(null);
+        if (superAdmin == null) {
+            superAdmin = com.recyclewise.model.AdminUser.builder()
+                .fullName("Super Admin")
+                .email("superadmin@recyclewise.id")
+                .password(encodedPassword)
+                .role(com.recyclewise.model.AdminUser.AdminRole.SUPER_ADMIN)
+                .active(true)
+                .build();
+            adminUserRepository.save(superAdmin);
+            System.out.println("✅ Created Super Admin: superadmin@recyclewise.id / " + defaultPassword);
+        } else {
+            // Force reset password for dev convenience if needed, but here we'll just ensure it matches what we expect
+            superAdmin.setPassword(encodedPassword);
+            adminUserRepository.save(superAdmin);
+            System.out.println("✅ Reset Super Admin password: superadmin@recyclewise.id / " + defaultPassword);
+        }
 
         java.util.List<com.recyclewise.model.TrashStation> stations = trashStationRepository.findAll();
         String[] names = {"Budi Santoso", "Siti Rahayu", "Ahmad Fauzi", "Dewi Kusuma", "Reza Pratama", "Nur Hidayah"};
         String[] emails = {"budi@recyclewise.id", "siti@recyclewise.id", "ahmad@recyclewise.id",
                            "dewi@recyclewise.id", "reza@recyclewise.id", "nur@recyclewise.id"};
+        
         for (int i = 0; i < Math.min(stations.size(), names.length); i++) {
-            adminUserRepository.save(java.util.Objects.requireNonNull(AdminUser.builder()
-                .fullName(names[i])
-                .email(emails[i])
-                .password(encodedPassword)
-                .role(AdminUser.AdminRole.STATION_STAFF)
-                .assignedStation(java.util.Objects.requireNonNull(stations.get(i)))
-                .active(true)
-                .build()));
+            final String staffEmail = emails[i];
+            final String staffName = names[i];
+            final com.recyclewise.model.TrashStation stat = stations.get(i);
+            
+            com.recyclewise.model.AdminUser staff = adminUserRepository.findByEmailAndActiveTrue(staffEmail).orElse(null);
+            if (staff == null) {
+                staff = com.recyclewise.model.AdminUser.builder()
+                    .fullName(staffName)
+                    .email(staffEmail)
+                    .password(encodedPassword)
+                    .role(com.recyclewise.model.AdminUser.AdminRole.STATION_STAFF)
+                    .assignedStation(stat)
+                    .active(true)
+                    .build();
+                adminUserRepository.save(staff);
+                System.out.println("✅ Created Staff: " + staffEmail + " / " + defaultPassword);
+            } else {
+                staff.setPassword(encodedPassword);
+                adminUserRepository.save(staff);
+                System.out.println("✅ Reset Staff password: " + staffEmail + " / " + defaultPassword);
+            }
         }
         System.out.println("✅ Seeded " + adminUserRepository.count() + " admin users with BCrypt passwords");
     }

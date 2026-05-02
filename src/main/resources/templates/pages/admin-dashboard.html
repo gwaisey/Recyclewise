@@ -149,117 +149,130 @@
   <section style="padding: 40px 0 100px;">
     <div class="container">
 
-      <!-- Stats Grid -->
-      <div class="stats-grid">
-        <div class="detail-card" style="border: 1px solid var(--cream-dark); padding: 24px; text-align:center; overflow:hidden;">
-          <p style="font-size:0.75rem; color:var(--sage); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; opacity: 0.7;">Pending Review</p>
-          <p style="font-size:2.5rem; font-weight:800; color:var(--forest);" th:text="${totalPending}">0</p>
+      <!-- Stats Overview -->
+      <div class="stats-grid" style="margin-bottom: 32px;">
+        <div class="detail-card" style="border: 1px solid var(--cream-dark); padding: 24px; background: white; border-radius: 12px;">
+          <p style="font-size:0.65rem; color:var(--sage); text-transform:uppercase; font-weight:800; letter-spacing:0.5px; margin-bottom:12px;">Review Queue</p>
+          <div style="display: flex; align-items: baseline; gap: 8px;">
+            <p style="font-size:2.5rem; font-weight:800; color:var(--forest); margin:0;" th:text="${totalPending}">0</p>
+            <span style="font-size: 0.85rem; color: var(--sage);">pending</span>
+          </div>
         </div>
-        <div class="detail-card" style="border: 1px solid var(--bin-green); padding: 24px; text-align:center; overflow:hidden;">
-          <p style="font-size:0.75rem; color:var(--sage); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; opacity: 0.7;">Confirmed</p>
-          <p style="font-size:2.5rem; font-weight:800; color:var(--bin-green);" th:text="${totalConfirmed}">0</p>
+        <div class="detail-card" style="border: 1px solid var(--cream-dark); padding: 24px; background: white; border-radius: 12px;">
+          <p style="font-size:0.65rem; color:var(--sage); text-transform:uppercase; font-weight:800; letter-spacing:0.5px; margin-bottom:12px;">Confirmed</p>
+          <div style="display: flex; align-items: baseline; gap: 8px;">
+            <p style="font-size:2.5rem; font-weight:800; color:var(--bin-green); margin:0;" th:text="${totalConfirmed}">0</p>
+            <span style="font-size: 0.85rem; color: var(--sage);">this period</span>
+          </div>
         </div>
-        <div class="detail-card" style="border: 1px solid var(--bin-red); padding: 24px; text-align:center; overflow:hidden;">
-          <p style="font-size:0.75rem; color:var(--sage); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; opacity: 0.7;">Rejected</p>
-          <p style="font-size:2.5rem; font-weight:800; color:var(--bin-red);" th:text="${totalRejected}">0</p>
+        <div class="detail-card" style="border: 1px solid var(--cream-dark); padding: 24px; background: white; border-radius: 12px;">
+          <p style="font-size:0.65rem; color:var(--sage); text-transform:uppercase; font-weight:800; letter-spacing:0.5px; margin-bottom:12px;">Rejected</p>
+          <div style="display: flex; align-items: baseline; gap: 8px;">
+            <p style="font-size:2.5rem; font-weight:800; color:var(--bin-red); margin:0;" th:text="${totalRejected}">0</p>
+            <span style="font-size: 0.85rem; color: var(--sage);">flagged</span>
+          </div>
         </div>
       </div>
 
-      <!-- Change Password Section -->
-      <div class="detail-card" style="border: 1px solid var(--cream-dark); padding: 40px; margin-bottom: 32px; overflow:hidden;">
-        <h2 style="font-family:'Syne',sans-serif; font-size: 1.3rem; margin-bottom: 24px;">Change Password</h2>
+      <!-- Settings & Staff -->
+      <div style="display: grid; grid-template-columns: 1fr; gap: 32px;">
         
-        <div th:if="${passwordSuccess}" class="alert alert-success" style="margin-bottom: 20px;" th:text="${passwordSuccess}"></div>
-        <div th:if="${passwordError}" class="alert alert-error" style="margin-bottom: 20px;" th:text="${passwordError}"></div>
-        
-        <form action="/admin/change-password" method="post" class="password-form">
-          <input type="hidden" th:name="_csrf" th:value="${_csrf.token}" />
-          <div style="display:flex; flex-direction:column; gap:8px;">
-            <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">Current Password</label>
-            <input type="password" name="currentPassword" placeholder="Enter current password" required
-              style="padding:12px; border:1px solid var(--cream-dark); border-radius:10px; font-size:0.9rem; outline:none; background:var(--white); width:100%; font-family:'DM Sans',sans-serif;" />
-          </div>
-          <div style="display:flex; flex-direction:column; gap:8px;">
-            <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">New Password</label>
-            <input type="password" name="newPassword" placeholder="Enter new password" required minlength="8"
-              style="padding:12px; border:1px solid var(--cream-dark); border-radius:10px; font-size:0.9rem; outline:none; background:var(--white); width:100%; font-family:'DM Sans',sans-serif;" />
-          </div>
-          <div style="display:flex; flex-direction:column; gap:8px;">
-            <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">Confirm Password</label>
-            <input type="password" name="confirmPassword" placeholder="Confirm new password" required minlength="8"
-              style="padding:12px; border:1px solid var(--cream-dark); border-radius:10px; font-size:0.9rem; outline:none; background:var(--white); width:100%; font-family:'DM Sans',sans-serif;" />
-          </div>
-          <div style="display:flex; align-items:end;">
-            <button type="submit" class="btn-primary" style="padding: 13px 24px; white-space: nowrap; width: 100%;">Update Password</button>
-          </div>
-        </form>
-        <p style="font-size:0.75rem; color:var(--sage); margin-top:16px; opacity:0.6;">Minimum 8 characters required.</p>
-      </div>
+        <!-- Change Password Section -->
+        <div style="padding: 32px; background: white; border-radius: 16px; border: 1px solid var(--cream-dark);">
+          <h2 style="font-family:'Syne',sans-serif; font-size: 1.1rem; margin-bottom: 24px; color: var(--forest); border-bottom: 1px solid var(--cream-dark); padding-bottom: 12px;">Security Settings</h2>
+          
+          <div th:if="${passwordSuccess}" class="alert alert-success" style="margin-bottom: 20px;" th:text="${passwordSuccess}"></div>
+          <div th:if="${passwordError}" class="alert alert-error" style="margin-bottom: 20px;" th:text="${passwordError}"></div>
+          
+          <form th:action="@{/admin/change-password}" method="post" class="password-form" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: end;">
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <label style="font-size:0.75rem; font-weight:700; color:var(--sage);">Current Password</label>
+              <input type="password" name="currentPassword" placeholder="••••••••" required
+                style="padding:12px; border:1px solid var(--cream-dark); border-radius:8px; font-size:0.9rem; background:var(--bg-cream); width:100%;" />
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <label style="font-size:0.75rem; font-weight:700; color:var(--sage);">New Password</label>
+              <input type="password" name="newPassword" placeholder="New password" required minlength="8"
+                style="padding:12px; border:1px solid var(--cream-dark); border-radius:8px; font-size:0.9rem; background:var(--bg-cream); width:100%;" />
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <label style="font-size:0.75rem; font-weight:700; color:var(--sage);">Confirm Password</label>
+              <input type="password" name="confirmPassword" placeholder="Confirm password" required minlength="8"
+                style="padding:12px; border:1px solid var(--cream-dark); border-radius:8px; font-size:0.9rem; background:var(--bg-cream); width:100%;" />
+            </div>
+            <div style="grid-column: 1 / -1; display:flex; justify-content: space-between; align-items: center; padding-top: 12px;">
+              <p style="font-size:0.75rem; color:var(--sage); opacity:0.8;">Password must be at least 8 characters long.</p>
+              <button type="submit" class="btn-primary" style="padding: 12px 32px; font-size: 0.85rem;">Update Password</button>
+            </div>
+          </form>
+        </div>
 
-      <!-- Staff Management -->
-      <div class="detail-card" style="border: 1px solid var(--cream-dark); padding: 40px; overflow: hidden;">
-        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+        <!-- Staff Management -->
+        <div style="padding: 32px; background: white; border-radius: 16px; border: 1px solid var(--cream-dark);">
+          <h2 style="font-family:'Syne',sans-serif; font-size: 1.1rem; margin-bottom: 32px; color: var(--forest); border-bottom: 1px solid var(--cream-dark); padding-bottom: 12px;">Station Staff Management</h2>
 
-        <h2 style="font-family:'Syne',sans-serif; font-size: 1.3rem; margin-bottom: 24px;">Station Staff Management</h2>
+          <div th:if="${success}" class="alert alert-success" style="margin-bottom: 24px;" th:text="${success}"></div>
+          <div th:if="${error}" class="alert alert-error" style="margin-bottom: 24px;" th:text="${error}"></div>
 
-        <div style="margin-bottom: 48px; overflow-x: auto;">
-          <div th:each="staff : ${staffList}" class="staff-card">
-            <div class="staff-info">
-              <div class="staff-avatar" th:text="${#strings.substring(staff.fullName, 0, 1)}">A</div>
-              <div class="staff-details">
-                <p class="staff-name" th:text="${staff.fullName}">Name</p>
-                <p class="staff-email" th:text="${staff.email}">email</p>
+          <div style="margin-bottom: 48px;">
+            <div th:each="staff : ${staffList}" th:if="${staff.role.name() != 'SUPER_ADMIN'}" 
+                 style="display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; background: var(--bg-cream); border: 1px solid var(--cream-dark); border-radius: 12px; margin-bottom: 12px;">
+              
+              <div style="display: flex; align-items: center; gap: 16px;">
+                <div style="width: 40px; height: 40px; background: var(--forest); color: var(--lime); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-family: 'Syne';" th:text="${#strings.substring(staff.fullName, 0, 1)}">A</div>
+                <div>
+                  <h4 style="margin:0; font-size:0.95rem; font-family:'Syne',sans-serif; color:var(--forest);" th:text="${staff.fullName}">Name</h4>
+                  <p style="margin:0; font-size:0.8rem; color:var(--sage);" th:text="${staff.email}">email</p>
+                </div>
+              </div>
+
+              <div style="flex: 1; margin: 0 40px; font-size: 0.85rem; color: var(--forest); font-weight: 600;">
+                 <span style="font-size: 0.7rem; color: var(--sage); font-weight: 400; display: block;">Assigned Station</span>
+                 <span th:text="${staff.assignedStation != null ? staff.assignedStation.name : 'Unassigned'}">Station</span>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 16px;">
+                <span th:class="${staff.active ? 'badge-confirmed' : 'badge-rejected'}" 
+                      style="font-size: 0.65rem; padding: 4px 10px;" 
+                      th:text="${staff.active ? 'ACTIVE' : 'INACTIVE'}">STATUS</span>
+                
+                <form th:action="@{/admin/staff/{id}/{action}(id=${staff.id}, action=${staff.active ? 'deactivate' : 'reactivate'})}" method="post">
+                  <button type="submit" class="btn-outline" style="padding: 8px 16px; font-size: 0.75rem; border-color: var(--forest); color: var(--forest);"
+                          th:text="${staff.active ? 'Deactivate' : 'Reactivate'}"
+                          onclick="return confirm('Change status for this staff member?')">Action</button>
+                </form>
               </div>
             </div>
-            <div class="staff-station">
-              <span class="badge-pending" style="background: var(--white); border: 1px solid var(--cream-dark);"
-                    th:text="${staff.assignedStation != null ? staff.assignedStation.name : 'Unassigned'}">Station</span>
-            </div>
-            <div class="staff-actions">
-              <span th:if="${staff.active}" class="badge-confirmed">ACTIVE</span>
-              <span th:unless="${staff.active}" class="badge-rejected">INACTIVE</span>
-              
-              <form th:action="@{/admin/staff/{id}/{action}(id=${staff.id}, action=${staff.active ? 'deactivate' : 'reactivate'})}" method="post">
-                <input type="hidden" th:name="_csrf" th:value="${_csrf.token}" />
-                <button type="submit" class="btn-outline" style="padding: 6px 16px; font-size: 0.75rem; color: var(--forest); border-color: var(--forest); white-space: nowrap;"
-                        th:text="${staff.active ? 'Deactivate' : 'Reactivate'}"
-                        th:attr="data-confirm-message=${staff.active ? 'Deactivate' : 'Reactivate'} + ' this staff account?'"
-                        onclick="return confirm(this.getAttribute('data-confirm-message'))">Action</button>
-              </form>
+
+            <div th:if="${#lists.isEmpty(staffList)}" style="padding: 40px; text-align: center; color: var(--sage); opacity: 0.7;">
+              <p>No station staff members configured.</p>
             </div>
           </div>
 
-          <div th:if="${#lists.isEmpty(staffList)}" style="text-align:center; padding: 40px; color: var(--sage); opacity: 0.7;">
-            <p>No station staff members yet.</p>
+          <!-- Add Staff Form -->
+          <div style="background: var(--bg-cream); padding: 24px; border-radius: 12px; border: 1px solid var(--cream-dark);">
+            <h3 style="font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--forest); margin-bottom: 20px;">Register New Staff</h3>
+            <form th:action="@{/admin/staff/create}" method="post" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 16px; align-items: end;">
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <label style="font-size:0.7rem; font-weight:700; color:var(--sage);">Full Name</label>
+                <input type="text" name="fullName" placeholder="John Doe" required
+                  style="padding:10px; border:1px solid var(--cream-dark); border-radius:6px; font-size:0.9rem; background: var(--white);" />
+              </div>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <label style="font-size:0.7rem; font-weight:700; color:var(--sage);">Email Address</label>
+                <input type="email" name="email" placeholder="staff@recyclewise.id" required
+                  style="padding:10px; border:1px solid var(--cream-dark); border-radius:6px; font-size:0.9rem; background: var(--white);" />
+              </div>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <label style="font-size:0.7rem; font-weight:700; color:var(--sage);">Assigned Station</label>
+                <select name="stationId" required
+                  style="padding:10px; border:1px solid var(--cream-dark); border-radius:6px; font-size:0.9rem; background: var(--white);">
+                  <option th:each="s : ${stations}" th:value="${s.id}" th:text="${s.name}">Station</option>
+                </select>
+              </div>
+              <button type="submit" class="btn-primary" style="padding: 10px 24px;">+ Register Staff</button>
+            </form>
           </div>
-        </div>
-
-        <!-- Add Staff Form -->
-        <div style="border-top: 1px solid var(--cream-dark); padding-top: 40px;">
-          <h3 style="font-family:'Syne',sans-serif; font-size: 1.1rem; margin-bottom: 20px;">Add New Station Staff</h3>
-          <form action="/admin/staff/create" method="post" class="add-staff-form">
-            <input type="hidden" th:name="_csrf" th:value="${_csrf.token}" />
-            <div style="display:flex; flex-direction:column; gap:8px;">
-              <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">Full Name</label>
-              <input type="text" name="fullName" placeholder="Budi Santoso" required
-                style="padding:12px; border:1px solid var(--cream-dark); border-radius:10px; font-size:0.9rem; outline:none; background:var(--white); width:100%; font-family:'DM Sans',sans-serif;" />
-            </div>
-            <div style="display:flex; flex-direction:column; gap:8px;">
-              <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">Email</label>
-              <input type="email" name="email" placeholder="staff@recyclewise.id" required
-                style="padding:12px; border:1px solid var(--cream-dark); border-radius:10px; font-size:0.9rem; outline:none; background:var(--white); width:100%; font-family:'DM Sans',sans-serif;" />
-            </div>
-            <div style="display:flex; flex-direction:column; gap:8px;">
-              <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">Station</label>
-              <select name="stationId" required
-                style="padding:12px; border:1px solid var(--cream-dark); border-radius:10px; font-size:0.9rem; outline:none; background:var(--white); width:100%; font-family:'DM Sans',sans-serif;">
-                <option th:each="s : ${stations}" th:value="${s.id}" th:text="${s.name}">Station</option>
-              </select>
-            </div>
-            <button type="submit" class="btn-primary" style="padding: 13px 24px; white-space: nowrap;">+ Add Member</button>
-          </form>
-          <p style="font-size:0.75rem; color:var(--sage); margin-top:16px; opacity:0.6;">Default password configured by system — user must change upon first login.</p>
         </div>
       </div>
 

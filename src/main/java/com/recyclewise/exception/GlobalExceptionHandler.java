@@ -19,9 +19,11 @@ public class GlobalExceptionHandler {
     /**
      * Handles 404 — item not found.
      */
-    @ExceptionHandler(ResourceNotFoundException.class)
+    @ExceptionHandler({ResourceNotFoundException.class, 
+                       org.springframework.web.servlet.resource.NoResourceFoundException.class,
+                       org.springframework.web.servlet.NoHandlerFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleNotFound(ResourceNotFoundException ex, Model model) {
+    public String handleNotFound(Exception ex, Model model) {
         model.addAttribute("errorCode", "404");
         model.addAttribute("errorTitle", "Item Not Found");
         model.addAttribute("errorMessage", ex.getMessage());
@@ -34,13 +36,14 @@ public class GlobalExceptionHandler {
     /**
      * Handles all other unexpected errors — 500.
      */
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(Throwable.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String handleGenericError(Exception ex, Model model) {
+    public String handleGenericError(Throwable ex, Model model) {
+        ex.printStackTrace(); // Keep logging the stack trace to console
         model.addAttribute("errorCode", "500");
         model.addAttribute("errorTitle", "Something Went Wrong");
-        model.addAttribute("errorMessage", "An unexpected error occurred. Please try again.");
-        model.addAttribute("suggestion", "If this keeps happening, try refreshing or going back to the home page.");
+        model.addAttribute("errorMessage", ex.getClass().getSimpleName() + ": " + (ex.getMessage() != null ? ex.getMessage() : "Unknown Error"));
+        model.addAttribute("suggestion", "Our team has been notified. Please try again later or go back to the home page.");
         model.addAttribute("backUrl", "/");
         model.addAttribute("backLabel", "Go Home");
         return "pages/error";

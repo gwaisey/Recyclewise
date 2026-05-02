@@ -79,6 +79,11 @@ public class ChatController {
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(request, headers);
 
         try {
+            if (apiKey == null || apiKey.isBlank() || apiKey.equals("not-configured")) {
+               System.err.println("⚠️ EcoBot Error: OpenRouter API key is not configured.");
+               return ResponseEntity.ok(Map.of("reply", handleLocalFallback(userMessage)));
+            }
+
             ParameterizedTypeReference<Map<String, Object>> typeRef = new ParameterizedTypeReference<Map<String, Object>>() {};
             ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
                     "https://openrouter.ai/api/v1/chat/completions", java.util.Objects.requireNonNull(HttpMethod.POST), entity, typeRef);
@@ -109,11 +114,27 @@ public class ChatController {
             session.setAttribute("chat_history", history);
 
             return ResponseEntity.ok(Map.of("reply", reply != null ? reply : "No response"));
-        } catch (org.springframework.web.client.HttpStatusCodeException e) {
-            return ResponseEntity.ok(Map.of("reply", "Sorry, I'm having trouble connecting to the brain. Please try again! ⚠️"));
         } catch (Exception e) {
-            return ResponseEntity.ok(Map.of("reply", "Sorry, I'm having trouble connecting to the brain. Please try again! ⚠️"));
+            System.err.println("⚠️ EcoBot API Exception: " + e.getMessage());
+            // Fallback for user experience during API outages or missing keys
+            return ResponseEntity.ok(Map.of("reply", handleLocalFallback(userMessage)));
         }
+    }
+
+    private String handleLocalFallback(String message) {
+        String msg = message.toLowerCase();
+        if (msg.contains("inhaler") || msg.contains("medicine")) {
+            return "RED bin (E-waste/Hazardous). Inhalers contain metal and residual medicine. Dispose safely! ⚠️";
+        } else if (msg.contains("plastic") || msg.contains("bottle")) {
+            return "YELLOW bin (Plastic). Make sure to rinse and dry! ♻️";
+        } else if (msg.contains("paper") || msg.contains("cardboard")) {
+            return "BLUE bin (Paper). Keep it dry and flat! 📄";
+        } else if (msg.contains("organic") || msg.contains("food") || msg.contains("leaf")) {
+            return "GREEN bin (Organic). Perfect for composting! 🌿";
+        } else if (msg.contains("battery") || msg.contains("electronic")) {
+            return "RED bin (E-waste). Contains hazardous materials! 🔋";
+        }
+        return "I'm having trouble connecting to my AI brain, but I'm here! For most items: Red (Hazardous), Yellow (Plastic), Blue (Paper), Green (Organic).";
     }
 
     private String sanitizeInput(String input) {

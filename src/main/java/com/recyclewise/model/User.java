@@ -53,9 +53,13 @@ public class User {
     @Builder.Default
     private LocalDateTime registeredAt = LocalDateTime.now();
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TrashSubmission> submissions;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Redemption> redemptions;
 }

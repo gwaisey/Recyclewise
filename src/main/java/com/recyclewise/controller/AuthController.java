@@ -3,6 +3,7 @@ package com.recyclewise.controller;
 import com.recyclewise.model.User;
 import com.recyclewise.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -24,13 +25,16 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestParam @NotBlank(message = "Username is required") @Size(min = 3, max = 30, message = "Username must be between 3 and 30 characters") @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Username can only contain letters, numbers, and underscores") String username,
-                           @RequestParam @NotBlank(message = "Email is required") @Email(message = "Please provide a valid email address") String email,
-                           @RequestParam @NotBlank(message = "Password is required") @Size(min = 8, message = "Password must be at least 8 characters") String password,
-                           @RequestParam @NotBlank(message = "Full name is required") @Size(min = 2, max = 100, message = "Full name must be between 2 and 100 characters") String fullName,
+    public String register(@Valid @ModelAttribute com.recyclewise.dto.RegisterRequest request,
+                           BindingResult result,
                            RedirectAttributes ra) {
+        if (result.hasErrors()) {
+            ra.addFlashAttribute("error", result.getAllErrors().get(0).getDefaultMessage());
+            return "redirect:/register";
+        }
+
         try {
-            userService.register(username, email, password, fullName);
+            userService.register(request.getUsername(), request.getEmail(), request.getPassword(), request.getFullName());
             ra.addFlashAttribute("success", "Account created! Please log in.");
             return "redirect:/login";
         } catch (IllegalArgumentException e) {
@@ -50,8 +54,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam @NotBlank(message = "Username is required") @Size(min = 3, max = 30) String username,
-                        @RequestParam @NotBlank(message = "Password is required") @Size(min = 1) String password,
+    public String login(@RequestParam String username,
+                        @RequestParam String password,
                         HttpSession session,
                         RedirectAttributes ra) {
         try {

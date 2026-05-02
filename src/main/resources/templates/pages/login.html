@@ -16,11 +16,10 @@
     <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
     <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
 
-    <form action="/login" method="post" style="display:flex; flex-direction:column; gap:20px;">
-      <input type="hidden" th:name="_csrf" th:value="${_csrf.token}" />
+    <form th:action="@{/login}" method="post" style="display:flex; flex-direction:column; gap:20px;">
       <div style="display:flex; flex-direction:column; gap:8px;">
-        <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">Username</label>
-        <input type="text" name="username" placeholder="your_username" required
+        <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">Email or Username</label>
+        <input type="text" name="username" placeholder="email@example.com or username" required
           style="padding:14px; border:1px solid var(--cream-dark); border-radius:12px; font-family:'DM Sans',sans-serif; font-size:1rem; outline:none; background:var(--white);" />
       </div>
       <div style="display:flex; flex-direction:column; gap:8px;">

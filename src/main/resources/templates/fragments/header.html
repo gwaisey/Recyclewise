@@ -22,12 +22,25 @@
             <li><a href="/" class="nav-link-default" th:classappend="${activePage == 'home'} ? ' active'">Home</a></li>
             <li><a href="/guide" class="nav-link-default" th:classappend="${activePage == 'guide'} ? ' active'">Waste Guide</a></li>
             <li><a href="/tips" class="nav-link-default" th:classappend="${activePage == 'tips'} ? ' active'">Eco Tips</a></li>
+            <!-- User Links -->
             <li th:if="${session.userId != null}"><a href="/stations" class="nav-link-default" th:classappend="${activePage == 'stations'} ? ' active'">Stations</a></li>
             <li th:if="${session.userId != null}"><a href="/rewards" class="nav-link-default" th:classappend="${activePage == 'rewards'} ? ' active'">Rewards</a></li>
             <li th:if="${session.userId != null}"><a href="/dashboard" class="nav-link-default" th:classappend="${activePage == 'dashboard'} ? ' active'">Dashboard</a></li>
-            <li th:if="${session.userId != null}"><a href="/logout" class="nav-link-logout">Logout</a></li>
-            <li th:if="${session.userId == null}"><a href="/login" class="nav-link-login" th:classappend="${activePage == 'login'} ? ' active'">Login</a></li>
-            <li th:if="${session.userId == null}" style="margin-left:6px;"><a href="/register" class="nav-link-register" th:classappend="${activePage == 'register'} ? ' active'">Register</a></li>
+            
+            <!-- Admin Links (Shortcut if on main site) -->
+            <li th:if="${session.adminId != null}">
+                <a th:href="${session.adminRole == 'SUPER_ADMIN' ? '/admin/dashboard' : '/admin/submissions'}" class="nav-link-default">Admin Panel</a>
+            </li>
+
+            <!-- Authentication (Login/Register or Logout) -->
+            <th:block th:if="${session.userId == null and session.adminId == null}">
+                <li><a href="/login" class="nav-link-login" th:classappend="${activePage == 'login'} ? ' active'">Login</a></li>
+                <li style="margin-left:6px;"><a href="/register" class="nav-link-register" th:classappend="${activePage == 'register'} ? ' active'">Register</a></li>
+            </th:block>
+
+            <li th:if="${session.userId != null or session.adminId != null}">
+                <a th:href="${session.adminId != null ? '/admin/logout' : '/logout'}" class="nav-link-logout">Logout</a>
+            </li>
         </ul>
     </div>
 

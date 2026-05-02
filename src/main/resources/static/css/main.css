@@ -209,6 +209,15 @@ input:focus, textarea:focus {
   color: var(--forest) !important;
 }
 
+.nav-link-register.active {
+  background: var(--lime) !important;
+  color: var(--forest) !important;
+}
+
+.nav-link-register:active {
+  color: var(--white) !important;
+}
+
 .nav-toggle {
   display: none;
   background: none;
@@ -1222,8 +1231,8 @@ input:focus, textarea:focus {
 }
 
 @media (max-width: 600px) {
-  .dashboard-hero { text-align: center; }
-  .dashboard-hero-inner { justify-content: center; }
+  .dashboard-hero { text-align: left; }
+  .dashboard-hero-inner { justify-content: flex-start; }
 }
 
 /* ===================================  RESPONSIVE  === */

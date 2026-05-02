@@ -43,84 +43,89 @@
     <div class="container">
 
       <!-- Change Password Section -->
-      <div style="padding: 24px 0; margin-bottom: 24px; border-bottom: 1px solid var(--cream-dark);">
-        <h2 style="font-family:'Syne',sans-serif; font-size: 1.1rem; margin-bottom: 20px; color: var(--forest);">Change Password</h2>
+      <div style="padding: 32px; margin-bottom: 40px; background: white; border-radius: 16px; border: 1px solid var(--cream-dark);">
+        <h2 style="font-family:'Syne',sans-serif; font-size: 1.1rem; margin-bottom: 24px; color: var(--forest); border-bottom: 1px solid var(--cream-dark); padding-bottom: 12px;">Security Settings</h2>
         
         <div th:if="${passwordSuccess}" class="alert alert-success" style="margin-bottom: 16px;" th:text="${passwordSuccess}"></div>
         <div th:if="${passwordError}" class="alert alert-error" style="margin-bottom: 16px;" th:text="${passwordError}"></div>
         
-        <form action="/admin/change-password" method="post" class="password-form" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 700px;">
-          <input type="hidden" th:name="_csrf" th:value="${_csrf.token}" />
-          <div style="display:flex; flex-direction:column; gap:6px;">
-            <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">Current Password</label>
-            <input type="password" name="currentPassword" placeholder="Current password" required
-              style="padding:10px 12px; border:1px solid var(--cream-dark); border-radius:8px; font-size:0.9rem; background:var(--white); width:100%; font-family:'DM Sans',sans-serif;" />
+        <form th:action="@{/admin/change-password}" method="post" class="password-form" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 900px; align-items: end;">
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <label style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--sage);">Current Password</label>
+            <input type="password" name="currentPassword" placeholder="••••••••" required
+              style="padding:12px; border:1px solid var(--cream-dark); border-radius:8px; font-size:0.9rem; background:var(--bg-cream); width:100%; font-family:inherit;" />
           </div>
-          <div style="display:flex; flex-direction:column; gap:6px;">
-            <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">New Password</label>
-            <input type="password" name="newPassword" placeholder="New password" required minlength="8"
-              style="padding:10px 12px; border:1px solid var(--cream-dark); border-radius:8px; font-size:0.9rem; background:var(--white); width:100%; font-family:'DM Sans',sans-serif;" />
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <label style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--sage);">New Password</label>
+            <input type="password" name="newPassword" placeholder="Min. 8 chars" required minlength="8"
+              style="padding:12px; border:1px solid var(--cream-dark); border-radius:8px; font-size:0.9rem; background:var(--bg-cream); width:100%; font-family:inherit;" />
           </div>
-          <div style="display:flex; flex-direction:column; gap:6px;">
-            <label style="font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--forest);">Confirm Password</label>
-            <input type="password" name="confirmPassword" placeholder="Confirm password" required minlength="8"
-              style="padding:10px 12px; border:1px solid var(--cream-dark); border-radius:8px; font-size:0.9rem; background:var(--white); width:100%; font-family:'DM Sans',sans-serif;" />
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <label style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--sage);">Confirm New</label>
+            <input type="password" name="confirmPassword" placeholder="Confirm new password" required minlength="8"
+              style="padding:12px; border:1px solid var(--cream-dark); border-radius:8px; font-size:0.9rem; background:var(--bg-cream); width:100%; font-family:inherit;" />
           </div>
-          <div style="grid-column: 1 / -1;">
-            <button type="submit" class="btn-primary" style="padding: 10px 20px; font-size: 0.85rem;">Update Password</button>
+          <div style="grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; padding-top: 8px;">
+             <p style="font-size:0.75rem; color:var(--sage); opacity:0.8;">Use a strong, unique password.</p>
+             <button type="submit" class="btn-primary" style="padding: 12px 32px; font-size: 0.85rem; border-radius: 8px;">Update Password</button>
           </div>
         </form>
-        <p style="font-size:0.75rem; color:var(--sage); margin-top:12px; opacity:0.6;">Minimum 8 characters required.</p>
       </div>
 
-      <!-- Alerts -->
-      <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-      <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
-
-      <div style="margin-bottom:48px;">
-        <h2 style="font-family:'Syne',sans-serif; font-size: 1.25rem; margin-bottom: 24px; display:flex; align-items:center; gap:12px;">
-          Pending Submissions
-          <span class="badge-pending" style="font-size: 0.75rem; padding: 4px 12px;" th:text="${#lists.size(pending)} + ' awaiting'">0 awaiting</span>
-        </h2>
-
-        <div th:if="${#lists.isEmpty(pending)}" class="detail-card" style="border-left: none; border: 1px solid var(--cream-dark); padding: 40px; text-align: center;">
-          <p style="color:var(--sage); opacity: 0.7;">No pending submissions. All caught up! ✅</p>
+      <!-- Main Review Queue -->
+      <div style="margin-bottom:60px;">
+        <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 32px; border-bottom: 2px solid var(--forest); padding-bottom: 12px;">
+           <h2 style="font-family:'Syne',sans-serif; font-size: 1.5rem; margin: 0; color: var(--forest);">Pending Queue</h2>
+           <span style="font-size: 0.85rem; color: var(--sage); font-weight: 600;" th:text="${#lists.size(pending)} + ' items to review'">0 awaiting</span>
         </div>
 
-        <div th:unless="${#lists.isEmpty(pending)}" style="display:flex; flex-direction:column; gap:16px;">
-          <div th:each="sub : ${pending}" class="item-card" style="padding: 24px 32px; display:flex; align-items:center; gap:24px; flex-wrap:wrap; border-left: 5px solid var(--lime);">
-            <div style="flex:1; min-width:200px;">
-              <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
-                <span style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.1rem; color:var(--forest);" th:text="${sub.user.username}">user</span>
-                <span class="badge-pending">PENDING</span>
+        <div th:if="${#lists.isEmpty(pending)}" style="padding: 60px; text-align: center; border: 2px dashed var(--cream-dark); border-radius: 20px;">
+          <div style="font-size: 3rem; margin-bottom: 16px;">✨</div>
+          <p style="color:var(--sage); font-weight: 600;">All submissions have been reviewed!</p>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(pending)}" style="display:grid; gap:20px;">
+          <!-- Submission Row -->
+          <div th:each="sub : ${pending}" 
+               style="background: white; border-radius: 12px; padding: 24px 32px; display: grid; grid-template-columns: 1.5fr 2fr 1fr auto; gap: 32px; align-items: center; border: 1px solid var(--cream-dark); transition: box-shadow 0.2s;">
+            
+            <!-- User Info -->
+            <div>
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                <h3 style="font-family:'Syne',sans-serif; font-weight:800; font-size:1.1rem; margin:0; color:var(--forest);" th:text="${sub.user.username}">username</h3>
+                <span class="badge-pending" style="font-size:0.6rem; letter-spacing: 0.5px;">PENDING</span>
               </div>
-              <p style="font-size:0.85rem; color:var(--sage); margin: 0; opacity: 0.7;" th:text="'📍 Station: ' + ${sub.station.name}">Station</p>
-              <p style="font-size:0.85rem; color:var(--sage); margin: 4px 0 0; opacity: 0.5;" th:text="${#temporals.format(sub.submittedAt, 'dd MMM yyyy, HH:mm')}">Date</p>
+              <p style="font-size:0.8rem; color:var(--sage); margin: 0;">📍 <span th:text="${sub.station.name}">Station</span></p>
+              <p style="font-size:0.75rem; color:var(--sage); margin-top: 4px; opacity:0.6;" th:text="${#temporals.format(sub.submittedAt, 'dd MMM, HH:mm')}">Date</p>
             </div>
 
-            <div style="min-width:160px;">
-              <p style="font-size:0.7rem; color:var(--sage); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; font-weight: 700;">Waste Items</p>
-              <div th:each="item : ${sub.items}" style="font-size:0.85rem; color:var(--forest); margin-bottom:4px; font-weight: 500;">
-                <span th:text="${item.category}">CAT</span> — <span th:text="${item.weightKg} + ' kg'" style="color: var(--sage);">0 kg</span>
+            <!-- Waste Content -->
+            <div style="background: var(--bg-cream); padding: 12px 20px; border-radius: 8px; border: 1px solid var(--cream-dark);">
+              <p style="font-size:0.65rem; color:var(--sage); text-transform:uppercase; font-weight:800; margin-bottom:10px; letter-spacing:0.5px;">Contents</p>
+              <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px;">
+                <div th:each="item : ${sub.items}" style="font-size:0.8rem; color:var(--forest); font-weight:600;">
+                  <span th:text="${item.category}" style="opacity: 0.7; font-weight: 400; font-size: 0.75rem; display: block;">CAT</span>
+                  <span th:text="${item.weightKg} + ' kg'">0 kg</span>
+                </div>
               </div>
             </div>
 
-            <div style="text-align:center; min-width:100px; padding: 0 24px; border-left: 1px solid var(--cream-dark); border-right: 1px solid var(--cream-dark);">
-              <p style="font-size:0.7rem; color:var(--sage); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; font-weight: 700;">Points</p>
-              <p style="font-family:'Syne',sans-serif; font-size:1.8rem; font-weight:800; color:var(--forest); margin: 0;" th:text="${sub.pointsEarned}">0</p>
+            <!-- Reward Points -->
+            <div style="padding-left: 20px; border-left: 1px solid var(--cream-dark);">
+              <p style="font-size:0.65rem; color:var(--sage); text-transform:uppercase; font-weight:800; margin-bottom:4px; letter-spacing:0.5px;">Points to Award</p>
+              <p style="font-family:'Syne',sans-serif; font-size:2rem; font-weight:800; color:var(--forest); margin: 0;" th:text="${sub.pointsEarned}">400</p>
             </div>
 
-            <div style="display:flex; gap:12px; flex-shrink:0;">
+            <!-- Action Buttons -->
+            <div style="display:flex; flex-direction: column; gap:10px;">
               <form th:action="@{/admin/submissions/{id}/confirm(id=${sub.id})}" method="post">
-                <input type="hidden" th:name="_csrf" th:value="${_csrf.token}" />
-                <button type="submit" class="btn-primary" style="padding: 10px 20px; font-size: 0.85rem; background: var(--bin-green); color: var(--white); border-color: var(--bin-green);">
-                  ✓ Confirm
+                <button type="submit" class="btn-primary" style="width:100%; padding: 10px 24px; background: var(--bin-green); border-color: var(--bin-green);">
+                  Confirm
                 </button>
               </form>
               <form th:action="@{/admin/submissions/{id}/reject(id=${sub.id})}" method="post">
-                <input type="hidden" th:name="_csrf" th:value="${_csrf.token}" />
-                <button type="submit" class="btn-outline" style="padding: 10px 20px; font-size: 0.85rem; color: var(--bin-red); border-color: var(--bin-red);">
-                  ✕ Reject
+                <button type="submit" class="btn-outline" style="width:100%; padding: 10px 24px; color: var(--bin-red); border-color: var(--bin-red);">
+                  Reject
                 </button>
               </form>
             </div>
