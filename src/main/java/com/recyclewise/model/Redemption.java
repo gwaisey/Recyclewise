@@ -2,7 +2,7 @@ package com.recyclewise.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-
+import lombok.experimental.SuperBuilder;
 import java.time.LocalDateTime;
 
 /**
@@ -12,10 +12,11 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "redemptions")
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Redemption {
+@EqualsAndHashCode(callSuper = true)
+public class Redemption extends BaseAuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,9 +33,7 @@ public class Redemption {
     @Column(nullable = false)
     private int pointsSpent;
 
-    @Column(nullable = false)
-    @Builder.Default
-    private LocalDateTime redeemedAt = LocalDateTime.now();
+
 
     @Column(nullable = false, unique = true)
     private String voucherCode; // auto-generated unique code

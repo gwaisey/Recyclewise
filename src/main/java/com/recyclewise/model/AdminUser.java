@@ -3,6 +3,7 @@ package com.recyclewise.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 /**
  * Represents a RecycleWise staff member with admin access.
@@ -11,10 +12,11 @@ import lombok.*;
 @Entity
 @Table(name = "admin_users")
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminUser {
+@EqualsAndHashCode(callSuper = true)
+public class AdminUser extends BaseAuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

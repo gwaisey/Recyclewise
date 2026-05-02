@@ -104,6 +104,6 @@ public class SubmissionServiceImpl implements SubmissionService {
 
     @Override
     public List<TrashSubmission> getSubmissionsForUser(User user) {
-        return submissionRepository.findByUserOrderBySubmittedAtDesc(user);
+        return submissionRepository.findByUserOrderByCreatedAtDesc(user);
     }
 }

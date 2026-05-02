@@ -2,6 +2,7 @@ package com.recyclewise.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,10 +16,11 @@ import java.util.List;
 @Entity
 @Table(name = "trash_submissions")
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TrashSubmission {
+@EqualsAndHashCode(callSuper = true)
+public class TrashSubmission extends BaseAuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,10 +38,6 @@ public class TrashSubmission {
 
     @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<SubmissionItem> items;
-
-    @Column(nullable = false)
-    @Builder.Default
-    private LocalDateTime submittedAt = LocalDateTime.now();
 
     @Column(nullable = false)
     @Builder.Default

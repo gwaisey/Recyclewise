@@ -68,7 +68,6 @@ public class RewardServiceImpl implements RewardService {
                 .reward(reward)
                 .pointsSpent(reward.getPointsCost())
                 .voucherCode(generateVoucherCode())
-                .redeemedAt(now)
                 .expiresAt(now.plusDays(30))
                 .status(Redemption.RedemptionStatus.ACTIVE)
                 .build();
@@ -93,7 +92,7 @@ public class RewardServiceImpl implements RewardService {
     @Override
     public void autoExpireRedemptions(User user) {
         LocalDateTime now = LocalDateTime.now();
-        List<Redemption> active = redemptionRepository.findByUserOrderByRedeemedAtDesc(user);
+        List<Redemption> active = redemptionRepository.findByUserOrderByCreatedAtDesc(user);
         for (Redemption r : active) {
             if (r.getStatus() == Redemption.RedemptionStatus.ACTIVE
                     && r.getExpiresAt() != null
@@ -106,7 +105,7 @@ public class RewardServiceImpl implements RewardService {
 
     @Override
     public List<Redemption> getRedemptionsForUser(User user) {
-        return redemptionRepository.findByUserOrderByRedeemedAtDesc(user);
+        return redemptionRepository.findByUserOrderByCreatedAtDesc(user);
     }
 
     private String generateVoucherCode() {

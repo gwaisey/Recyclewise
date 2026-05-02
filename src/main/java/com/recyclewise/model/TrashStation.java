@@ -2,6 +2,7 @@ package com.recyclewise.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 /**
  * Represents an organized trash station located around town.
@@ -10,10 +11,11 @@ import lombok.*;
 @Entity
 @Table(name = "trash_stations")
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TrashStation {
+@EqualsAndHashCode(callSuper = true)
+public class TrashStation extends BaseAuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

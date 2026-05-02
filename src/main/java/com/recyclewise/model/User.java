@@ -3,6 +3,7 @@ package com.recyclewise.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,10 +16,11 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+@EqualsAndHashCode(callSuper = true)
+public class User extends BaseAuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,10 +50,6 @@ public class User {
     @Column(nullable = false)
     @Builder.Default
     private int totalPoints = 0;
-
-    @Column(nullable = false)
-    @Builder.Default
-    private LocalDateTime registeredAt = LocalDateTime.now();
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface RedemptionRepository extends JpaRepository<Redemption, Long> {
-    List<Redemption> findByUserOrderByRedeemedAtDesc(User user);
+    List<Redemption> findByUserOrderByCreatedAtDesc(User user);
 }

@@ -96,7 +96,7 @@
                 <span class="badge-pending" style="font-size:0.6rem; letter-spacing: 0.5px;">PENDING</span>
               </div>
               <p style="font-size:0.8rem; color:var(--sage); margin: 0;">📍 <span th:text="${sub.station.name}">Station</span></p>
-              <p style="font-size:0.75rem; color:var(--sage); margin-top: 4px; opacity:0.6;" th:text="${#temporals.format(sub.submittedAt, 'dd MMM, HH:mm')}">Date</p>
+              <p style="font-size:0.75rem; color:var(--sage); margin-top: 4px; opacity:0.6;" th:text="${#temporals.format(sub.createdAt, 'dd MMM, HH:mm')}">Date</p>
             </div>
 
             <!-- Waste Content -->
@@ -147,7 +147,7 @@
                       th:class="${sub.status.name() == 'CONFIRMED' ? 'badge-confirmed' : 'badge-rejected'}" 
                       style="font-size: 0.65rem; padding: 2px 8px;">STATUS</span>
               </div>
-              <p style="font-size:0.8rem; color:var(--sage); margin:0; opacity: 0.6;" th:text="${sub.station.name} + ' | ' + ${#temporals.format(sub.submittedAt, 'dd MMM yyyy')}">Info</p>
+              <p style="font-size:0.8rem; color:var(--sage); margin:0; opacity: 0.6;" th:text="${sub.station.name} + ' | ' + ${#temporals.format(sub.createdAt, 'dd MMM yyyy')}">Info</p>
             </div>
             <div style="font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; color:var(--sage);" th:text="${sub.pointsEarned} + ' pts'">0 pts</div>
           </div>

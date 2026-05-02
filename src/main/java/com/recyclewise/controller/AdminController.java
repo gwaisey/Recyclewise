@@ -95,11 +95,11 @@ public class AdminController {
         if (!isSuperAdmin(session)) return "redirect:/admin/login";
         model.addAttribute("adminName", session.getAttribute("adminName"));
         model.addAttribute("totalPending", submissionRepository
-            .findByStatusOrderBySubmittedAtDesc(TrashSubmission.SubmissionStatus.PENDING).size());
+            .findByStatusOrderByCreatedAtDesc(TrashSubmission.SubmissionStatus.PENDING).size());
         model.addAttribute("totalConfirmed", submissionRepository
-            .findByStatusOrderBySubmittedAtDesc(TrashSubmission.SubmissionStatus.CONFIRMED).size());
+            .findByStatusOrderByCreatedAtDesc(TrashSubmission.SubmissionStatus.CONFIRMED).size());
         model.addAttribute("totalRejected", submissionRepository
-            .findByStatusOrderBySubmittedAtDesc(TrashSubmission.SubmissionStatus.REJECTED).size());
+            .findByStatusOrderByCreatedAtDesc(TrashSubmission.SubmissionStatus.REJECTED).size());
         model.addAttribute("staffList", adminUserRepository
             .findByRoleOrderByFullNameAsc(AdminUser.AdminRole.STATION_STAFF));
         model.addAttribute("stations", stationRepository.findAll());
@@ -177,8 +177,8 @@ public class AdminController {
 
         if (admin.getRole() == AdminUser.AdminRole.SUPER_ADMIN) {
             // Super admin sees ALL submissions
-            pending = submissionRepository.findByStatusOrderBySubmittedAtDesc(TrashSubmission.SubmissionStatus.PENDING);
-            resolved = submissionRepository.findByStatusNotOrderBySubmittedAtDesc(TrashSubmission.SubmissionStatus.PENDING);
+            pending = submissionRepository.findByStatusOrderByCreatedAtDesc(TrashSubmission.SubmissionStatus.PENDING);
+            resolved = submissionRepository.findByStatusNotOrderByCreatedAtDesc(TrashSubmission.SubmissionStatus.PENDING);
         } else {
             // Station staff sees ONLY their station's submissions
             if (admin.getAssignedStation() == null) {
@@ -186,8 +186,8 @@ public class AdminController {
                 resolved = List.of();
             } else {
                 Long stationId = admin.getAssignedStation().getId();
-                pending = submissionRepository.findByStationIdAndStatusOrderBySubmittedAtDesc(stationId, TrashSubmission.SubmissionStatus.PENDING);
-                resolved = submissionRepository.findByStationIdAndStatusNotOrderBySubmittedAtDesc(stationId, TrashSubmission.SubmissionStatus.PENDING);
+                pending = submissionRepository.findByStationIdAndStatusOrderByCreatedAtDesc(stationId, TrashSubmission.SubmissionStatus.PENDING);
+                resolved = submissionRepository.findByStationIdAndStatusNotOrderByCreatedAtDesc(stationId, TrashSubmission.SubmissionStatus.PENDING);
             }
         }
 
