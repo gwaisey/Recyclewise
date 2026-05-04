@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @Controller
@@ -119,7 +118,7 @@ public class AdminController {
             ra.addFlashAttribute("error", "Email already in use.");
             return "redirect:/admin/dashboard";
         }
-        var station = stationRepository.findById(stationId).orElseThrow();
+        var station = stationRepository.findById(Objects.requireNonNull(stationId)).orElseThrow();
         String tempPassword = System.getenv("STAFF_INITIAL_PASSWORD");
         if (tempPassword == null || tempPassword.isBlank()) {
             tempPassword = generateSecureTempPassword();
