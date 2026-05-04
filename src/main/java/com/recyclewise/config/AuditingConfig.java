@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import org.springframework.lang.NonNull;
 import java.util.Optional;
 
 @Configuration
@@ -15,19 +16,25 @@ import java.util.Optional;
 public class AuditingConfig {
 
     @Bean
+    @NonNull
     public AuditorAware<String> auditorProvider() {
-        return () -> {
-            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            if (attributes != null) {
-                HttpSession session = attributes.getRequest().getSession(false);
-                if (session != null) {
-                    String username = (String) session.getAttribute("username");
-                    if (username != null) {
-                        return Optional.of(username);
+        return new AuditorAware<String>() {
+            @Override
+            @NonNull
+            @SuppressWarnings("null")
+            public Optional<String> getCurrentAuditor() {
+                ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+                if (attributes != null) {
+                    HttpSession session = attributes.getRequest().getSession(false);
+                    if (session != null) {
+                        String username = (String) session.getAttribute("username");
+                        if (username != null) {
+                            return Optional.of(username);
+                        }
                     }
                 }
+                return Optional.of("SYSTEM");
             }
-            return Optional.of("SYSTEM");
         };
     }
 }

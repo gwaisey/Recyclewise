@@ -6,6 +6,7 @@ import io.github.bucket4j.Refill;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -25,7 +26,7 @@ public class RateLimitingInterceptor implements HandlerInterceptor {
     private final Bandwidth standardLimit = Bandwidth.classic(30, Refill.intervally(30, Duration.ofMinutes(1)));
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) throws Exception {
         String ip = request.getRemoteAddr();
         String path = request.getRequestURI();
         
