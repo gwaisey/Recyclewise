@@ -318,7 +318,7 @@ input:focus, textarea:focus {
   border: 2px solid var(--forest);
   border-radius: 100px;
   padding: 6px 6px 6px 20px;
-  box-shadow: var(--shadow-lg: none;
+  box-shadow: none;
 }
 
 .search-input {
@@ -500,7 +500,7 @@ input:focus, textarea:focus {
 .category-card.hazardous::before { background: linear-gradient(135deg, #fee2e230, #fecaca20); }
 .category-card.general::before { background: linear-gradient(135deg, #f3f4f630, #e5e7eb20); }
 
-.category-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg: none;
+.category-card:hover { transform: translateY(-4px); box-shadow: none; }
 .category-card.paper:hover { border-color: var(--bin-blue); }
 .category-card.recyclable:hover { border-color: var(--bin-yellow); }
 .category-card.organic:hover { border-color: var(--bin-green); }
@@ -723,7 +723,7 @@ input:focus, textarea:focus {
 
 .item-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-lg: none;
+  box-shadow: none;
 }
 
 .item-bin-blue:hover { border-color: var(--bin-blue); }
@@ -1355,7 +1355,7 @@ input:focus, textarea:focus {
   height: 400px;
   background: var(--white);
   border-radius: 24px;
-  box-shadow: var(--shadow-lg: none;
+  box-shadow: none;
   z-index: 9998;
   flex-direction: column;
   overflow: hidden;
