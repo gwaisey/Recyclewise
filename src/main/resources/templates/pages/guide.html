@@ -20,19 +20,19 @@
             <!-- Bin Legend -->
             <div style="display:flex; flex-wrap:wrap; gap:16px; margin-bottom:32px; background:var(--white); padding:20px; border-radius:16px; border:1px solid var(--cream-dark);">
                 <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem; font-weight:700;">
-                    <span style="width:12px; height:12px; border-radius:50%; background:var(--bin-blue);"></span> 📑 blue: paper
+                    <span style="width:12px; height:12px; border-radius:50%; background:var(--bin-blue);"></span> 📑 Paper
                 </div>
                 <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem; font-weight:700;">
-                    <span style="width:12px; height:12px; border-radius:50%; background:var(--bin-yellow);"></span> 🥫 yellow: plastic/metal
+                    <span style="width:12px; height:12px; border-radius:50%; background:var(--bin-yellow);"></span> 🥫 Plastic & Metal
                 </div>
                 <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem; font-weight:700;">
-                    <span style="width:12px; height:12px; border-radius:50%; background:var(--bin-green);"></span> 🍎 green: organic
+                    <span style="width:12px; height:12px; border-radius:50%; background:var(--bin-green);"></span> 🍎 Organic
                 </div>
                 <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem; font-weight:700;">
-                    <span style="width:12px; height:12px; border-radius:50%; background:var(--bin-red);"></span> 🔋 red: hazardous
+                    <span style="width:12px; height:12px; border-radius:50%; background:var(--bin-red);"></span> 🔋 Hazardous
                 </div>
                 <div style="display:flex; align-items:center; gap:8px; font-size:0.85rem; font-weight:700;">
-                    <span style="width:12px; height:12px; border-radius:50%; background:var(--bin-black);"></span> 🗑 black: residual
+                    <span style="width:12px; height:12px; border-radius:50%; background:var(--bin-black);"></span> 🗑 General
                 </div>
             </div>
 
@@ -52,7 +52,7 @@
                 <a href="/guide?category=RECYCLABLES" class="tab tab-yellow" th:classappend="${activeCategory == 'RECYCLABLES'} ? 'active'">🥫 Recyclables</a>
                 <a href="/guide?category=ORGANIC" class="tab tab-green" th:classappend="${activeCategory == 'ORGANIC'} ? 'active'">🌿 Organic</a>
                 <a href="/guide?category=HAZARDOUS" class="tab tab-red" th:classappend="${activeCategory == 'HAZARDOUS'} ? 'active'">⚠️ Hazardous</a>
-                <a href="/guide?category=GENERAL" class="tab tab-black" th:classappend="${activeCategory == 'GENERAL'} ? 'active'">🗑 Residual</a>
+                <a href="/guide?category=GENERAL" class="tab tab-black" th:classappend="${activeCategory == 'GENERAL'} ? 'active'">🗑 General</a>
             </div>
 
             <div class="results-info" th:if="${searchQuery != null}">

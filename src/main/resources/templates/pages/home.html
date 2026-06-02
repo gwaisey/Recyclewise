@@ -67,7 +67,8 @@
         </div>
         <div class="hero-visual">
             <div class="bin-grid">
-                <div class="bin-card" style="--clr: var(--bin-blue);"><div class="bin-icon">♻</div><div>Recycle</div></div>
+                <div class="bin-card" style="--clr: var(--bin-blue);"><div class="bin-icon">📑</div><div>Paper</div></div>
+                <div class="bin-card" style="--clr: var(--bin-yellow);"><div class="bin-icon">🥫</div><div>Recyclables</div></div>
                 <div class="bin-card" style="--clr: var(--bin-green);"><div class="bin-icon">🌿</div><div>Organic</div></div>
                 <div class="bin-card" style="--clr: var(--bin-red);"><div class="bin-icon">⚠️</div><div>Hazardous</div></div>
                 <div class="bin-card" style="--clr: var(--bin-black);"><div class="bin-icon">🗑</div><div>General</div></div>
@@ -80,8 +81,13 @@
     <section class="stats-strip">
         <div class="stats-inner">
             <div class="stat-item">
-                <span class="stat-num" th:text="${stats.getOrDefault('RECYCLABLE', 0)}">0</span>
+                <span class="stat-num" th:text="${stats.getOrDefault('RECYCLABLES', 0)}">0</span>
                 <span class="stat-label">Recyclable Items</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span class="stat-num" th:text="${stats.getOrDefault('PAPER', 0)}">0</span>
+                <span class="stat-label">Paper Items</span>
             </div>
             <div class="stat-divider"></div>
             <div class="stat-item">
@@ -95,8 +101,8 @@
             </div>
             <div class="stat-divider"></div>
             <div class="stat-item">
-                <span class="stat-num">3R</span>
-                <span class="stat-label">Reduce, Reuse, Recycle</span>
+                <span class="stat-num" th:text="${stats.getOrDefault('GENERAL', 0)}">0</span>
+                <span class="stat-label">General Waste</span>
             </div>
         </div>
     </section>
@@ -145,7 +151,7 @@
                     <div class="cat-icon">🗑</div>
                     <div class="cat-info">
                         <h3>General</h3>
-                        <p>Residual waste that cannot be recycled — the last resort</p>
+                        <p>General waste that cannot be recycled — the last resort</p>
                     </div>
                     <span class="cat-arrow">→</span>
                 </a>
